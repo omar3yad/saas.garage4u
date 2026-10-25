@@ -4,7 +4,7 @@ import asyncio
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
-from sqlalchemy import select
+from sqlalchemy import select, or_, case
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
@@ -342,8 +342,19 @@ async def export_shift_sessions_csv(
         while True:
             stmt = (
                 select(ParkingSession)
-                .where(ParkingSession.shift_id == shift_id)
-                .order_by(ParkingSession.entry_time.desc())
+                .where(
+                    or_(
+                        ParkingSession.shift_id == shift_id,
+                        ParkingSession.exit_shift_id == shift_id,
+                    )
+                )
+                .order_by(
+                    case(
+                        (ParkingSession.exit_shift_id == shift_id, ParkingSession.exit_time),
+                        else_=ParkingSession.entry_time,
+                    ).desc(),
+                    ParkingSession.id.desc(),
+                )
                 .offset(offset)
                 .limit(chunk_size)
             )

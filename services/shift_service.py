@@ -136,9 +136,16 @@ class ShiftService:
         active_sessions = len(active_sessions_list)
 
         # Sessions that were EXITED in this shift (revenue sessions)
+        from sqlalchemy import or_, and_
         exit_result = await self.db.execute(
             select(ParkingSession).where(
-                ParkingSession.exit_shift_id == shift.id,
+                or_(
+                    ParkingSession.exit_shift_id == shift.id,
+                    and_(
+                        ParkingSession.exit_shift_id.is_(None),
+                        ParkingSession.shift_id == shift.id,
+                    ),
+                ),
                 ParkingSession.status.in_(
                     [SessionStatus.COMPLETED, SessionStatus.LOST_CARD]
                 ),

@@ -74,16 +74,33 @@ class ParkingSessionRepository:
         self, shift_id: int, page: int = 1, size: int = 10
     ) -> tuple[list[ParkingSession], int]:
         """Returns a paginated list of sessions for a shift (newest first) and total count.
-        Only sessions entered in this shift (for backward-compat with legacy callers).
+        Includes sessions entered in this shift (shift_id) OR exited in this shift (exit_shift_id).
         """
-        query = select(ParkingSession).where(ParkingSession.shift_id == shift_id)
-        count_query = select(func.count()).select_from(ParkingSession).where(ParkingSession.shift_id == shift_id)
+        from sqlalchemy import or_, case
+
+        condition = or_(
+            ParkingSession.shift_id == shift_id,
+            ParkingSession.exit_shift_id == shift_id,
+        )
+        count_query = select(func.count()).select_from(ParkingSession).where(condition)
 
         count_result = await self.db.execute(count_query)
         total_count = count_result.scalar_one()
 
         offset_val = (page - 1) * size
-        query = query.order_by(ParkingSession.entry_time.desc()).offset(offset_val).limit(size)
+        query = (
+            select(ParkingSession)
+            .where(condition)
+            .order_by(
+                case(
+                    (ParkingSession.exit_shift_id == shift_id, ParkingSession.exit_time),
+                    else_=ParkingSession.entry_time,
+                ).desc(),
+                ParkingSession.id.desc(),
+            )
+            .offset(offset_val)
+            .limit(size)
+        )
         result = await self.db.execute(query)
         sessions = list(result.scalars().all())
 
@@ -99,7 +116,7 @@ class ParkingSessionRepository:
         This ensures an operator sees all sessions they are financially responsible for,
         even if the car was originally checked in by a different operator/shift.
         """
-        from sqlalchemy import or_, and_
+        from sqlalchemy import or_, and_, case
 
         combined_condition = or_(
             # Active sessions entered in this shift
@@ -126,7 +143,13 @@ class ParkingSessionRepository:
         query = (
             select(ParkingSession)
             .where(combined_condition)
-            .order_by(ParkingSession.entry_time.desc())
+            .order_by(
+                case(
+                    (ParkingSession.exit_shift_id == shift_id, ParkingSession.exit_time),
+                    else_=ParkingSession.entry_time,
+                ).desc(),
+                ParkingSession.id.desc(),
+            )
             .offset(offset_val)
             .limit(size)
         )

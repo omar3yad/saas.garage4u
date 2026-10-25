@@ -255,3 +255,60 @@ async def test_dashboard_no_banner_when_no_long_stay(
     res = await async_client.get("/ui/admin/dashboard")
     assert res.status_code == 200
     assert "جلسات مفتوحة أكثر من ٢٤ ساعة" not in res.text
+
+
+@pytest.mark.asyncio
+async def test_admin_shift_detail_shows_exit_sessions(
+    async_client: AsyncClient, db_session: AsyncSession, auth_service: AuthService
+):
+    admin = await setup_admin(db_session, auth_service, async_client)
+
+    # Shift 1 (Entry gate)
+    entry_shift = Shift(
+        operator_id=admin.id,
+        gate_number=1,
+        started_at=datetime.utcnow() - timedelta(hours=3),
+        ended_at=datetime.utcnow() - timedelta(hours=2),
+    )
+    # Shift 2 (Exit gate)
+    exit_shift = Shift(
+        operator_id=admin.id,
+        gate_number=2,
+        started_at=datetime.utcnow() - timedelta(hours=2),
+        ended_at=None,
+    )
+    db_session.add_all([entry_shift, exit_shift])
+    await db_session.flush()
+
+    card = ParkingCard(card_code="EXIT-CARD-999", status=CardStatus.AVAILABLE)
+    db_session.add(card)
+    await db_session.flush()
+
+    # Session entered in shift 1 (entry_shift), but exited in shift 2 (exit_shift)
+    session = ParkingSession(
+        card_id=card.id,
+        card_code=card.card_code,
+        gate_number=1,
+        shift_id=entry_shift.id,
+        operator_id=admin.id,
+        exit_shift_id=exit_shift.id,
+        exit_operator_id=admin.id,
+        entry_time=datetime.utcnow() - timedelta(hours=2, minutes=30),
+        exit_time=datetime.utcnow() - timedelta(minutes=10),
+        amount_charged=3500,
+        status=SessionStatus.COMPLETED,
+    )
+    db_session.add(session)
+    await db_session.commit()
+
+    # 1. Check UI Admin Shift Detail for exit_shift
+    res = await async_client.get(f"/ui/admin/shifts/{exit_shift.id}")
+    assert res.status_code == 200
+    assert "EXIT-CARD-999" in res.text
+    assert "لا توجد حركات مسجلة لهذا الشيفت" not in res.text
+
+    # 2. Check CSV export for exit_shift
+    csv_res = await async_client.get(f"/api/v1/admin/shifts/{exit_shift.id}/export/csv")
+    assert csv_res.status_code == 200
+    assert "EXIT-CARD-999" in csv_res.text
+
