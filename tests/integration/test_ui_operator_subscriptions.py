@@ -143,7 +143,7 @@ async def test_operator_subscribed_card_entry_flow(
     )
     assert res_lookup.status_code == 200
     assert "مشترك نشط" in res_lookup.text
-    assert "٠٫٠٠ ج.م" in res_lookup.text
+    assert "٠ ج.م" in res_lookup.text
     assert "تأكيد الخروج (اشتراك)" in res_lookup.text
 
     # 4. Confirm exit -> zero-charge exit and redirect to receipt
@@ -160,7 +160,7 @@ async def test_operator_subscribed_card_entry_flow(
     assert "إيصال اشتراك" in res_receipt.text
     assert "Tarek Zaki" in res_receipt.text
     assert "Monthly 1 Entry" in res_receipt.text
-    assert "٠٫٠٠ ج.م" in res_receipt.text
+    assert "٠ ج.م" in res_receipt.text
 
     # 6. Second entry today exceeds max_entries_per_day=1 -> fails with error banner
     op.gate_number = 1

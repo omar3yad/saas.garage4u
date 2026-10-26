@@ -12,9 +12,9 @@ from utils.csv_export import (
 
 def test_piastres_to_egp_str():
     assert _piastres_to_egp_str(None) == ""
-    assert _piastres_to_egp_str(0) == "0.00"
-    assert _piastres_to_egp_str(2550) == "25.50"
-    assert _piastres_to_egp_str(100) == "1.00"
+    assert _piastres_to_egp_str(0) == "0"
+    assert _piastres_to_egp_str(2550) == "26"
+    assert _piastres_to_egp_str(100) == "1"
 
 
 async def async_iter(items):
@@ -118,6 +118,6 @@ async def test_shifts_csv_export():
     assert "الإجمالي المحسوب (جنيه)" in chunks[1]
     # Data row
     assert "Ahmed Operator" in chunks[2]
-    assert "45.00" in chunks[2]
-    assert "50.00" in chunks[2]
-    assert "5.00" in chunks[2]
+    assert "45" in chunks[2]
+    assert "50" in chunks[2]
+    assert "5" in chunks[2]

@@ -691,7 +691,7 @@ async def print_receipt_page(
             base_amount=0,
             penalty_amount=0,
             total_amount=0,
-            total_display="٠٫٠٠ ج.م",
+            total_display="٠ ج.م",
             payment_method="اشتراك",
             is_lost_card=False,
             is_grace_period=False,
@@ -939,7 +939,7 @@ async def api_operator_scan(
             except Exception as cam_exc:
                 logger.error("Could not trigger exit camera snapshot: %s", cam_exc)
 
-            total_egp = str(amount_piastres // 100) if amount_piastres % 100 == 0 else f"{amount_piastres / 100:.2f}"
+            total_egp = str(int(round(amount_piastres / 100)))
             try:
                 total_formatted = format_egp(amount_piastres)
             except Exception:
@@ -951,7 +951,7 @@ async def api_operator_scan(
                 try:
                     rate_per_hour = format_egp(calc.rate_per_hour)
                 except Exception:
-                    rate_per_hour = f"{getattr(calc, 'rate_per_hour', 0) / 100:.2f} ج.م"
+                    rate_per_hour = f"{int(round(getattr(calc, 'rate_per_hour', 0) / 100))} ج.م"
             else:
                 try:
                     rule = await pricing_service.get_active_rule()

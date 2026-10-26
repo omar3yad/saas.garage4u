@@ -844,7 +844,7 @@
                             </td>
                             <td class="py-2 px-3 font-digital">
                                 {% if s.amount_charged is not none %}
-                                    <span class="font-black text-emerald-400 font-digital text-sm sm:text-base" style="color: #34d399;">{{ s.amount_charged | format_egp }}</span>
+                                    <span class="font-black text-emerald-400 font-digital text-sm sm:text-base" style="color: #34d399;">{{ s.amount_charged | format_egp }} ج.م</span>
                                 {% else %}
                                     <span class="text-slate-500 font-bold">—</span>
                                 {% endif %}

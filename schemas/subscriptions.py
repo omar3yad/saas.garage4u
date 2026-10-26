@@ -16,7 +16,7 @@ class PlanCreate(BaseModel):
 
     @property
     def price_piastres(self) -> int:
-        return round(self.price_egp * 100)
+        return int(round(self.price_egp)) * 100
 
 
 class PlanUpdate(BaseModel):
@@ -29,7 +29,7 @@ class PlanUpdate(BaseModel):
     @property
     def price_piastres(self) -> int | None:
         if self.price_egp is not None:
-            return round(self.price_egp * 100)
+            return int(round(self.price_egp)) * 100
         return None
 
 
@@ -106,7 +106,7 @@ class SubscriptionCreate(BaseModel):
 
     @property
     def amount_paid_piastres(self) -> int:
-        return round(self.amount_paid_egp * 100)
+        return int(round(self.amount_paid_egp)) * 100
 
 
 class SubscriptionRenew(BaseModel):
@@ -118,7 +118,7 @@ class SubscriptionRenew(BaseModel):
 
     @property
     def amount_paid_piastres(self) -> int:
-        return round(self.amount_paid_egp * 100)
+        return int(round(self.amount_paid_egp)) * 100
 
 
 

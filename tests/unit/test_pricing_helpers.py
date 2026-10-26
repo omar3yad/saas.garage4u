@@ -11,20 +11,20 @@ def test_multi_digit():
     assert to_arabic_indic(2025) == "٢٠٢٥"
 
 def test_zero_piastres():
-    assert format_egp(0) == "٠٫٠٠ ج.م"
+    assert format_egp(0) == "٠ ج.م"
 
 def test_round_egp():
-    assert format_egp(100) == "١٫٠٠ ج.م"
+    assert format_egp(100) == "١ ج.م"
 
 def test_partial_egp():
-    assert format_egp(2550) == "٢٥٫٥٠ ج.م"
+    assert format_egp(2550) == "٢٦ ج.م"
 
 def test_no_float_used():
     source = inspect.getsource(format_egp)
     assert "float" not in source
 
-def test_arabic_decimal_separator():
-    assert "٫" in format_egp(1234)
+def test_no_arabic_decimal_separator():
+    assert "٫" not in format_egp(1234)
 
 def test_zero_minutes():
     assert format_duration(0) == "٠ دقائق"

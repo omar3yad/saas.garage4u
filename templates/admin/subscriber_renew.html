@@ -61,8 +61,8 @@
 
             <div>
                 <label class="block text-sm font-semibold text-gray-300 mb-1.5">مبلغ التجديد (ج.م)</label>
-                <input type="number" step="0.01" min="0" id="renewAmountPaid" required
-                    value="{{ (plan.price_piastres / 100.0) if plan else '0.00' }}"
+                <input type="number" step="1" min="0" id="renewAmountPaid" required
+                    value="{{ ((plan.price_piastres / 100) | int) if plan else '0' }}"
                     class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white font-mono focus:outline-none focus:border-indigo-500">
             </div>
 

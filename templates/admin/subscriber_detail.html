@@ -164,7 +164,7 @@
                         <td class="p-4">{{ sess.duration_minutes | duration_ar if sess.duration_minutes else "—" }}</td>
                         <td class="p-4 font-mono font-bold text-green-400">
                             {% if sess.is_subscribed %}
-                            ٠٫٠٠ ج.م
+                            ٠ ج.م
                             {% else %}
                             {{ sess.amount_charged | format_egp }}
                             {% endif %}

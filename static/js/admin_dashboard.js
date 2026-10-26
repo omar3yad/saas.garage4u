@@ -44,7 +44,7 @@ async function refreshLiveStats(statsUrl, gatesUrl) {
 
     const revEl = document.getElementById("stat-revenue-today");
     if (revEl && statData.revenue_today_piastres !== undefined) {
-      const egpVal = (statData.revenue_today_piastres / 100).toFixed(2);
+      const egpVal = Math.round(statData.revenue_today_piastres / 100);
       revEl.textContent = convertToArabicIndic(egpVal) + " ج.م";
     }
 

@@ -23,8 +23,8 @@ PAYMENT_METHOD_LABELS: dict[str, str] = {
 def _piastres_to_egp_str(piastres: int | None) -> str:
     if piastres is None:
         return ""
-    # display only — not stored
-    return f"{piastres / 100:.2f}"
+    # display only — whole EGP, no piastres
+    return str(int(round(piastres / 100)))
 
 
 def _row_to_str(row: list[Any]) -> str:

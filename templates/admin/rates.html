@@ -62,21 +62,21 @@
         <!-- First Hour Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-emerald-300 mb-1">سعر أول ساعة (ج.م) *</label>
-          <input type="number" id="edit-rate-first-hour" step="0.01" min="0" required class="w-full bg-gray-900 border border-emerald-600/60 rounded-lg px-3 py-2 text-sm text-emerald-300 font-bold focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="edit-rate-first-hour" step="1" min="0" required class="w-full bg-gray-900 border border-emerald-600/60 rounded-lg px-3 py-2 text-sm text-emerald-300 font-bold focus:outline-none focus:border-emerald-500 non-negative">
           <span class="text-[10px] text-gray-400">سعر الساعة الأولى للسيارة</span>
         </div>
 
         <!-- Subsequent Hour Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-cyan-300 mb-1">سعر الساعات التالية (ج.م) *</label>
-          <input type="number" id="edit-rate-subsequent-hour" step="0.01" min="0" required class="w-full bg-gray-900 border border-cyan-600/60 rounded-lg px-3 py-2 text-sm text-cyan-300 font-bold focus:outline-none focus:border-cyan-500 non-negative">
+          <input type="number" id="edit-rate-subsequent-hour" step="1" min="0" required class="w-full bg-gray-900 border border-cyan-600/60 rounded-lg px-3 py-2 text-sm text-cyan-300 font-bold focus:outline-none focus:border-cyan-500 non-negative">
           <span class="text-[10px] text-gray-400">عن كل ساعة إضافية بعد الأولى</span>
         </div>
 
         <!-- Flat Rate Per Hour (EGP) (Fallback) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">سعر الساعة الافتراضي (ج.م)</label>
-          <input type="number" id="edit-rate-per-hour" step="0.01" min="0" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="edit-rate-per-hour" step="1" min="0" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
           <span class="text-[10px] text-gray-500">احتياطي</span>
         </div>
 
@@ -89,13 +89,13 @@
         <!-- Minimum Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">الحد الأدنى للمحاسبة (ج.م)</label>
-          <input type="number" id="edit-rate-min-charge" step="0.01" min="0" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="edit-rate-min-charge" step="1" min="0" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
         </div>
 
         <!-- Lost Card Penalty (EGP) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">غرامة الكرت المفقود (ج.م)</label>
-          <input type="number" id="edit-rate-lost-penalty" step="0.01" min="0" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="edit-rate-lost-penalty" step="1" min="0" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
         </div>
       </div>
 
@@ -132,21 +132,21 @@
         <!-- First Hour Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-emerald-300 mb-1">سعر أول ساعة (ج.م) *</label>
-          <input type="number" id="rate-first-hour" step="0.01" min="0" required placeholder="20.00" value="20.00" class="w-full bg-gray-900 border border-emerald-600/50 rounded-lg px-3 py-2 text-sm text-emerald-300 font-semibold focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="rate-first-hour" step="1" min="0" required placeholder="20" value="20" class="w-full bg-gray-900 border border-emerald-600/50 rounded-lg px-3 py-2 text-sm text-emerald-300 font-semibold focus:outline-none focus:border-emerald-500 non-negative">
           <span class="text-[10px] text-gray-400">الساعة الأولى للسيارة</span>
         </div>
 
         <!-- Subsequent Hour Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-cyan-300 mb-1">سعر الساعات التالية (ج.م) *</label>
-          <input type="number" id="rate-subsequent-hour" step="0.01" min="0" required placeholder="10.00" value="10.00" class="w-full bg-gray-900 border border-cyan-600/50 rounded-lg px-3 py-2 text-sm text-cyan-300 font-semibold focus:outline-none focus:border-cyan-500 non-negative">
+          <input type="number" id="rate-subsequent-hour" step="1" min="0" required placeholder="10" value="10" class="w-full bg-gray-900 border border-cyan-600/50 rounded-lg px-3 py-2 text-sm text-cyan-300 font-semibold focus:outline-none focus:border-cyan-500 non-negative">
           <span class="text-[10px] text-gray-400">عن كل ساعة إضافية</span>
         </div>
 
         <!-- Flat Rate Per Hour (EGP) (Fallback) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">سعر الساعة الافتراضي (ج.م)</label>
-          <input type="number" id="rate-per-hour" step="0.01" min="0" required placeholder="10.00" value="10.00" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
+          <input type="number" id="rate-per-hour" step="1" min="0" required placeholder="10" value="10" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
           <span class="text-[10px] text-gray-500">احتياطي</span>
         </div>
 
@@ -159,13 +159,13 @@
         <!-- Minimum Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">الحد الأدنى للمحاسبة (ج.م)</label>
-          <input type="number" id="rate-min-charge" step="0.01" min="0" value="0.00" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
+          <input type="number" id="rate-min-charge" step="1" min="0" value="0" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
         </div>
 
         <!-- Lost Card Penalty (EGP) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">غرامة الكرت المفقود (ج.م)</label>
-          <input type="number" id="rate-lost-penalty" step="0.01" min="0" value="50.00" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
+          <input type="number" id="rate-lost-penalty" step="1" min="0" value="50" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
         </div>
 
         <!-- Effective From -->
@@ -341,12 +341,12 @@
   function openEditModal(id, label, firstHour, subsequentHour, ratePerHour, grace, minCharge, lostPenalty) {
     document.getElementById('edit-rate-id').value = id;
     document.getElementById('edit-rate-label').value = label;
-    document.getElementById('edit-rate-first-hour').value = parseFloat(firstHour).toFixed(2);
-    document.getElementById('edit-rate-subsequent-hour').value = parseFloat(subsequentHour).toFixed(2);
-    document.getElementById('edit-rate-per-hour').value = parseFloat(ratePerHour).toFixed(2);
+    document.getElementById('edit-rate-first-hour').value = Math.round(parseFloat(firstHour));
+    document.getElementById('edit-rate-subsequent-hour').value = Math.round(parseFloat(subsequentHour));
+    document.getElementById('edit-rate-per-hour').value = Math.round(parseFloat(ratePerHour));
     document.getElementById('edit-rate-grace').value = grace;
-    document.getElementById('edit-rate-min-charge').value = parseFloat(minCharge).toFixed(2);
-    document.getElementById('edit-rate-lost-penalty').value = parseFloat(lostPenalty).toFixed(2);
+    document.getElementById('edit-rate-min-charge').value = Math.round(parseFloat(minCharge));
+    document.getElementById('edit-rate-lost-penalty').value = Math.round(parseFloat(lostPenalty));
 
     document.getElementById('edit-modal-title').textContent = `تعديل التعريفة: ${label}`;
     document.getElementById('edit-form-error-msg').classList.add('hidden');
@@ -405,8 +405,8 @@
       // Update row in table
       const row = document.getElementById(`rule-row-${id}`);
       if (row) {
-        const firstHourFormatted = r.first_hour_charge > 0 ? `${(r.first_hour_charge/100).toFixed(2)} ج.م` : `${(r.rate_per_hour/100).toFixed(2)} ج.م`;
-        const subsequentFormatted = r.first_hour_charge > 0 ? `${(r.subsequent_hour_charge/100).toFixed(2)} ج.م` : `${(r.rate_per_hour/100).toFixed(2)} ج.م`;
+        const firstHourFormatted = r.first_hour_charge > 0 ? `${Math.round(r.first_hour_charge/100)} ج.م` : `${Math.round(r.rate_per_hour/100)} ج.م`;
+        const subsequentFormatted = r.first_hour_charge > 0 ? `${Math.round(r.subsequent_hour_charge/100)} ج.م` : `${Math.round(r.rate_per_hour/100)} ج.م`;
 
         const cellLabel = row.querySelector('.cell-label');
         if (cellLabel) cellLabel.textContent = r.label;
@@ -421,33 +421,33 @@
         if (cellGrace) cellGrace.textContent = `${toArabic(r.grace_period_mins)} دقيقة`;
 
         const cellMin = row.querySelector('.cell-min-charge');
-        if (cellMin) cellMin.textContent = `${(r.minimum_charge/100).toFixed(2)} ج.م`;
+        if (cellMin) cellMin.textContent = `${Math.round(r.minimum_charge/100)} ج.م`;
 
         const cellLost = row.querySelector('.cell-lost-penalty');
-        if (cellLost) cellLost.textContent = `${(r.lost_card_penalty/100).toFixed(2)} ج.م`;
+        if (cellLost) cellLost.textContent = `${Math.round(r.lost_card_penalty/100)} ج.م`;
 
         // Update data-* attributes on the edit button in this row
         const editBtn = row.querySelector('.edit-action-btn');
         if (editBtn) {
           editBtn.setAttribute('data-label', r.label);
-          editBtn.setAttribute('data-first-hour', (r.first_hour_charge/100).toFixed(2));
-          editBtn.setAttribute('data-subsequent-hour', (r.subsequent_hour_charge/100).toFixed(2));
-          editBtn.setAttribute('data-rate-per-hour', (r.rate_per_hour/100).toFixed(2));
+          editBtn.setAttribute('data-first-hour', Math.round(r.first_hour_charge/100));
+          editBtn.setAttribute('data-subsequent-hour', Math.round(r.subsequent_hour_charge/100));
+          editBtn.setAttribute('data-rate-per-hour', Math.round(r.rate_per_hour/100));
           editBtn.setAttribute('data-grace', r.grace_period_mins);
-          editBtn.setAttribute('data-min-charge', (r.minimum_charge/100).toFixed(2));
-          editBtn.setAttribute('data-lost-penalty', (r.lost_card_penalty/100).toFixed(2));
+          editBtn.setAttribute('data-min-charge', Math.round(r.minimum_charge/100));
+          editBtn.setAttribute('data-lost-penalty', Math.round(r.lost_card_penalty/100));
         }
 
         // Also update quick edit button if it's the same rule
         const quickBtn = document.getElementById('quick-edit-active-btn');
         if (quickBtn && quickBtn.getAttribute('data-id') === String(id)) {
           quickBtn.setAttribute('data-label', r.label);
-          quickBtn.setAttribute('data-first-hour', (r.first_hour_charge/100).toFixed(2));
-          quickBtn.setAttribute('data-subsequent-hour', (r.subsequent_hour_charge/100).toFixed(2));
-          quickBtn.setAttribute('data-rate-per-hour', (r.rate_per_hour/100).toFixed(2));
+          quickBtn.setAttribute('data-first-hour', Math.round(r.first_hour_charge/100));
+          quickBtn.setAttribute('data-subsequent-hour', Math.round(r.subsequent_hour_charge/100));
+          quickBtn.setAttribute('data-rate-per-hour', Math.round(r.rate_per_hour/100));
           quickBtn.setAttribute('data-grace', r.grace_period_mins);
-          quickBtn.setAttribute('data-min-charge', (r.minimum_charge/100).toFixed(2));
-          quickBtn.setAttribute('data-lost-penalty', (r.lost_card_penalty/100).toFixed(2));
+          quickBtn.setAttribute('data-min-charge', Math.round(r.minimum_charge/100));
+          quickBtn.setAttribute('data-lost-penalty', Math.round(r.lost_card_penalty/100));
         }
 
         // Highlight updated row
@@ -543,11 +543,11 @@
       const noRules = document.getElementById('no-rules-row');
       if (noRules) noRules.remove();
 
-      const firstHourVal = (r.first_hour_charge / 100).toFixed(2);
-      const subsequentHourVal = (r.subsequent_hour_charge / 100).toFixed(2);
-      const ratePerHourVal = (r.rate_per_hour / 100).toFixed(2);
-      const minChargeVal = (r.minimum_charge / 100).toFixed(2);
-      const lostPenaltyVal = (r.lost_card_penalty / 100).toFixed(2);
+      const firstHourVal = Math.round(r.first_hour_charge / 100);
+      const subsequentHourVal = Math.round(r.subsequent_hour_charge / 100);
+      const ratePerHourVal = Math.round(r.rate_per_hour / 100);
+      const minChargeVal = Math.round(r.minimum_charge / 100);
+      const lostPenaltyVal = Math.round(r.lost_card_penalty / 100);
 
       const firstHourFormatted = r.first_hour_charge > 0 ? `${firstHourVal} ج.م` : `${ratePerHourVal} ج.م`;
       const subsequentFormatted = r.first_hour_charge > 0 ? `${subsequentHourVal} ج.م` : `${ratePerHourVal} ج.م`;

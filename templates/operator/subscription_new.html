@@ -121,7 +121,7 @@
                     <input type="radio" 
                            name="plan_id" 
                            value="{{ plan.id }}" 
-                           data-price="{{ (plan.price_piastres / 100) }}"
+                           data-price="{{ ((plan.price_piastres / 100) | int) }}"
                            data-label="{{ plan.label }}"
                            data-days="{{ plan.duration_days }}"
                            required
@@ -231,7 +231,7 @@
         <div class="mt-auto flex flex-col gap-2.5 pt-1">
             <div class="bg-gradient-to-r from-purple-950/60 to-indigo-950/60 border border-purple-500/40 rounded-xl p-3.5 flex justify-between items-center shadow-lg">
                 <span class="text-sm text-gray-300 font-bold">المبلغ المطلوب تحصيله نقداً:</span>
-                <span id="total-price-display" class="text-2xl font-black text-emerald-400 font-mono">٠٫٠٠ ج.م</span>
+                <span id="total-price-display" class="text-2xl font-black text-emerald-400 font-mono">٠ ج.م</span>
             </div>
 
             <button type="submit" 
@@ -276,9 +276,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const days = radio.dataset.days;
                 const label = radio.dataset.label;
                 
-                priceDisplay.textContent = price.toLocaleString('ar-EG', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
+                priceDisplay.textContent = Math.round(price).toLocaleString('ar-EG', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
                 }) + ' ج.م';
                 
                 planBadge.textContent = label + ' (' + days + ' يوم)';

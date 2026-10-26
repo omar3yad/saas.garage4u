@@ -318,7 +318,7 @@
       var p = (data.total_egp !== undefined && data.total_egp !== null) ? data.total_egp : "0";
       var pNum = parseFloat(p);
       if (!isNaN(pNum)) {
-        priceEl.textContent = (pNum % 1 === 0) ? String(Math.round(pNum)) : pNum.toFixed(2);
+        priceEl.textContent = String(Math.round(pNum));
       } else {
         priceEl.textContent = String(p).replace(/\.00$/, "");
       }
