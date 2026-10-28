@@ -18,7 +18,7 @@ class ReceiptData(BaseModel):
     base_amount: int = 0
     penalty_amount: int = 0
     total_amount: int = 0
-    total_display: str = "٠ ج.م"
+    total_display: str = "٠٫٠٠ ج.م"
     payment_method: str = "نقدي"
     is_lost_card: bool = False
     is_grace_period: bool = False

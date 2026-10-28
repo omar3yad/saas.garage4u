@@ -17,11 +17,17 @@
     <!-- 2-Step Progress Indicator -->
     <div class="grid grid-cols-2 gap-3 text-xs font-semibold">
         <div class="bg-gray-850 border border-gray-800 text-gray-400 rounded-xl p-3 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-xs">✓</span>
+            <span class="w-6 h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center text-xs">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+                </svg>
+            </span>
             <span>الخطوة الأولى: بيانات العميل واللوحة (مكتملة)</span>
         </div>
-        <div class="bg-indigo-600/20 border border-indigo-500/50 text-indigo-300 rounded-xl p-3 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">٢</span>
+        <div
+            class="bg-indigo-600/20 border border-indigo-500/50 text-indigo-300 rounded-xl p-3 flex items-center gap-2">
+            <span
+                class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">٢</span>
             <span>الخطوة الثانية: تخصيص الكرت واختيار الخطة (الحالية)</span>
         </div>
     </div>
@@ -39,28 +45,34 @@
     </div>
 
     <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 md:p-8 shadow-xl">
-        <div id="subscribeError" class="hidden mb-6 bg-red-950/60 border border-red-500/60 text-red-300 px-4 py-3 rounded-lg text-sm"></div>
+        <div id="subscribeError"
+            class="hidden mb-6 bg-red-950/60 border border-red-500/60 text-red-300 px-4 py-3 rounded-lg text-sm"></div>
 
-        <form id="subscribeForm" data-subscriber-id="{{ subscriber.id }}" onsubmit="handleCreateSubscription(event)" class="space-y-5">
+        <form id="subscribeForm" data-subscriber-id="{{ subscriber.id }}" onsubmit="handleCreateSubscription(event)"
+            class="space-y-5">
             <!-- Plan Selection (Optional / Custom) -->
             <div>
                 <label class="block text-sm font-semibold text-gray-300 mb-1.5">باقة الاشتراك</label>
                 <select id="subPlanSelect" onchange="onPlanSelected()"
                     class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500">
-                    <option value="" data-duration="30" data-price="">✨ اشتراك مخصص (تحديد السعر يدوياً)</option>
+                    <option value="" data-duration="30" data-price="">اشتراك مخصص (تحديد السعر يدوياً)</option>
                     {% for plan in plans %}
-                    <option value="{{ plan.id }}" data-duration="{{ plan.duration_days }}" data-price="{{ (plan.price_piastres / 100) | int }}">
-                        {{ plan.label }} — ({{ plan.duration_days | to_arabic_indic }} يوم) — {{ plan.price_piastres | format_egp }}
+                    <option value="{{ plan.id }}" data-duration="{{ plan.duration_days }}"
+                        data-price="{{ plan.price_piastres / 100.0 }}">
+                        {{ plan.label }} — ({{ plan.duration_days | to_arabic_indic }} يوم) — {{ plan.price_piastres |
+                        format_egp }}
                     </option>
                     {% endfor %}
                 </select>
-                <p class="text-xs text-gray-500 mt-1">يمكنك اختيار باقة محددة أو اختيار "اشتراك مخصص" وكتابة أي سعر تريده بالأسفل</p>
+                <p class="text-xs text-gray-500 mt-1">يمكنك اختيار باقة محددة أو اختيار "اشتراك مخصص" وكتابة أي سعر
+                    تريده بالأسفل</p>
             </div>
 
             <!-- Card Code Input (Direct Text/Scan) -->
             <div>
                 <label class="block text-sm font-semibold text-gray-300 mb-1.5">رقم / كود كرت الدخول (مطلوب)</label>
-                <input type="text" id="subCardCode" list="availableCards" required placeholder="أدخل أو امسح كود الكرت (مثلاً 3160)" autofocus
+                <input type="text" id="subCardCode" list="availableCards" required
+                    placeholder="أدخل أو امسح كود الكرت (مثلاً 3160)" autofocus
                     class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white font-mono text-base focus:outline-none focus:border-indigo-500">
                 <datalist id="availableCards">
                     {% for card in cards %}
@@ -84,10 +96,17 @@
             </div>
 
             <!-- Auto end-of-month info alert & summary -->
-            <div id="endPreviewBox" class="bg-indigo-950/40 border border-indigo-800/60 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <div id="endPreviewBox"
+                class="bg-indigo-950/40 border border-indigo-800/60 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                 <div class="flex items-center gap-2 text-indigo-200">
-                    <span>💡</span>
-                    <span>ينتهي الاشتراك في <strong>آخر يوم من الشهر</strong> (<span id="previewMonthText">—</span>)</span>
+                    <svg class="w-4 h-4 text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.516 0c.85.493 1.509 1.333 1.509 2.316V18">
+                        </path>
+                    </svg>
+                    <span>ينتهي الاشتراك في <strong>آخر يوم من الشهر</strong> (<span
+                            id="previewMonthText">—</span>)</span>
                 </div>
                 <div class="text-gray-300">
                     المدة المحسوبة: <span id="computedDaysCount" class="font-bold text-white font-mono">—</span> يوم
@@ -96,7 +115,7 @@
 
             <div>
                 <label class="block text-sm font-semibold text-gray-300 mb-1.5">المبلغ المدفوع (ج.م) (مطلوب)</label>
-                <input type="number" step="1" min="0" id="subAmountPaid" required placeholder="مثلاً 1500"
+                <input type="number" step="0.01" min="0" id="subAmountPaid" required placeholder="مثلاً 1500"
                     class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white font-mono text-base focus:outline-none focus:border-indigo-500">
             </div>
 
@@ -117,148 +136,146 @@
 </div>
 
 <script>
-// Calculate end of calendar month for a given YYYY-MM-DD
-function getEndOfMonth(dateStr) {
-    if (!dateStr) return '';
-    var parts = dateStr.split('-');
-    var y = parseInt(parts[0], 10);
-    var m = parseInt(parts[1], 10); // 1-12
-    var lastDay = new Date(y, m, 0).getDate();
-    var mStr = m < 10 ? '0' + m : '' + m;
-    var dStr = lastDay < 10 ? '0' + lastDay : '' + lastDay;
-    return y + '-' + mStr + '-' + dStr;
-}
-
-// Format date into readable Arabic month text
-function getArabicMonthName(dateStr) {
-    if (!dateStr) return '';
-    var d = new Date(dateStr);
-    try {
-        return d.toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' });
-    } catch (e) {
-        return dateStr;
+    // Calculate end of calendar month for a given YYYY-MM-DD
+    function getEndOfMonth(dateStr) {
+        if (!dateStr) return '';
+        var parts = dateStr.split('-');
+        var y = parseInt(parts[0], 10);
+        var m = parseInt(parts[1], 10); // 1-12
+        var lastDay = new Date(y, m, 0).getDate();
+        var mStr = m < 10 ? '0' + m : '' + m;
+        var dStr = lastDay < 10 ? '0' + lastDay : '' + lastDay;
+        return y + '-' + mStr + '-' + dStr;
     }
-}
 
-document.addEventListener('DOMContentLoaded', function() {
-    var today = new Date().toISOString().split('T')[0];
-    document.getElementById('subStartDate').value = today;
-    document.getElementById('subEndDate').value = getEndOfMonth(today);
-    updateSummaryPreview();
-});
-
-function onStartDateChanged() {
-    var startDateVal = document.getElementById('subStartDate').value;
-    if (startDateVal) {
-        document.getElementById('subEndDate').value = getEndOfMonth(startDateVal);
-    }
-    updateSummaryPreview();
-}
-
-function onPlanSelected() {
-    var planSelect = document.getElementById('subPlanSelect');
-    var selectedOption = planSelect.options[planSelect.selectedIndex];
-    if (selectedOption && selectedOption.value) {
-        var price = selectedOption.getAttribute('data-price');
-        if (price) {
-            document.getElementById('subAmountPaid').value = price;
+    // Format date into readable Arabic month text
+    function getArabicMonthName(dateStr) {
+        if (!dateStr) return '';
+        var d = new Date(dateStr);
+        try {
+            return d.toLocaleDateString('ar-EG', { month: 'long', year: 'numeric' });
+        } catch (e) {
+            return dateStr;
         }
     }
-    updateSummaryPreview();
-}
 
-function updateSummaryPreview() {
-    var startDateVal = document.getElementById('subStartDate').value;
-    var endDateVal = document.getElementById('subEndDate').value;
-    var previewMonthText = document.getElementById('previewMonthText');
-    var computedDaysCount = document.getElementById('computedDaysCount');
+    document.addEventListener('DOMContentLoaded', function () {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('subStartDate').value = today;
+        document.getElementById('subEndDate').value = getEndOfMonth(today);
+        updateSummaryPreview();
+    });
 
-    if (!startDateVal || !endDateVal) {
-        previewMonthText.innerText = '—';
-        computedDaysCount.innerText = '—';
-        return;
+    function onStartDateChanged() {
+        var startDateVal = document.getElementById('subStartDate').value;
+        if (startDateVal) {
+            document.getElementById('subEndDate').value = getEndOfMonth(startDateVal);
+        }
+        updateSummaryPreview();
     }
 
-    previewMonthText.innerText = getArabicMonthName(endDateVal);
-
-    var d1 = new Date(startDateVal);
-    var d2 = new Date(endDateVal);
-    var diffMs = d2 - d1;
-    var diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24)) + 1;
-    computedDaysCount.innerText = diffDays > 0 ? diffDays : 0;
-}
-
-async function handleCreateSubscription(e) {
-    e.preventDefault();
-    var errorDiv = document.getElementById('subscribeError');
-    var btn = document.getElementById('submitSubFormBtn');
-    errorDiv.classList.add('hidden');
-    errorDiv.innerText = '';
-    btn.disabled = true;
-
-    var planSelectVal = document.getElementById('subPlanSelect').value;
-    var planId = planSelectVal ? parseInt(planSelectVal) : null;
-    var cardCode = document.getElementById('subCardCode').value.trim();
-    var startDate = document.getElementById('subStartDate').value;
-    var endDate = document.getElementById('subEndDate').value;
-    var amountPaidEgp = parseFloat(document.getElementById('subAmountPaid').value);
-    var notes = document.getElementById('subNotes').value.trim() || null;
-
-    if (!cardCode) {
-        errorDiv.innerText = 'يرجى إدخال رقم / كود الكرت';
-        errorDiv.classList.remove('hidden');
-        btn.disabled = false;
-        return;
+    function onPlanSelected() {
+        var planSelect = document.getElementById('subPlanSelect');
+        var selectedOption = planSelect.options[planSelect.selectedIndex];
+        if (selectedOption && selectedOption.value) {
+            var price = selectedOption.getAttribute('data-price');
+            if (price) {
+                document.getElementById('subAmountPaid').value = price;
+            }
+        }
+        updateSummaryPreview();
     }
 
-    if (!startDate || !endDate) {
-        errorDiv.innerText = 'يرجى تحديد تاريخ البداية وتاريخ الانتهاء';
-        errorDiv.classList.remove('hidden');
-        btn.disabled = false;
-        return;
+    function updateSummaryPreview() {
+        var startDateVal = document.getElementById('subStartDate').value;
+        var endDateVal = document.getElementById('subEndDate').value;
+        var previewMonthText = document.getElementById('previewMonthText');
+        var computedDaysCount = document.getElementById('computedDaysCount');
+
+        if (!startDateVal || !endDateVal) {
+            previewMonthText.innerText = '—';
+            computedDaysCount.innerText = '—';
+            return;
+        }
+
+        previewMonthText.innerText = getArabicMonthName(endDateVal);
+
+        var d1 = new Date(startDateVal);
+        var d2 = new Date(endDateVal);
+        var diffMs = d2 - d1;
+        var diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24)) + 1;
+        computedDaysCount.innerText = diffDays > 0 ? diffDays : 0;
     }
 
-    if (isNaN(amountPaidEgp) || amountPaidEgp < 0) {
-        errorDiv.innerText = 'يرجى إدخال مبلغ صحيح';
-        errorDiv.classList.remove('hidden');
-        btn.disabled = false;
-        return;
-    }
+    async function handleCreateSubscription(e) {
+        e.preventDefault();
+        var errorDiv = document.getElementById('subscribeError');
+        var btn = document.getElementById('submitSubFormBtn');
+        errorDiv.classList.add('hidden');
+        errorDiv.innerText = '';
+        btn.disabled = true;
 
-    var subscriberId = parseInt(document.getElementById('subscribeForm').getAttribute('data-subscriber-id'), 10);
+        var planSelectVal = document.getElementById('subPlanSelect').value;
+        var planId = planSelectVal ? parseInt(planSelectVal) : null;
+        var cardCode = document.getElementById('subCardCode').value.trim();
+        var startDate = document.getElementById('subStartDate').value;
+        var endDate = document.getElementById('subEndDate').value;
+        var amountPaidEgp = parseFloat(document.getElementById('subAmountPaid').value);
+        var notes = document.getElementById('subNotes').value.trim() || null;
 
-    var payload = {
-        subscriber_id: subscriberId,
-        plan_id: planId,
-        card_code: cardCode,
-        start_date: startDate,
-        end_date: endDate,
-        amount_paid_egp: amountPaidEgp,
-        notes: notes
-    };
+        if (!cardCode) {
+            errorDiv.innerText = 'يرجى إدخال رقم / كود الكرت';
+            errorDiv.classList.remove('hidden');
+            btn.disabled = false;
+            return;
+        }
 
-    try {
-        var res = await fetch('/api/v1/subscriptions/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        if (!startDate || !endDate) {
+            errorDiv.innerText = 'يرجى تحديد تاريخ البداية وتاريخ الانتهاء';
+            errorDiv.classList.remove('hidden');
+            btn.disabled = false;
+            return;
+        }
 
-        var data = await res.json();
-        if (res.ok) {
-            window.location.href = '/ui/admin/subscribers/' + subscriberId;
-        } else {
-            errorDiv.innerText = data.detail || 'حدث خطأ أثناء إنشاء الاشتراك';
+        if (isNaN(amountPaidEgp) || amountPaidEgp < 0) {
+            errorDiv.innerText = 'يرجى إدخال مبلغ صحيح';
+            errorDiv.classList.remove('hidden');
+            btn.disabled = false;
+            return;
+        }
+
+        var subscriberId = parseInt(document.getElementById('subscribeForm').getAttribute('data-subscriber-id'), 10);
+
+        var payload = {
+            subscriber_id: subscriberId,
+            plan_id: planId,
+            card_code: cardCode,
+            start_date: startDate,
+            end_date: endDate,
+            amount_paid_egp: amountPaidEgp,
+            notes: notes
+        };
+
+        try {
+            var res = await fetch('/api/v1/subscriptions/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            var data = await res.json();
+            if (res.ok) {
+                window.location.href = '/ui/admin/subscribers/' + subscriberId;
+            } else {
+                errorDiv.innerText = data.detail || 'حدث خطأ أثناء إنشاء الاشتراك';
+                errorDiv.classList.remove('hidden');
+                btn.disabled = false;
+            }
+        } catch (err) {
+            errorDiv.innerText = 'تعذر الاتصال بالخادم';
             errorDiv.classList.remove('hidden');
             btn.disabled = false;
         }
-    } catch (err) {
-        errorDiv.innerText = 'تعذر الاتصال بالخادم';
-        errorDiv.classList.remove('hidden');
-        btn.disabled = false;
     }
-}
 </script>
 {% endblock %}
-
-

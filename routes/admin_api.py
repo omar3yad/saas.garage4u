@@ -51,8 +51,13 @@ from services.exceptions import (
     SessionNotFoundError,
     SessionNotActiveError,
 )
-from utils.csv_export import generate_sessions_csv
-from utils.time import cairo_date_str
+from utils.csv_export import (
+    generate_sessions_csv,
+    generate_monthly_revenue_csv,
+    generate_daily_revenue_csv,
+    generate_operator_revenue_csv,
+)
+from utils.time import cairo_date_str, cairo_now
 
 
 router = APIRouter(
@@ -496,19 +501,63 @@ async def force_close_shift(
 
 @router.get("/reports/export/csv")
 async def export_report_csv(
+    report_type: str | None = Query(None, alias="type"),
+    group_by: str | None = Query(None),
     filters: ReportFilters = Depends(get_report_filters),
     db: AsyncSession = Depends(get_db),
 ):
+    export_mode = (report_type or group_by or "detailed").lower().strip()
     repo = ReportRepository(db)
-    sessions_iter = repo.get_sessions_for_export(filters)
+    service = ReportService(db, repo)
 
-    users_result = await db.execute(select(User.id, User.full_name))
-    operator_names = {u.id: u.full_name for u in users_result.fetchall()}
-
-    generator = generate_sessions_csv(sessions_iter, operator_names)
+    today = cairo_now().date()
     start_str = filters.start_date.isoformat() if filters.start_date else "all"
     end_str = filters.end_date.isoformat() if filters.end_date else "all"
-    filename = f"pgms_report_{start_str}_{end_str}.csv"
+
+    if export_mode in ("monthly", "month", "شهر", "شهري"):
+        if filters.start_date is None or filters.start_date == filters.end_date:
+            filters = filters.model_copy(update={
+                "start_date": date(today.year, 1, 1),
+                "end_date": filters.end_date or today,
+            })
+            start_str = filters.start_date.isoformat()
+            end_str = filters.end_date.isoformat()
+        monthly_data = await service.get_monthly_revenue(filters)
+        generator = generate_monthly_revenue_csv(monthly_data)
+        filename = f"revenue_monthly_{start_str}_{end_str}.csv"
+
+    elif export_mode in ("daily", "day", "يوم", "يومي"):
+        if filters.start_date is None:
+            filters = filters.model_copy(update={
+                "start_date": date(today.year, today.month, 1),
+                "end_date": filters.end_date or today,
+            })
+            start_str = filters.start_date.isoformat()
+            end_str = filters.end_date.isoformat()
+        daily_data = await service.get_daily_revenue(filters)
+        generator = generate_daily_revenue_csv(daily_data)
+        filename = f"revenue_daily_{start_str}_{end_str}.csv"
+
+    elif export_mode in ("operator", "worker", "operators", "workers", "عمال", "عامل"):
+        if filters.start_date is None and filters.end_date is None:
+            filters = filters.model_copy(update={
+                "start_date": date(today.year, today.month, 1),
+                "end_date": today,
+            })
+            start_str = filters.start_date.isoformat()
+            end_str = filters.end_date.isoformat()
+        operator_data = await service.get_revenue_by_operator(filters)
+        generator = generate_operator_revenue_csv(operator_data)
+        filename = f"revenue_by_operator_{start_str}_{end_str}.csv"
+
+    else:
+        # Default: detailed sessions
+        sessions_iter = repo.get_sessions_for_export(filters)
+        users_result = await db.execute(select(User.id, User.full_name))
+        operator_names = {u.id: u.full_name for u in users_result.fetchall()}
+        generator = generate_sessions_csv(sessions_iter, operator_names)
+        filename = f"pgms_report_{start_str}_{end_str}.csv"
+
     return StreamingResponse(
         generator,
         media_type="text/csv; charset=utf-8",

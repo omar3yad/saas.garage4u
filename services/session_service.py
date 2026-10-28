@@ -340,7 +340,7 @@ class SessionService:
                 "exit_time": str(session.exit_time),
             }
 
-            amount_piastres = max(0, int(round(amount_charged_egp)) * 100)
+            amount_piastres = max(0, round(amount_charged_egp * 100))
 
             session.status = SessionStatus.COMPLETED
             session.exit_time = exit_time

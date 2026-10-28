@@ -1,4 +1,5 @@
 from datetime import date, datetime, time, timedelta, timezone
+from typing import Any
 import asyncio
 import logging
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -239,6 +240,51 @@ class ReportService:
             curr += timedelta(days=1)
 
         return results
+
+    async def get_monthly_revenue(
+        self, filters: ReportFilters
+    ) -> list[dict[str, Any]]:
+        """Returns monthly revenue breakdown."""
+        start_utc = (
+            cairo_date_to_utc_start(filters.start_date) if filters.start_date else None
+        )
+        end_utc = cairo_date_to_utc_end(filters.end_date) if filters.end_date else None
+
+        rows = await self.report_repo.get_monthly_revenue_raw(
+            start_utc=start_utc,
+            end_utc=end_utc,
+            gate_number=filters.gate_number,
+            operator_id=filters.operator_id,
+        )
+
+        if filters.start_date and filters.end_date:
+            curr_y = filters.start_date.year
+            curr_m = filters.start_date.month
+            end_y = filters.end_date.year
+            end_m = filters.end_date.month
+
+            existing_map = {r["month_str"]: r for r in rows}
+            results = []
+            while (curr_y < end_y) or (curr_y == end_y and curr_m <= end_m):
+                m_str = f"{curr_y:04d}-{curr_m:02d}"
+                if m_str in existing_map:
+                    results.append(existing_map[m_str])
+                else:
+                    results.append({
+                        "month_str": m_str,
+                        "session_count": 0,
+                        "ticket_piastres": 0,
+                        "sub_count": 0,
+                        "sub_piastres": 0,
+                        "total_piastres": 0,
+                    })
+                curr_m += 1
+                if curr_m > 12:
+                    curr_m = 1
+                    curr_y += 1
+            return results
+
+        return rows
 
     async def get_sessions_filtered(
         self,

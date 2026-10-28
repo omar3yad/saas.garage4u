@@ -11,39 +11,120 @@
       <p class="text-sm text-gray-400 mt-1">تقارير الإيرادات المجمعة والتفصيلية للمرآب</p>
     </div>
     <div class="flex items-center gap-3">
-      <a href="/api/v1/admin/reports/export/csv?{% if filters.start_date %}start_date={{ filters.start_date }}&{% endif %}{% if filters.end_date %}end_date={{ filters.end_date }}&{% endif %}{% if filters.gate_number %}gate_number={{ filters.gate_number }}&{% endif %}{% if filters.operator_id %}operator_id={{ filters.operator_id }}&{% endif %}" class="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
-        <span>📥</span>
-        <span>{{ t("admin.export.csv_button") }}</span>
-      </a>
-      <a href="/ui/admin/reports/print?report_type=revenue&{% if filters.start_date %}start_date={{ filters.start_date }}&{% endif %}{% if filters.end_date %}end_date={{ filters.end_date }}&{% endif %}{% if filters.gate_number %}gate_number={{ filters.gate_number }}&{% endif %}{% if filters.operator_id %}operator_id={{ filters.operator_id }}&{% endif %}" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
-        <span>🖨️</span>
+      <!-- CSV Export Dropdown -->
+      <div class="relative inline-block text-right" id="csvDropdownContainer">
+        <button type="button" id="csvDropdownBtn"
+          class="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 px-4 py-2 rounded-lg text-sm transition flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm cursor-pointer">
+          <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3">
+            </path>
+          </svg>
+          <span>{{ t("admin.export.csv_button") }}</span>
+          <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" id="csvDropdownArrow" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div id="csvDropdownMenu"
+          class="hidden absolute right-0 mt-2 rounded-xl shadow-2xl bg-gray-900 border border-gray-700 divide-y divide-gray-800 z-50"
+          style="min-width: 175px;">
+          <div class="p-1 space-y-0.5 text-right">
+            <!-- شهر -->
+            <a href="/api/v1/admin/reports/export/csv?type=monthly{% if request.query_params.get('start_date') %}&start_date={{ request.query_params.get('start_date') }}{% endif %}{% if request.query_params.get('end_date') %}&end_date={{ request.query_params.get('end_date') }}{% endif %}{% if filters.gate_number %}&gate_number={{ filters.gate_number }}{% endif %}{% if filters.operator_id %}&operator_id={{ filters.operator_id }}{% endif %}"
+              class="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-800 rounded-lg transition whitespace-nowrap">
+              <svg class="w-4 h-4 text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5">
+                </path>
+              </svg>
+              <span class="font-medium">تقرير شهر</span>
+            </a>
+
+            <!-- يوم -->
+            <a href="/api/v1/admin/reports/export/csv?type=daily{% if request.query_params.get('start_date') %}&start_date={{ request.query_params.get('start_date') }}{% endif %}{% if request.query_params.get('end_date') %}&end_date={{ request.query_params.get('end_date') }}{% endif %}{% if filters.gate_number %}&gate_number={{ filters.gate_number }}{% endif %}{% if filters.operator_id %}&operator_id={{ filters.operator_id }}{% endif %}"
+              class="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-800 rounded-lg transition whitespace-nowrap">
+              <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z">
+                </path>
+              </svg>
+              <span class="font-medium">تقرير يوم</span>
+            </a>
+
+            <!-- عمال -->
+            <a href="/api/v1/admin/reports/export/csv?type=operator{% if request.query_params.get('start_date') %}&start_date={{ request.query_params.get('start_date') }}{% endif %}{% if request.query_params.get('end_date') %}&end_date={{ request.query_params.get('end_date') }}{% endif %}{% if filters.gate_number %}&gate_number={{ filters.gate_number }}{% endif %}{% if filters.operator_id %}&operator_id={{ filters.operator_id }}{% endif %}"
+              class="flex items-center gap-2.5 px-3 py-2 text-sm text-gray-200 hover:text-white hover:bg-gray-800 rounded-lg transition whitespace-nowrap">
+              <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z">
+                </path>
+              </svg>
+              <span class="font-medium">تقرير عمال</span>
+            </a>
+          </div>
+
+          <!-- تفصيلي -->
+          <div class="p-1">
+            <a href="/api/v1/admin/reports/export/csv?type=detailed{% if request.query_params.get('start_date') %}&start_date={{ request.query_params.get('start_date') }}{% endif %}{% if request.query_params.get('end_date') %}&end_date={{ request.query_params.get('end_date') }}{% endif %}{% if filters.gate_number %}&gate_number={{ filters.gate_number }}{% endif %}{% if filters.operator_id %}&operator_id={{ filters.operator_id }}{% endif %}"
+              class="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-800 rounded-lg transition whitespace-nowrap">
+              <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z">
+                </path>
+              </svg>
+              <span>تقرير تفصيلي</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Print Button -->
+      <a href="/ui/admin/reports/print?report_type=revenue&{% if filters.start_date %}start_date={{ filters.start_date }}&{% endif %}{% if filters.end_date %}end_date={{ filters.end_date }}&{% endif %}{% if filters.gate_number %}gate_number={{ filters.gate_number }}&{% endif %}{% if filters.operator_id %}operator_id={{ filters.operator_id }}&{% endif %}"
+        target="_blank"
+        class="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+        <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M6.72 13.829c-.24-1.076-.672-2.126-1.272-3.078M18 10a6 6 0 00-12 0v3.75A2.25 2.25 0 008.25 16h7.5A2.25 2.25 0 0018 13.75V10zM6 18h12a2 2 0 002-2v-4a2 2 0 00-2-2H6a2 2 0 00-2 2v4a2 2 0 002 2zM6 6h12v4H6V6z">
+          </path>
+        </svg>
         <span>{{ t("admin.print.button") }}</span>
       </a>
     </div>
   </div>
 
   <!-- Filter Bar -->
-  <form method="GET" action="/ui/admin/reports/revenue" class="bg-gray-800/80 border border-gray-700/60 rounded-xl p-4 shadow">
+  <form method="GET" action="/ui/admin/reports/revenue"
+    class="bg-gray-800/80 border border-gray-700/60 rounded-xl p-4 shadow">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
       <!-- Start Date -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">{{ t("admin.filter.start_date") }}</label>
-        <input type="date" name="start_date" value="{{ filters.start_date or '' }}" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+        <input type="date" name="start_date" value="{{ filters.start_date or '' }}"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
       </div>
 
       <!-- End Date -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">{{ t("admin.filter.end_date") }}</label>
-        <input type="date" name="end_date" value="{{ filters.end_date or '' }}" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+        <input type="date" name="end_date" value="{{ filters.end_date or '' }}"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
       </div>
 
       <!-- Gate Number -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">البوابة</label>
-        <select name="gate_number" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+        <select name="gate_number"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
           <option value="">{{ t("admin.filter.all_gates") }}</option>
           {% for g in range(1, 6) %}
-          <option value="{{ g }}" {% if filters.gate_number == g %}selected{% endif %}>بوابة {{ g | to_arabic_indic }}</option>
+          <option value="{{ g }}" {% if filters.gate_number==g %}selected{% endif %}>بوابة {{ g | to_arabic_indic }}
+          </option>
           {% endfor %}
         </select>
       </div>
@@ -51,17 +132,19 @@
       <!-- Operator -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">العامل</label>
-        <select name="operator_id" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+        <select name="operator_id"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
           <option value="">{{ t("admin.filter.all_operators") }}</option>
           {% for op in all_operators %}
-          <option value="{{ op.id }}" {% if filters.operator_id == op.id %}selected{% endif %}>{{ op.full_name }}</option>
+          <option value="{{ op.id }}" {% if filters.operator_id==op.id %}selected{% endif %}>{{ op.full_name }}</option>
           {% endfor %}
         </select>
       </div>
 
       <!-- Submit -->
       <div class="flex items-end">
-        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-1.5 px-3 rounded-lg text-sm transition">
+        <button type="submit"
+          class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-1.5 px-3 rounded-lg text-sm transition">
           {{ t("admin.filter.submit") }}
         </button>
       </div>
@@ -72,7 +155,11 @@
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
     <div class="bg-gray-800/80 border border-gray-700/60 rounded-xl p-5 shadow">
       <p class="text-xs text-gray-400 font-medium">إجمالي الإيرادات</p>
-      <p class="text-2xl font-bold text-emerald-400 mt-2">{{ summary.total_revenue_piastres | format_egp }}</p>
+      <div class="flex items-center gap-1.5 mt-2">
+        <span class="text-2xl font-bold text-emerald-400 leading-none">{{ summary.total_revenue_piastres | format_egp
+          }}</span>
+        <span class="text-sm font-semibold text-emerald-400/80 leading-none">ج.م</span>
+      </div>
     </div>
     <div class="bg-gray-800/80 border border-gray-700/60 rounded-xl p-5 shadow">
       <p class="text-xs text-gray-400 font-medium">إجمالي الجلسات</p>
@@ -84,7 +171,10 @@
     </div>
     <div class="bg-gray-800/80 border border-gray-700/60 rounded-xl p-5 shadow">
       <p class="text-xs text-gray-400 font-medium">متوسط قيمة التذكرة</p>
-      <p class="text-2xl font-bold text-cyan-400 mt-2">{{ summary.avg_revenue_piastres | format_egp }}</p>
+      <div class="flex items-baseline gap-1.5 mt-2">
+        <span class="text-2xl font-bold text-cyan-400">{{ summary.avg_revenue_piastres | format_egp }}</span>
+        <span class="text-xs font-normal text-gray-400">ج.م</span>
+      </div>
     </div>
   </div>
 
@@ -111,17 +201,33 @@
               <td class="p-3">
                 <div class="flex items-center gap-2">
                   {% if st.service_type == 'tickets' %}
-                    <span class="text-lg">🎟️</span>
+                  <svg class="w-5 h-5 text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z">
+                    </path>
+                  </svg>
                   {% elif st.service_type == 'subscriptions' %}
-                    <span class="text-lg">💳</span>
+                  <svg class="w-5 h-5 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z">
+                    </path>
+                  </svg>
                   {% else %}
-                    <span class="text-lg">⚠️</span>
+                  <svg class="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z">
+                    </path>
+                  </svg>
                   {% endif %}
                   <span class="font-semibold text-white">{{ st.label }}</span>
                 </div>
               </td>
               <td class="p-3 text-indigo-300">{{ st.session_count | to_arabic_indic }}</td>
-              <td class="p-3 font-bold text-emerald-400">{{ st.total_piastres | format_egp }}</td>
+              <td class="p-3 font-bold text-emerald-400"><span>{{ st.total_piastres | format_egp }}</span> <span
+                  class="text-xs font-normal text-gray-400 mr-1">ج.م</span></td>
               <td class="p-3">
                 <div class="flex items-center gap-2">
                   <div class="w-16 bg-gray-700 rounded-full h-2 overflow-hidden">
@@ -160,7 +266,8 @@
             <tr class="hover:bg-gray-700/30">
               <td class="p-3 font-semibold text-white">{{ op.operator_name }}</td>
               <td class="p-3 text-indigo-300">{{ op.session_count | to_arabic_indic }}</td>
-              <td class="p-3 font-bold text-emerald-400">{{ op.total_piastres | format_egp }}</td>
+              <td class="p-3 font-bold text-emerald-400"><span>{{ op.total_piastres | format_egp }}</span> <span
+                  class="text-xs font-normal text-gray-400 mr-1">ج.م</span></td>
             </tr>
             {% else %}
             <tr>
@@ -190,9 +297,13 @@
         <tbody class="divide-y divide-gray-700/60">
           {% for d in daily %}
           <tr class="hover:bg-gray-700/30 {{ 'text-gray-500' if d.session_count == 0 else '' }}">
-            <td class="p-3 font-mono font-medium {{ 'text-gray-500' if d.session_count == 0 else 'text-white' }}">{{ d.date_str }}</td>
-            <td class="p-3 {{ 'text-gray-500' if d.session_count == 0 else 'text-indigo-300' }}">{{ d.session_count | to_arabic_indic }}</td>
-            <td class="p-3 font-bold {{ 'text-gray-500' if d.session_count == 0 else 'text-emerald-400' }}">{{ d.total_piastres | format_egp }}</td>
+            <td class="p-3 font-mono font-medium {{ 'text-gray-500' if d.session_count == 0 else 'text-white' }}">{{
+              d.date_str }}</td>
+            <td class="p-3 {{ 'text-gray-500' if d.session_count == 0 else 'text-indigo-300' }}">{{ d.session_count |
+              to_arabic_indic }}</td>
+            <td class="p-3 font-bold {{ 'text-gray-500' if d.session_count == 0 else 'text-emerald-400' }}"><span>{{
+                d.total_piastres | format_egp }}</span> <span class="text-xs font-normal text-gray-400 mr-1">ج.م</span>
+            </td>
           </tr>
           {% else %}
           <tr>
@@ -204,4 +315,48 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('csvDropdownBtn');
+    const menu = document.getElementById('csvDropdownMenu');
+    const arrow = document.getElementById('csvDropdownArrow');
+    const container = document.getElementById('csvDropdownContainer');
+
+    if (!btn || !menu) return;
+
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (arrow) arrow.classList.add('rotate-180');
+      } else {
+        menu.classList.add('hidden');
+        if (arrow) arrow.classList.remove('rotate-180');
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (container && !container.contains(e.target)) {
+        menu.classList.add('hidden');
+        if (arrow) arrow.classList.remove('rotate-180');
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        menu.classList.add('hidden');
+        if (arrow) arrow.classList.remove('rotate-180');
+      }
+    });
+
+    menu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        menu.classList.add('hidden');
+        if (arrow) arrow.classList.remove('rotate-180');
+      });
+    });
+  });
+</script>
 {% endblock %}

@@ -52,71 +52,79 @@
       </div>
       <nav class="p-3 space-y-1 text-sm font-medium flex-1 overflow-y-auto">
         <a href="/ui/admin/dashboard"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path == '/ui/admin/dashboard' %}bg-cyan-600/20 text-cyan-400 font-semibold border-2  border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>📊</span>
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path == '/ui/admin/dashboard' %}bg-cyan-600/20 text-cyan-400 font-semibold border-2 border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
+          <svg class="w-5 h-5 shrink-0 text-current" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="9" rx="1.5"></rect>
+            <rect x="14" y="3" width="7" height="5" rx="1.5"></rect>
+            <rect x="14" y="12" width="7" height="9" rx="1.5"></rect>
+            <rect x="3" y="16" width="7" height="5" rx="1.5"></rect>
+          </svg>
           <span>{{ t("admin.nav.dashboard", "لوحة التحكم") }}</span>
         </a>
         <a href="/ui/admin/shifts"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/shifts') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2  border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>⏱️</span>
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/shifts') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2 border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
+          <svg class="w-5 h-5 shrink-0 text-current" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
           <span>{{ t("admin.nav.shifts", "الشيفتات") }}</span>
         </a>
         <a href="/ui/admin/sessions"
           class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/sessions') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2 border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>🚗</span>
+          <svg class="w-5 h-5 shrink-0 text-current" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9C2.1 11.1 2 11.5 2 12v4c0 .6.4 1 1 1h2"></path>
+            <circle cx="7" cy="17" r="2"></circle>
+            <path d="M9 17h6"></path>
+            <circle cx="17" cy="17" r="2"></circle>
+          </svg>
           <span>{{ t("admin.nav.sessions", "دخول وخروج") }}</span>
         </a>
         <a href="/ui/admin/reports/revenue"
           class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/reports') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2 border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>📈</span>
+          <svg class="w-5 h-5 shrink-0 text-current" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
           <span>{{ t("admin.nav.reports", "التقارير") }}</span>
         </a>
         <a href="/ui/admin/rates"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/rates') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2  border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>💰</span>
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/rates') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2 border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
+          <svg class="w-5 h-5 shrink-0 text-current" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M14.8 9A2 2 0 0 0 13 8h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1-1.8-1"></path>
+            <path d="M12 6v2m0 8v2"></path>
+          </svg>
           <span>{{ t("admin.nav.rates", "التعريفات") }}</span>
         </a>
         <a href="/ui/admin/operators"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/operators') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2  border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>👷</span>
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/operators') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2 border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
+          <svg class="w-5 h-5 shrink-0 text-current" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
           <span>{{ t("admin.nav.operators", "المشغلين") }}</span>
         </a>
         <a href="/ui/admin/cards"
           class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/cards') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2 border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>💳</span>
+          <svg class="w-5 h-5 shrink-0 text-current" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+            <line x1="2" y1="10" x2="22" y2="10"></line>
+          </svg>
           <span>إدارة الكروت والباركود</span>
         </a>
-
-<!-- 
-        <div class="pt-3 pb-1">
-          <p class="px-3 text-xs font-semibold uppercase tracking-wider text-gray-500">الاشتراكات</p>
-        </div>
-        <a href="/ui/admin/subscribers"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path == '/ui/admin/subscribers' %}bg-cyan-600/20 text-cyan-400 font-semibold border-2  border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>👥</span>
-          <span>{{ t("admin.nav.subscribers", "المشتركين") }}</span>
-        </a>
-        <a href="/ui/admin/subscribers/import"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/subscribers/import') %}bg-indigo-600/20 text-indigo-400 font-semibold border-2 border-indigo-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>📥</span>
-          <span>استيراد إكسيل شركات</span>
-        </a>
-        <a href="/ui/admin/plans"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/plans') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2  border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>📋</span>
-          <span>{{ t("admin.nav.plans", "خطط الاشتراك") }}</span>
-        </a>
-        <a href="/ui/admin/subscriptions"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path.startswith('/ui/admin/subscriptions') %}bg-cyan-600/20 text-cyan-400 font-semibold border-2  border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
-          <span>🎫</span>
-          <span>{{ t("admin.nav.subscriptions", "الاشتراكات") }}</span>
-        </a> -->
 
         <div class="pt-4 mt-4 border-t border-gray-800">
           <form method="POST" action="/ui/logout">
             <button type="submit"
               class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:bg-red-950/40 hover:text-red-300 transition text-right">
-              <span>🚪</span>
+              <svg class="w-5 h-5 shrink-0 text-red-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
               <span>{{ t("admin.nav.logout", "تسجيل خروج") }}</span>
             </button>
           </form>
@@ -134,7 +142,11 @@
         <div class="flex items-center gap-3">
           <button id="sidebar-toggle"
             class="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition focus:outline-none">
-            <span class="text-xl leading-none">☰</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
           </button>
           <span class="text-sm font-semibold text-gray-300">مواقف السيارات الذكية</span>
         </div>

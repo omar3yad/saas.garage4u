@@ -11,8 +11,13 @@
       <p class="text-sm text-gray-400 mt-1">سجل وبحث كافة حركات الدخول والخروج في المرآب</p>
     </div>
     <div>
-      <a href="/api/v1/admin/sessions/export/csv?{% if filters.start_date %}start_date={{ filters.start_date }}&{% endif %}{% if filters.end_date %}end_date={{ filters.end_date }}&{% endif %}{% if filters.gate_number %}gate_number={{ filters.gate_number }}&{% endif %}{% if filters.operator_id %}operator_id={{ filters.operator_id }}&{% endif %}{% if filters.status %}status={{ filters.status }}&{% endif %}{% if filters.card_code %}card_code={{ filters.card_code }}&{% endif %}{% if filters.plate_number %}plate_number={{ filters.plate_number }}&{% endif %}{% if filters.long_stay %}long_stay=true&{% endif %}" class="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
-        <span>📥</span>
+      <a href="/api/v1/admin/sessions/export/csv?{% if filters.start_date %}start_date={{ filters.start_date }}&{% endif %}{% if filters.end_date %}end_date={{ filters.end_date }}&{% endif %}{% if filters.gate_number %}gate_number={{ filters.gate_number }}&{% endif %}{% if filters.operator_id %}operator_id={{ filters.operator_id }}&{% endif %}{% if filters.status %}status={{ filters.status.value if filters.status.value is defined else filters.status }}&{% endif %}{% if filters.card_code %}card_code={{ filters.card_code }}&{% endif %}{% if filters.plate_number %}plate_number={{ filters.plate_number }}&{% endif %}{% if filters.long_stay %}long_stay=true&{% endif %}"
+        class="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+        <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3">
+          </path>
+        </svg>
         <span>{{ t("admin.export.csv_button") }}</span>
       </a>
     </div>
@@ -20,26 +25,30 @@
 
   <!-- Filter Bar -->
   <form method="GET" action="/ui/admin/sessions" class="bg-gray-800/80 border border-gray-700/60 rounded-xl p-4 shadow">
+    <input type="hidden" name="size" value="{{ size }}">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
       <!-- Start Date -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">{{ t("admin.filter.start_date") }}</label>
-        <input type="date" name="start_date" value="{{ filters.start_date or '' }}" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+        <input type="date" name="start_date" value="{{ filters.start_date or today }}"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
       </div>
 
       <!-- End Date -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">{{ t("admin.filter.end_date") }}</label>
-        <input type="date" name="end_date" value="{{ filters.end_date or '' }}" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+        <input type="date" name="end_date" value="{{ filters.end_date or today }}"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
       </div>
 
       <!-- Gate Number -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">البوابة</label>
-        <select name="gate_number" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+        <select name="gate_number"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
           <option value="">الكل</option>
           {% for g in range(1, 6) %}
-          <option value="{{ g }}" {% if filters.gate_number == g %}selected{% endif %}>{{ g | to_arabic_indic }}</option>
+          <option value="{{ g }}" {% if filters.gate_number==g %}selected{% endif %}>{{ g | to_arabic_indic }}</option>
           {% endfor %}
         </select>
       </div>
@@ -47,10 +56,11 @@
       <!-- Operator -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">العامل</label>
-        <select name="operator_id" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+        <select name="operator_id"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
           <option value="">الكل</option>
           {% for op in all_operators %}
-          <option value="{{ op.id }}" {% if filters.operator_id == op.id %}selected{% endif %}>{{ op.full_name }}</option>
+          <option value="{{ op.id }}" {% if filters.operator_id==op.id %}selected{% endif %}>{{ op.full_name }}</option>
           {% endfor %}
         </select>
       </div>
@@ -58,33 +68,41 @@
       <!-- Status -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">الحالة</label>
-        <select name="status" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+        <select name="status"
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
           <option value="">الكل</option>
-          <option value="ACTIVE" {% if filters.status == 'ACTIVE' %}selected{% endif %}>داخل</option>
-          <option value="COMPLETED" {% if filters.status == 'COMPLETED' %}selected{% endif %}>خرج</option>
-          <option value="LOST_CARD" {% if filters.status == 'LOST_CARD' %}selected{% endif %}>كرت مفقود</option>
+          <option value="ACTIVE" {% if (filters.status.value if filters.status.value is defined else
+            filters.status)=='ACTIVE' %}selected{% endif %}>داخل</option>
+          <option value="COMPLETED" {% if (filters.status.value if filters.status.value is defined else
+            filters.status)=='COMPLETED' %}selected{% endif %}>خرج</option>
+          <option value="LOST_CARD" {% if (filters.status.value if filters.status.value is defined else
+            filters.status)=='LOST_CARD' %}selected{% endif %}>كرت مفقود</option>
         </select>
       </div>
 
       <!-- Card Code -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">كود الكرت</label>
-        <input type="text" name="card_code" value="{{ filters.card_code or '' }}" placeholder="بحث بالكود..." class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+        <input type="text" name="card_code" value="{{ filters.card_code or '' }}" placeholder="بحث بالكود..."
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
       </div>
 
       <!-- Plate Number -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">رقم اللوحة</label>
-        <input type="text" name="plate_number" value="{{ filters.plate_number or '' }}" placeholder="أرقام / حروف..." class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+        <input type="text" name="plate_number" value="{{ filters.plate_number or '' }}" placeholder="أرقام / حروف..."
+          class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
       </div>
 
       <!-- Long Stay & Submit -->
       <div class="flex items-end gap-2">
         <label class="flex items-center gap-1.5 cursor-pointer pb-2 text-xs text-amber-300 whitespace-nowrap">
-          <input type="checkbox" name="long_stay" value="true" {% if filters.long_stay %}checked{% endif %} class="rounded bg-gray-900 border-gray-700 text-indigo-600 focus:ring-0">
+          <input type="checkbox" name="long_stay" value="true" {% if filters.long_stay %}checked{% endif %}
+            class="rounded bg-gray-900 border-gray-700 text-indigo-600 focus:ring-0">
           <span>&gt;٢٤س</span>
         </label>
-        <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-1.5 px-2 rounded-lg text-xs transition">
+        <button type="submit"
+          class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-1.5 px-2 rounded-lg text-xs transition">
           {{ t("admin.filter.submit") }}
         </button>
       </div>
@@ -95,11 +113,12 @@
   <div class="flex items-center justify-between text-xs text-gray-400">
     {% if total > 0 %}
     {% set from_item = (page - 1) * size + 1 %}
-    {% set to_item = page * size if (page * size) < total else total %}
-    <span>{{ t("admin.pagination.showing") | replace("{from}", from_item | to_arabic_indic) | replace("{to}", to_item | to_arabic_indic) | replace("{total}", total | to_arabic_indic) }}</span>
-    {% else %}
-    <span>{{ t("admin.table.no_results") }}</span>
-    {% endif %}
+    {% set to_item = page * size if (page * size) < total else total %} <span>{{ t("admin.pagination.showing") |
+      replace("{from}", from_item | to_arabic_indic) | replace("{to}", to_item | to_arabic_indic) | replace("{total}",
+      total | to_arabic_indic) }}</span>
+      {% else %}
+      <span>{{ t("admin.table.no_results") }}</span>
+      {% endif %}
   </div>
 
   <!-- Sessions Table -->
@@ -125,21 +144,32 @@
         </thead>
         <tbody class="divide-y divide-gray-700/60">
           {% for s in sessions %}
-          <tr onclick="window.location.href='/ui/admin/sessions/{{ s.id }}'" class="cursor-pointer hover:bg-gray-700/40 transition">
+          <tr onclick="window.location.href='/ui/admin/sessions/{{ s.id }}'"
+            class="cursor-pointer hover:bg-gray-700/40 transition">
             <td class="p-3 font-mono font-medium text-white">#{{ s.id | zfill(8) | to_arabic_indic }}</td>
             <td class="p-3 font-mono text-indigo-300">{{ s.card_code }}</td>
             <td class="p-3 text-gray-200">{{ s.plate_number or "—" }}</td>
             <td class="p-2 text-center" onclick="event.stopPropagation()">
               <div class="inline-flex items-center gap-1.5 justify-center">
                 {% if s.plate_image_path %}
-                <a href="/ui/admin/sessions/{{ s.id }}/plate-image" target="_blank" title="عرض صورة الدخول" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-900/90 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500/60 text-cyan-300 hover:text-white transition group shadow-sm text-xs font-bold font-mono">
-                  <span>📷</span>
+                <a href="/ui/admin/sessions/{{ s.id }}/plate-image" target="_blank" title="عرض صورة الدخول"
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500/60 text-cyan-300 hover:text-white transition group shadow-sm text-xs font-bold">
+                  <svg class="w-4 h-4 text-cyan-400 group-hover:text-cyan-200 transition shrink-0" fill="none"
+                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
                   <span>دخول</span>
                 </a>
                 {% endif %}
                 {% if s.exit_image_path %}
-                <a href="/ui/admin/sessions/{{ s.id }}/exit-image" target="_blank" title="عرض صورة الخروج" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-900/90 hover:bg-emerald-950 border border-slate-700 hover:border-emerald-500/60 text-emerald-300 hover:text-white transition group shadow-sm text-xs font-bold font-mono">
-                  <span>📸</span>
+                <a href="/ui/admin/sessions/{{ s.id }}/exit-image" target="_blank" title="عرض صورة الخروج"
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-emerald-950 border border-slate-700 hover:border-emerald-500/60 text-emerald-300 hover:text-white transition group shadow-sm text-xs font-bold">
+                  <svg class="w-4 h-4 text-emerald-400 group-hover:text-emerald-200 transition shrink-0" fill="none"
+                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
                   <span>خروج</span>
                 </a>
                 {% endif %}
@@ -150,26 +180,38 @@
             </td>
             <td class="p-3 text-gray-300">بوابة {{ s.gate_number | to_arabic_indic }}</td>
             <td class="p-3 text-gray-300">{{ operator_names.get(s.operator_id, "—") }}</td>
-            <td class="p-3 font-medium text-emerald-300">{{ operator_names.get(s.exit_operator_id, "—") if s.exit_operator_id else "—" }}</td>
+            <td class="p-3 font-medium text-emerald-300">{{ operator_names.get(s.exit_operator_id, "—") if
+              s.exit_operator_id else "—" }}</td>
             <td class="p-3">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if s.status.value == 'ACTIVE' or s.status == 'ACTIVE' %}bg-cyan-900/60 text-cyan-300 border border-cyan-700/50{% elif s.status.value == 'COMPLETED' or s.status == 'COMPLETED' %}bg-emerald-900/60 text-emerald-300 border border-emerald-700/50{% else %}bg-red-900/60 text-red-300 border border-red-700/50{% endif %}">
+              <span
+                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if s.status.value == 'ACTIVE' or s.status == 'ACTIVE' %}bg-cyan-900/60 text-cyan-300 border border-cyan-700/50{% elif s.status.value == 'COMPLETED' or s.status == 'COMPLETED' %}bg-emerald-900/60 text-emerald-300 border border-emerald-700/50{% else %}bg-red-900/60 text-red-300 border border-red-700/50{% endif %}">
                 {{ s.status | session_status_label }}
               </span>
             </td>
             <td class="p-3 text-gray-400 text-xs">{{ s.entry_time | format_datetime }}</td>
             <td class="p-3 text-gray-400 text-xs">{{ s.exit_time | format_datetime if s.exit_time else "—" }}</td>
-            <td class="p-3 text-gray-300">{{ s.duration_minutes | format_duration if s.duration_minutes is not none else "—" }}</td>
-            <td class="p-3 font-semibold text-emerald-400">{{ s.amount_charged | format_egp if s.amount_charged is not none else "—" }}</td>
+            <td class="p-3 text-gray-300">{{ s.duration_minutes | format_duration if s.duration_minutes is not none else
+              "—" }}</td>
+            <td class="p-3 font-semibold text-emerald-400">
+              {% if s.amount_charged is not none %}
+              <span>{{ s.amount_charged | format_egp }}</span> <span
+                class="text-xs font-normal text-gray-400 mr-1">ج.م</span>
+              {% else %}
+              —
+              {% endif %}
+            </td>
             <td class="p-3 text-center" onclick="event.stopPropagation()">
               {% if s.status.value == 'ACTIVE' or s.status == 'ACTIVE' %}
-              <button type="button" 
-                data-id="{{ s.id }}" 
-                data-card="{{ s.card_code }}" 
-                data-plate="{{ s.plate_number or '—' }}" 
-                data-entry="{{ s.entry_time | format_datetime }}"
+              <button type="button" data-id="{{ s.id }}" data-card="{{ s.card_code }}"
+                data-plate="{{ s.plate_number or '—' }}" data-entry="{{ s.entry_time | format_datetime }}"
                 onclick="openOverrideModalBtn(this)"
-                class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg bg-amber-600/20 text-amber-300 hover:bg-amber-600 hover:text-white border border-amber-500/30 transition">
-                <span>⚙️</span>
+                class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg bg-amber-600/20 text-amber-300 hover:bg-amber-600 hover:text-white border border-amber-500/30 transition">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                  </path>
+                </svg>
                 <span>إغلاق إداري</span>
               </button>
               {% else %}
@@ -192,16 +234,18 @@
     <div class="p-4 border-t border-gray-700 flex items-center justify-between text-sm">
       <div>
         {% if page > 1 %}
-        <a href="/ui/admin/sessions?page={{ page - 1 }}&size={{ size }}{% if filters.gate_number %}&gate_number={{ filters.gate_number }}{% endif %}{% if filters.operator_id %}&operator_id={{ filters.operator_id }}{% endif %}{% if filters.status %}&status={{ filters.status }}{% endif %}{% if filters.card_code %}&card_code={{ filters.card_code }}{% endif %}{% if filters.plate_number %}&plate_number={{ filters.plate_number }}{% endif %}{% if filters.start_date %}&start_date={{ filters.start_date }}{% endif %}{% if filters.end_date %}&end_date={{ filters.end_date }}{% endif %}{% if filters.long_stay %}&long_stay=true{% endif %}" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg transition">السابق</a>
+        <a href="/ui/admin/sessions?page={{ page - 1 }}&size={{ size }}{% if filters.gate_number %}&gate_number={{ filters.gate_number }}{% endif %}{% if filters.operator_id %}&operator_id={{ filters.operator_id }}{% endif %}{% if filters.status %}&status={{ filters.status.value if filters.status.value is defined else filters.status }}{% endif %}{% if filters.card_code %}&card_code={{ filters.card_code }}{% endif %}{% if filters.plate_number %}&plate_number={{ filters.plate_number }}{% endif %}{% if filters.start_date %}&start_date={{ filters.start_date }}{% endif %}{% if filters.end_date %}&end_date={{ filters.end_date }}{% endif %}{% if filters.long_stay %}&long_stay=true{% endif %}"
+          class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg transition">السابق</a>
         {% endif %}
       </div>
       <div class="text-gray-400">
         صفحة {{ page | to_arabic_indic }} من {{ total_pages | to_arabic_indic }}
       </div>
       <div>
-        {% if page < total_pages %}
-        <a href="/ui/admin/sessions?page={{ page + 1 }}&size={{ size }}{% if filters.gate_number %}&gate_number={{ filters.gate_number }}{% endif %}{% if filters.operator_id %}&operator_id={{ filters.operator_id }}{% endif %}{% if filters.status %}&status={{ filters.status }}{% endif %}{% if filters.card_code %}&card_code={{ filters.card_code }}{% endif %}{% if filters.plate_number %}&plate_number={{ filters.plate_number }}{% endif %}{% if filters.start_date %}&start_date={{ filters.start_date }}{% endif %}{% if filters.end_date %}&end_date={{ filters.end_date }}{% endif %}{% if filters.long_stay %}&long_stay=true{% endif %}" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg transition">التالي</a>
-        {% endif %}
+        {% if page < total_pages %} <a
+          href="/ui/admin/sessions?page={{ page + 1 }}&size={{ size }}{% if filters.gate_number %}&gate_number={{ filters.gate_number }}{% endif %}{% if filters.operator_id %}&operator_id={{ filters.operator_id }}{% endif %}{% if filters.status %}&status={{ filters.status.value if filters.status.value is defined else filters.status }}{% endif %}{% if filters.card_code %}&card_code={{ filters.card_code }}{% endif %}{% if filters.plate_number %}&plate_number={{ filters.plate_number }}{% endif %}{% if filters.start_date %}&start_date={{ filters.start_date }}{% endif %}{% if filters.end_date %}&end_date={{ filters.end_date }}{% endif %}{% if filters.long_stay %}&long_stay=true{% endif %}"
+          class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg transition">التالي</a>
+          {% endif %}
       </div>
     </div>
     {% endif %}
@@ -211,38 +255,63 @@
 <!-- Modal: Admin Session Override (Fixed Popup Overlay) -->
 <div id="overrideModal" onclick="if(event.target === this) closeOverrideModal()"
   style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; padding: 16px;">
-  
-  <div class="bg-gray-900 border border-gray-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 text-right" dir="rtl"
-    style="max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);">
-    
+
+  <div class="bg-gray-900 border border-gray-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-5 text-right"
+    dir="rtl" style="max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);">
+
     <div class="flex items-center justify-between border-b border-gray-800 pb-3">
       <h3 class="text-lg font-bold text-white flex items-center gap-2">
-        <span>⚙️</span>
+        <svg class="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+          </path>
+        </svg>
         <span>إغلاق وتسوية الجلسة إدارياً</span>
       </h3>
-      <button type="button" onclick="closeOverrideModal()" class="text-gray-400 hover:text-white text-xl font-bold p-1">✕</button>
+      <button type="button" onclick="closeOverrideModal()"
+        class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-gray-800 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
     </div>
 
-    <div id="modalAlertError" class="hidden bg-red-950/60 border border-red-500/60 text-red-300 px-3 py-2 rounded-lg text-xs"></div>
+    <div id="modalAlertError"
+      class="hidden bg-red-950/60 border border-red-500/60 text-red-300 px-3 py-2 rounded-lg text-xs"></div>
 
     <div class="bg-gray-800/60 rounded-xl p-3 grid grid-cols-2 gap-2 text-xs">
-      <div><span class="text-gray-400">رقم الجلسة:</span> <strong id="modalSessionId" class="text-white font-mono"></strong></div>
-      <div><span class="text-gray-400">كود الكرت:</span> <strong id="modalCardCode" class="text-indigo-300 font-mono"></strong></div>
+      <div><span class="text-gray-400">رقم الجلسة:</span> <strong id="modalSessionId"
+          class="text-white font-mono"></strong></div>
+      <div><span class="text-gray-400">كود الكرت:</span> <strong id="modalCardCode"
+          class="text-indigo-300 font-mono"></strong></div>
       <div><span class="text-gray-400">رقم اللوحة:</span> <span id="modalPlateNumber" class="text-white"></span></div>
       <div><span class="text-gray-400">وقت الدخول:</span> <span id="modalEntryTime" class="text-gray-300"></span></div>
     </div>
 
-    <div class="bg-amber-950/30 border border-amber-800/50 rounded-xl p-3 text-xs text-amber-200">
-      💡 <strong>تنبيه:</strong> سيتم إنهاء الجلسة فوراً وتحرير الكرت ليصبح <strong>متاحاً (AVAILABLE)</strong>، وتحديد المبلغ المحسوب (الافتراضي ٠ ج.م لتجنب التأثير على التقارير المالية).
+    <div
+      class="bg-amber-950/30 border border-amber-800/50 rounded-xl p-3 text-xs text-amber-200 flex items-start gap-2">
+      <svg class="w-4 h-4 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <div>
+        <strong>تنبيه:</strong> سيتم إنهاء الجلسة فوراً وتحرير الكرت ليصبح <strong>متاحاً (AVAILABLE)</strong>، وتحديد
+        المبلغ المحسوب (الافتراضي ٠ ج.م لتجنب التأثير على التقارير المالية).
+      </div>
     </div>
 
     <form id="overrideModalForm" onsubmit="submitOverrideModal(event)" class="space-y-4">
       <input type="hidden" id="modalInputSessionId">
       <div>
         <label class="block text-xs font-semibold text-gray-300 mb-1">المبلغ المحصل الفعلي (ج.م)</label>
-        <input type="number" step="1" min="0" id="modalInputAmount" value="0" required
+        <input type="number" step="0.01" min="0" id="modalInputAmount" value="0.00" required
           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2.5 text-white font-mono text-base focus:outline-none focus:border-amber-500">
-        <p class="text-xs text-gray-500 mt-1">اتركه 0 إذا كانت الجلسة خطأ وتريد تصفير حسابها تماماً</p>
+        <p class="text-xs text-gray-500 mt-1">اتركه 0.00 إذا كانت الجلسة خطأ وتريد تصفير حسابها تماماً</p>
       </div>
 
       <div>
@@ -252,10 +321,12 @@
       </div>
 
       <div class="flex items-center justify-end gap-3 pt-2">
-        <button type="button" onclick="closeOverrideModal()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-xl text-sm transition">
+        <button type="button" onclick="closeOverrideModal()"
+          class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2 rounded-xl text-sm transition">
           إلغاء
         </button>
-        <button type="submit" id="modalSubmitBtn" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-5 py-2 rounded-xl text-sm transition flex items-center gap-2">
+        <button type="submit" id="modalSubmitBtn"
+          class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-5 py-2 rounded-xl text-sm transition flex items-center gap-2">
           <span>تأكيد الإغلاق وتحرير الكرت</span>
         </button>
       </div>
@@ -264,67 +335,65 @@
 </div>
 
 <script>
-function openOverrideModalBtn(btn) {
-  var id = btn.getAttribute('data-id');
-  var card = btn.getAttribute('data-card');
-  var plate = btn.getAttribute('data-plate');
-  var entry = btn.getAttribute('data-entry');
+  function openOverrideModalBtn(btn) {
+    var id = btn.getAttribute('data-id');
+    var card = btn.getAttribute('data-card');
+    var plate = btn.getAttribute('data-plate');
+    var entry = btn.getAttribute('data-entry');
 
-  document.getElementById('modalInputSessionId').value = id;
-  document.getElementById('modalSessionId').innerText = '#' + id;
-  document.getElementById('modalCardCode').innerText = card;
-  document.getElementById('modalPlateNumber').innerText = plate;
-  document.getElementById('modalEntryTime').innerText = entry;
-  document.getElementById('modalInputAmount').value = '0';
-  document.getElementById('modalInputNote').value = 'كارت مسجل بالخطأ - تسوية إدارية';
-  document.getElementById('modalAlertError').classList.add('hidden');
-  document.getElementById('modalAlertError').innerText = '';
-  
-  var modal = document.getElementById('overrideModal');
-  modal.style.display = 'flex';
-}
+    document.getElementById('modalInputSessionId').value = id;
+    document.getElementById('modalSessionId').innerText = '#' + id;
+    document.getElementById('modalCardCode').innerText = card;
+    document.getElementById('modalPlateNumber').innerText = plate;
+    document.getElementById('modalEntryTime').innerText = entry;
+    document.getElementById('modalInputAmount').value = '0.00';
+    document.getElementById('modalInputNote').value = 'كارت مسجل بالخطأ - تسوية إدارية';
+    document.getElementById('modalAlertError').classList.add('hidden');
+    document.getElementById('modalAlertError').innerText = '';
 
-function closeOverrideModal() {
-  var modal = document.getElementById('overrideModal');
-  modal.style.display = 'none';
-}
+    var modal = document.getElementById('overrideModal');
+    modal.style.display = 'flex';
+  }
 
-async function submitOverrideModal(e) {
-  e.preventDefault();
-  var id = document.getElementById('modalInputSessionId').value;
-  var amount = parseFloat(document.getElementById('modalInputAmount').value) || 0;
-  var note = document.getElementById('modalInputNote').value.trim();
-  var btn = document.getElementById('modalSubmitBtn');
-  var errDiv = document.getElementById('modalAlertError');
+  function closeOverrideModal() {
+    var modal = document.getElementById('overrideModal');
+    modal.style.display = 'none';
+  }
 
-  btn.disabled = true;
-  errDiv.classList.add('hidden');
+  async function submitOverrideModal(e) {
+    e.preventDefault();
+    var id = document.getElementById('modalInputSessionId').value;
+    var amount = parseFloat(document.getElementById('modalInputAmount').value) || 0;
+    var note = document.getElementById('modalInputNote').value.trim();
+    var btn = document.getElementById('modalSubmitBtn');
+    var errDiv = document.getElementById('modalAlertError');
 
-  try {
-    var res = await fetch('/api/v1/admin/sessions/' + id + '/override-close', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount_charged_egp: amount,
-        override_note: note
-      })
-    });
+    btn.disabled = true;
+    errDiv.classList.add('hidden');
 
-    var data = await res.json();
-    if (res.ok && data.success) {
-      window.location.reload();
-    } else {
-      errDiv.innerText = data.detail || data.message || 'حدث خطأ أثناء إغلاق الجلسة';
+    try {
+      var res = await fetch('/api/v1/admin/sessions/' + id + '/override-close', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount_charged_egp: amount,
+          override_note: note
+        })
+      });
+
+      var data = await res.json();
+      if (res.ok && data.success) {
+        window.location.reload();
+      } else {
+        errDiv.innerText = data.detail || data.message || 'حدث خطأ أثناء إغلاق الجلسة';
+        errDiv.classList.remove('hidden');
+        btn.disabled = false;
+      }
+    } catch (err) {
+      errDiv.innerText = 'تعذر الاتصال بالخادم';
       errDiv.classList.remove('hidden');
       btn.disabled = false;
     }
-  } catch (err) {
-    errDiv.innerText = 'تعذر الاتصال بالخادم';
-    errDiv.classList.remove('hidden');
-    btn.disabled = false;
   }
-}
 </script>
 {% endblock %}
-
-

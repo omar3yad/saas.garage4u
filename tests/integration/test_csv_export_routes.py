@@ -174,3 +174,118 @@ async def test_sessions_csv_monetary_latin_digits(
     assert res.status_code == 200
     decoded = res.content.decode("utf-8")
     assert "25.00" in decoded
+
+
+@pytest.mark.asyncio
+async def test_revenue_csv_export_monthly(
+    async_client: AsyncClient, db_session: AsyncSession, auth_service: AuthService
+):
+    admin = await setup_admin(db_session, auth_service, async_client)
+    card = ParkingCard(card_code="CSV_M_CARD", status=CardStatus.IN_USE)
+    db_session.add(card)
+    await db_session.flush()
+
+    now = datetime.utcnow()
+    s = ParkingSession(
+        card_id=card.id,
+        card_code=card.card_code,
+        gate_number=1,
+        shift_id=1,
+        operator_id=admin.id,
+        entry_time=now - timedelta(hours=1),
+        exit_time=now,
+        status=SessionStatus.COMPLETED,
+        amount_charged=3000,
+    )
+    db_session.add(s)
+    await db_session.commit()
+
+    res = await async_client.get("/api/v1/admin/reports/export/csv?type=monthly")
+    assert res.status_code == 200
+    assert "text/csv" in res.headers.get("content-type", "")
+    assert res.content[:3] == b"\xef\xbb\xbf"
+    assert "revenue_monthly_" in res.headers.get("content-disposition", "")
+
+    decoded = res.content.decode("utf-8")
+    assert "الشهر" in decoded
+    assert "اسم الشهر" in decoded
+    assert "إجمالي الإيراد (جنيه)" in decoded
+    assert "الإجمالي العام" in decoded
+    assert "30.00" in decoded
+
+
+@pytest.mark.asyncio
+async def test_revenue_csv_export_daily(
+    async_client: AsyncClient, db_session: AsyncSession, auth_service: AuthService
+):
+    admin = await setup_admin(db_session, auth_service, async_client)
+    card = ParkingCard(card_code="CSV_D_CARD", status=CardStatus.IN_USE)
+    db_session.add(card)
+    await db_session.flush()
+
+    now = datetime.utcnow()
+    s = ParkingSession(
+        card_id=card.id,
+        card_code=card.card_code,
+        gate_number=1,
+        shift_id=1,
+        operator_id=admin.id,
+        entry_time=now - timedelta(hours=1),
+        exit_time=now,
+        status=SessionStatus.COMPLETED,
+        amount_charged=4500,
+    )
+    db_session.add(s)
+    await db_session.commit()
+
+    res = await async_client.get("/api/v1/admin/reports/export/csv?type=daily")
+    assert res.status_code == 200
+    assert "text/csv" in res.headers.get("content-type", "")
+    assert res.content[:3] == b"\xef\xbb\xbf"
+    assert "revenue_daily_" in res.headers.get("content-disposition", "")
+
+    decoded = res.content.decode("utf-8")
+    assert "التاريخ" in decoded
+    assert "اليوم" in decoded
+    assert "عدد العمليات / الجلسات" in decoded
+    assert "الإجمالي العام" in decoded
+    assert "45.00" in decoded
+
+
+@pytest.mark.asyncio
+async def test_revenue_csv_export_operator(
+    async_client: AsyncClient, db_session: AsyncSession, auth_service: AuthService
+):
+    admin = await setup_admin(db_session, auth_service, async_client)
+    card = ParkingCard(card_code="CSV_OP_CARD", status=CardStatus.IN_USE)
+    db_session.add(card)
+    await db_session.flush()
+
+    now = datetime.utcnow()
+    s = ParkingSession(
+        card_id=card.id,
+        card_code=card.card_code,
+        gate_number=1,
+        shift_id=1,
+        operator_id=admin.id,
+        entry_time=now - timedelta(hours=1),
+        exit_time=now,
+        status=SessionStatus.COMPLETED,
+        amount_charged=5000,
+    )
+    db_session.add(s)
+    await db_session.commit()
+
+    res = await async_client.get("/api/v1/admin/reports/export/csv?type=operator")
+    assert res.status_code == 200
+    assert "text/csv" in res.headers.get("content-type", "")
+    assert res.content[:3] == b"\xef\xbb\xbf"
+    assert "revenue_by_operator_" in res.headers.get("content-disposition", "")
+
+    decoded = res.content.decode("utf-8")
+    assert "اسم العامل" in decoded
+    assert "معرف العامل" in decoded
+    assert "نسبة التحصيل" in decoded
+    assert "الإجمالي العام" in decoded
+    assert "50.00" in decoded
+    assert admin.full_name in decoded

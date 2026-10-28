@@ -14,12 +14,20 @@
 
   <!-- Long Stay Alert Banner -->
   {% if long_stay_count > 0 %}
-  <div class="bg-amber-950/60 border border-amber-500/50 rounded-xl p-4 flex items-center justify-between text-amber-200">
-    <a href="/ui/admin/sessions?status=ACTIVE&long_stay=true" class="font-medium hover:underline flex items-center gap-2">
-      <span class="text-xl">⚠️</span>
+  <div
+    class="bg-amber-950/60 border border-amber-500/50 rounded-xl p-4 flex items-center justify-between text-amber-200">
+    <a href="/ui/admin/sessions?status=ACTIVE&long_stay=true"
+      class="font-medium hover:underline flex items-center gap-2">
+      <svg class="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z">
+        </path>
+      </svg>
       <span>{{ t("admin.dashboard.long_stay_alert") }}: {{ long_stay_count | to_arabic_indic }}</span>
     </a>
-    <a href="/ui/admin/sessions?status=ACTIVE&long_stay=true" class="text-xs bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-lg transition font-bold">عرض</a>
+    <a href="/ui/admin/sessions?status=ACTIVE&long_stay=true"
+      class="text-xs bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-lg transition font-bold">عرض</a>
   </div>
   {% endif %}
 
@@ -27,10 +35,13 @@
   {% if overdue_shift_count > 0 %}
   <div class="bg-red-950/60 border border-red-500/50 rounded-xl p-4 flex items-center justify-between text-red-200">
     <a href="/ui/admin/shifts?status=open&overdue=true" class="font-medium hover:underline flex items-center gap-2">
-      <span class="text-xl">⏰</span>
+      <svg class="w-5 h-5 text-red-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
       <span>{{ t("admin.dashboard.overdue_shift_alert") }}: {{ overdue_shift_count | to_arabic_indic }}</span>
     </a>
-    <a href="/ui/admin/shifts?status=open&overdue=true" class="text-xs bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg transition font-bold">عرض</a>
+    <a href="/ui/admin/shifts?status=open&overdue=true"
+      class="text-xs bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg transition font-bold">عرض</a>
   </div>
   {% endif %}
 
@@ -55,9 +66,12 @@
     <!-- Card 3: Revenue Today -->
     <div class="bg-gray-800/80 border border-gray-700/60 rounded-xl p-5 shadow">
       <p class="text-xs text-gray-400 font-medium">{{ t("admin.dashboard.revenue_today") }}</p>
-      <p id="stat-revenue-today" class="text-2xl font-bold text-emerald-400 mt-2">
-        {{ stats.revenue_today_piastres | format_egp }}
-      </p>
+      <div class="flex items-baseline gap-1.5 mt-2">
+        <span id="stat-revenue-today" class="text-2xl font-bold text-emerald-400">
+          {{ stats.revenue_today_piastres | format_egp }}
+        </span>
+        <span class="text-xs font-normal text-gray-400">ج.م</span>
+      </div>
     </div>
 
     <!-- Card 4: Open Shifts -->
@@ -73,15 +87,23 @@
   <div class="bg-gray-800/80 border border-gray-700/60 rounded-xl shadow overflow-hidden">
     <div class="p-4 border-b border-gray-700 flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <span class="text-xl">⏱️</span>
+        <svg class="w-5 h-5 text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
         <h2 class="font-bold text-white text-base">ورديات اليوم</h2>
-        <span class="bg-indigo-900/60 text-indigo-300 border border-indigo-700/50 text-xs px-2.5 py-0.5 rounded-full font-bold">
+        <span
+          class="bg-indigo-900/60 text-indigo-300 border border-indigo-700/50 text-xs px-2.5 py-0.5 rounded-full font-bold">
           {{ today_shifts | length | to_arabic_indic }}
         </span>
       </div>
-      <a href="/ui/admin/shifts" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition flex items-center gap-1">
+      <a href="/ui/admin/shifts"
+        class="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition flex items-center gap-1 group">
         <span>عرض كافة الورديات</span>
-        <span>←</span>
+        <svg class="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor"
+          stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path>
+        </svg>
       </a>
     </div>
     <div class="overflow-x-auto">
@@ -98,51 +120,63 @@
         </thead>
         <tbody class="divide-y divide-gray-700/60">
           {% for s in today_shifts %}
-          <tr onclick="window.location.href='/ui/admin/shifts/{{ s.id }}'" class="cursor-pointer hover:bg-gray-700/40 transition">
+          <tr onclick="window.location.href='/ui/admin/shifts/{{ s.id }}'"
+            class="cursor-pointer hover:bg-gray-700/40 transition">
             <td class="p-3">
               <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-indigo-300 px-2.5 py-0.5 ">
+                <div
+                  class="w-7 h-7 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-indigo-300">
                   {{ (operator_names.get(s.operator_id) or "ع")[0] }}
                 </div>
-                <span class="font-semibold text-white">{{ operator_names.get(s.operator_id) or "عامل غير معروف" }}</span>
+                <span class="font-semibold text-white">{{ operator_names.get(s.operator_id) or "عامل غير معروف"
+                  }}</span>
               </div>
             </td>
             <td class="p-3 text-gray-300">{{ s.started_at | format_datetime }}</td>
             <td class="p-3 text-gray-400">
               {% if s.ended_at %}
-                {{ s.ended_at | format_datetime }}
+              {{ s.ended_at | format_datetime }}
               {% else %}
-                <span class="text-amber-400 font-medium">مستمرة الآن...</span>
+              <span class="text-amber-400 font-medium">مستمرة الآن...</span>
               {% endif %}
             </td>
             <td class="p-3 font-bold text-emerald-400">
               {% if s.closing_cash_egp is not none %}
-                {{ s.closing_cash_egp | format_egp }}
+              <span>{{ s.closing_cash_egp | format_egp }}</span> <span
+                class="text-xs font-normal text-gray-400 mr-1">ج.م</span>
               {% else %}
-                {{ (session_totals.get(s.id, 0)) | format_egp }}
+              <span>{{ (session_totals.get(s.id, 0)) | format_egp }}</span> <span
+                class="text-xs font-normal text-gray-400 mr-1">ج.م</span>
               {% endif %}
             </td>
             <td class="p-3">
               {% if s.ended_at is none %}
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-900/60 text-emerald-300 border border-emerald-700/50">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  مفتوحة
-                </span>
+              <span
+                class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-900/60 text-emerald-300 border border-emerald-700/50">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                مفتوحة
+              </span>
               {% else %}
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-700 text-gray-400">
-                  مغلقة
-                </span>
+              <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-700 text-gray-400">
+                مغلقة
+              </span>
               {% endif %}
             </td>
             <td class="p-3 text-center">
-              <a href="/ui/admin/shifts/{{ s.id }}" class="text-xs bg-gray-700 hover:bg-gray-600 text-white px-2.5 py-1 rounded transition">عرض</a>
+              <a href="/ui/admin/shifts/{{ s.id }}"
+                class="text-xs bg-gray-700 hover:bg-gray-600 text-white px-2.5 py-1 rounded transition">عرض</a>
             </td>
           </tr>
           {% else %}
           <tr>
-            <td colspan="6" class="p-6 text-center text-gray-400">
+            <td colspan="6" class="p-8 text-center text-gray-400">
               <div class="flex flex-col items-center justify-center gap-2">
-                <span class="text-2xl">⏳</span>
+                <svg class="w-8 h-8 text-gray-600 mb-1" fill="none" stroke="currentColor" stroke-width="1.5"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
                 <span>لا توجد ورديات مسجلة اليوم حتى الآن</span>
               </div>
             </td>
@@ -167,7 +201,7 @@
         <p class="text-xl font-bold text-green-400 mt-1">{{ sub_stats.active_subscriptions | to_arabic_indic }}</p>
       </div>
       <div class="bg-gray-800/60 border border-gray-700/50 rounded-xl p-4">
-        <p class="text-xs text-gray-400 font-medium">اشتراكات تنتهي قريباً</p>
+        <p class="text-xs text-gray-400 font-medium">تنتهي قريباً</p>
         <p class="text-xl font-bold text-amber-400 mt-1">{{ sub_stats.expiring_soon_count | to_arabic_indic }}</p>
       </div>
       <div class="bg-gray-800/60 border border-gray-700/50 rounded-xl p-4">
@@ -181,7 +215,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="/static/js/admin_dashboard.js"></script>
+<script src="/static/js/admin_dashboard.js?v=20261028_v1"></script>
 <script>
   startAutoRefresh('/api/v1/admin/stats/live', '/api/v1/admin/stats/gates', 30000);
 </script>

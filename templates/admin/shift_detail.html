@@ -7,8 +7,10 @@
   <!-- Top Navigation & Actions -->
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div class="flex items-center gap-3">
-      <a href="/ui/admin/shifts" class="text-sm text-indigo-400 hover:text-indigo-300 transition flex items-center gap-1">
-        <span>←</span>
+      <a href="/ui/admin/shifts" class="text-sm text-indigo-400 hover:text-indigo-300 transition flex items-center gap-1.5 group">
+        <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+        </svg>
         <span>العودة إلى الشيفتات</span>
       </a>
       <h1 class="text-xl font-bold text-white">تفاصيل الشيفت #{{ shift.id | to_arabic_indic }}</h1>
@@ -16,16 +18,22 @@
 
     <div class="flex items-center gap-3 flex-wrap">
       <a href="/api/v1/admin/shifts/{{ shift.id }}/export/csv" class="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 px-3 py-1.5 rounded-lg text-sm transition flex items-center gap-2">
-        <span>📥</span>
+        <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path>
+        </svg>
         <span>{{ t("admin.export.csv_button") }}</span>
       </a>
       <a href="/ui/admin/reports/print?report_type=shift&shift_id={{ shift.id }}" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 px-3 py-1.5 rounded-lg text-sm transition flex items-center gap-2">
-        <span>🖨️</span>
+        <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24-1.076-.672-2.126-1.272-3.078M18 10a6 6 0 00-12 0v3.75A2.25 2.25 0 008.25 16h7.5A2.25 2.25 0 0018 13.75V10zM6 18h12a2 2 0 002-2v-4a2 2 0 00-2-2H6a2 2 0 00-2 2v4a2 2 0 002 2zM6 6h12v4H6V6z"></path>
+        </svg>
         <span>{{ t("admin.print.button") }}</span>
       </a>
       {% if shift.ended_at is none %}
       <button id="open-force-close-btn" class="bg-red-600 hover:bg-red-500 text-white font-medium px-4 py-1.5 rounded-lg text-sm transition shadow flex items-center gap-2">
-        <span>⚠️</span>
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"></path>
+        </svg>
         <span>{{ t("admin.shifts.force_close") }}</span>
       </button>
       {% endif %}
@@ -69,33 +77,6 @@
 
   <!-- Financial Summary Card -->
   <div class="bg-gray-800/80 border border-gray-700/60 rounded-xl p-5 shadow">
-    {% if shift.gate_number == 1 %}
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-base font-bold text-white">الملخص الإحصائي لوردية الدخول</h2>
-      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40">
-        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-        بوابة دخول (بدون تحصيل كاش)
-      </span>
-    </div>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-      <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-700/40">
-        <p class="text-xs text-gray-400">إجمالي السيارات المدخلة</p>
-        <p class="text-lg font-bold text-white mt-1">{{ summary.total_sessions | to_arabic_indic }}</p>
-      </div>
-      <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-700/40">
-        <p class="text-xs text-gray-400">سيارات بالداخل (نشطة)</p>
-        <p class="text-lg font-bold text-cyan-400 mt-1">{{ summary.active_sessions | to_arabic_indic }}</p>
-      </div>
-      <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-700/40">
-        <p class="text-xs text-gray-400">سيارات خرجت لاحقاً</p>
-        <p class="text-lg font-bold text-emerald-400 mt-1">{{ summary.completed_sessions | to_arabic_indic }}</p>
-      </div>
-      <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-700/40">
-        <p class="text-xs text-gray-400">حالة الكاش والعهدة</p>
-        <p class="text-xs font-bold text-gray-400 mt-2">لا تنطبق (بوابة دخول فقط)</p>
-      </div>
-    </div>
-    {% else %}
     <h2 class="text-base font-bold text-white mb-4">الملخص المالي والإحصائي</h2>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 text-center">
       <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-700/40">
@@ -116,20 +97,36 @@
       </div>
       <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-700/40">
         <p class="text-xs text-gray-400">الإيراد المحسوب</p>
-        <p class="text-lg font-bold text-emerald-400 mt-1">{{ summary.computed_total_piastres | format_egp }}</p>
+        <div class="flex items-baseline gap-1 mt-1">
+          <span class="text-lg font-bold text-emerald-400">{{ summary.computed_total_piastres | format_egp }}</span>
+          <span class="text-xs font-normal text-gray-400">ج.م</span>
+        </div>
       </div>
       <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-700/40">
         <p class="text-xs text-gray-400">النقدية عند الإغلاق</p>
-        <p class="text-lg font-bold text-white mt-1">{{ summary.closing_cash_piastres | format_egp if summary.closing_cash_piastres is not none else "—" }}</p>
+        <div class="flex items-baseline gap-1 mt-1">
+          {% if summary.closing_cash_piastres is not none %}
+            <span class="text-lg font-bold text-white">{{ summary.closing_cash_piastres | format_egp }}</span>
+            <span class="text-xs font-normal text-gray-400">ج.م</span>
+          {% else %}
+            <span class="text-lg font-bold text-white">—</span>
+          {% endif %}
+        </div>
       </div>
       <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-700/40">
         <p class="text-xs text-gray-400">الفارق</p>
-        <p class="text-lg font-bold mt-1 {{ summary.discrepancy_piastres | discrepancy_class(summary.computed_total_piastres) }}">
-          {{ summary.discrepancy_piastres | format_egp if summary.discrepancy_piastres is not none else "—" }}
-        </p>
+        <div class="flex items-baseline gap-1 mt-1">
+          {% if summary.discrepancy_piastres is not none %}
+            <span class="text-lg font-bold {{ summary.discrepancy_piastres | discrepancy_class(summary.computed_total_piastres) }}">
+              {{ summary.discrepancy_piastres | format_egp }}
+            </span>
+            <span class="text-xs font-normal text-gray-400">ج.م</span>
+          {% else %}
+            <span class="text-lg font-bold text-gray-400">—</span>
+          {% endif %}
+        </div>
       </div>
     </div>
-    {% endif %}
   </div>
 
   <!-- Sessions List Table -->
@@ -164,7 +161,13 @@
             <td class="p-3 text-gray-400 text-xs">{{ s.entry_time | format_datetime }}</td>
             <td class="p-3 text-gray-400 text-xs">{{ s.exit_time | format_datetime if s.exit_time else "—" }}</td>
             <td class="p-3 text-gray-300">{{ s.duration_minutes | format_duration if s.duration_minutes is not none else "—" }}</td>
-            <td class="p-3 font-semibold text-emerald-400">{{ s.amount_charged | format_egp if s.amount_charged is not none else "—" }}</td>
+            <td class="p-3 font-semibold text-emerald-400">
+              {% if s.amount_charged is not none %}
+                <span>{{ s.amount_charged | format_egp }}</span> <span class="text-xs font-normal text-gray-400 mr-1">ج.م</span>
+              {% else %}
+                —
+              {% endif %}
+            </td>
           </tr>
           {% else %}
           <tr>
@@ -203,7 +206,9 @@
   <div class="space-y-4">
     <div class="flex items-center justify-between border-b border-gray-800 pb-3">
       <h3 class="text-lg font-bold text-red-400 flex items-center gap-2">
-        <span>⚠️</span>
+        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"></path>
+        </svg>
         <span>{{ t("admin.shifts.force_close") }}</span>
       </h3>
       <button id="close-modal-btn" type="button" class="text-gray-400 hover:text-white text-xl leading-none">&times;</button>
@@ -215,7 +220,7 @@
     <form id="force-close-form" class="space-y-4">
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">النقدية عند الإغلاق (ج.م) - اختياري</label>
-        <input type="number" step="1" min="0" id="closing-cash-input" placeholder="0" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500">
+        <input type="number" step="0.01" min="0" id="closing-cash-input" placeholder="0.00" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500">
       </div>
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">سبب الإغلاق الإداري / ملاحظات</label>

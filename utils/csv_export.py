@@ -1,4 +1,5 @@
 from collections.abc import AsyncIterator
+from datetime import date
 from typing import Any
 import asyncio
 import csv
@@ -23,8 +24,8 @@ PAYMENT_METHOD_LABELS: dict[str, str] = {
 def _piastres_to_egp_str(piastres: int | None) -> str:
     if piastres is None:
         return ""
-    # display only — whole EGP, no piastres
-    return str(int(round(piastres / 100)))
+    # display only — not stored
+    return f"{piastres / 100:.2f}"
 
 
 def _row_to_str(row: list[Any]) -> str:
@@ -189,4 +190,250 @@ async def generate_shifts_csv(
             await asyncio.sleep(0)
 
 
-__all__ = ["generate_sessions_csv", "generate_shifts_csv"]
+ARABIC_MONTH_NAMES: dict[str, str] = {
+    "01": "يناير",
+    "02": "فبراير",
+    "03": "مارس",
+    "04": "أبريل",
+    "05": "مايو",
+    "06": "يونيو",
+    "07": "يوليو",
+    "08": "أغسطس",
+    "09": "سبتمبر",
+    "10": "أكتوبر",
+    "11": "نوفمبر",
+    "12": "ديسمبر",
+}
+
+ARABIC_DAY_NAMES: dict[int, str] = {
+    0: "الإثنين",
+    1: "الثلاثاء",
+    2: "الأربعاء",
+    3: "الخميس",
+    4: "الجمعة",
+    5: "السبت",
+    6: "الأحد",
+}
+
+
+async def generate_monthly_revenue_csv(
+    monthly_data: list[dict[str, Any]],
+) -> AsyncIterator[str]:
+    # 1. Yield CSV BOM
+    yield CSV_BOM
+
+    # 2. Yield Arabic header row
+    headers = [
+        "الشهر",
+        "اسم الشهر",
+        "عدد تذاكر الانتظار",
+        "إيراد الانتظار (جنيه)",
+        "عدد الاشتراكات",
+        "إيراد الاشتراكات (جنيه)",
+        "إجمالي الإيراد (جنيه)",
+        "متوسط إيراد التذكرة (جنيه)",
+    ]
+    yield _row_to_str(headers)
+
+    grand_sessions = 0
+    grand_tickets_piastres = 0
+    grand_subs = 0
+    grand_subs_piastres = 0
+    grand_total_piastres = 0
+
+    for item in monthly_data:
+        m_str = str(item.get("month_str", ""))
+        month_name = ""
+        if "-" in m_str:
+            parts = m_str.split("-")
+            if len(parts) == 2:
+                y, m = parts[0], parts[1]
+                ar_m = ARABIC_MONTH_NAMES.get(m, m)
+                month_name = f"{ar_m} {y}"
+
+        s_cnt = int(item.get("session_count", 0) or 0)
+        t_piastres = int(item.get("ticket_piastres", 0) or 0)
+        sub_cnt = int(item.get("sub_count", 0) or 0)
+        sub_piastres = int(item.get("sub_piastres", 0) or 0)
+        tot_piastres = int(item.get("total_piastres", t_piastres + sub_piastres) or 0)
+
+        grand_sessions += s_cnt
+        grand_tickets_piastres += t_piastres
+        grand_subs += sub_cnt
+        grand_subs_piastres += sub_piastres
+        grand_total_piastres += tot_piastres
+
+        avg_ticket_str = (
+            _piastres_to_egp_str(t_piastres // s_cnt) if s_cnt > 0 else "0.00"
+        )
+
+        row = [
+            m_str,
+            month_name,
+            s_cnt,
+            _piastres_to_egp_str(t_piastres),
+            sub_cnt,
+            _piastres_to_egp_str(sub_piastres),
+            _piastres_to_egp_str(tot_piastres),
+            avg_ticket_str,
+        ]
+        yield _row_to_str(row)
+        await asyncio.sleep(0)
+
+    # Summary row at the bottom
+    grand_avg_ticket_str = (
+        _piastres_to_egp_str(grand_tickets_piastres // grand_sessions)
+        if grand_sessions > 0
+        else "0.00"
+    )
+    summary_row = [
+        "الإجمالي العام",
+        "",
+        grand_sessions,
+        _piastres_to_egp_str(grand_tickets_piastres),
+        grand_subs,
+        _piastres_to_egp_str(grand_subs_piastres),
+        _piastres_to_egp_str(grand_total_piastres),
+        grand_avg_ticket_str,
+    ]
+    yield _row_to_str(summary_row)
+
+
+async def generate_daily_revenue_csv(
+    daily_data: list[Any],
+) -> AsyncIterator[str]:
+    # 1. Yield CSV BOM
+    yield CSV_BOM
+
+    # 2. Yield Arabic header row
+    headers = [
+        "التاريخ",
+        "اليوم",
+        "عدد العمليات / الجلسات",
+        "إجمالي الإيراد (جنيه)",
+        "متوسط قيمة العملية (جنيه)",
+    ]
+    yield _row_to_str(headers)
+
+    grand_sessions = 0
+    grand_piastres = 0
+
+    for d in daily_data:
+        date_str = str(getattr(d, "date_str", None) or (d.get("date_str") if isinstance(d, dict) else "") or "")
+        session_count = int(getattr(d, "session_count", None) if hasattr(d, "session_count") else (d.get("session_count", 0) if isinstance(d, dict) else 0) or 0)
+        total_piastres = int(getattr(d, "total_piastres", None) if hasattr(d, "total_piastres") else (d.get("total_piastres", 0) if isinstance(d, dict) else 0) or 0)
+
+        day_name = ""
+        try:
+            dt = date.fromisoformat(date_str)
+            day_name = ARABIC_DAY_NAMES.get(dt.weekday(), "")
+        except Exception:
+            pass
+
+        grand_sessions += session_count
+        grand_piastres += total_piastres
+
+        avg_str = (
+            _piastres_to_egp_str(total_piastres // session_count)
+            if session_count > 0
+            else "0.00"
+        )
+
+        row = [
+            date_str,
+            day_name,
+            session_count,
+            _piastres_to_egp_str(total_piastres),
+            avg_str,
+        ]
+        yield _row_to_str(row)
+        await asyncio.sleep(0)
+
+    grand_avg_str = (
+        _piastres_to_egp_str(grand_piastres // grand_sessions)
+        if grand_sessions > 0
+        else "0.00"
+    )
+    summary_row = [
+        "الإجمالي العام",
+        "",
+        grand_sessions,
+        _piastres_to_egp_str(grand_piastres),
+        grand_avg_str,
+    ]
+    yield _row_to_str(summary_row)
+
+
+async def generate_operator_revenue_csv(
+    operator_data: list[Any],
+) -> AsyncIterator[str]:
+    # 1. Yield CSV BOM
+    yield CSV_BOM
+
+    # 2. Yield Arabic header row
+    headers = [
+        "اسم العامل",
+        "معرف العامل",
+        "عدد العمليات / الجلسات",
+        "إجمالي الإيراد (جنيه)",
+        "متوسط قيمة العملية (جنيه)",
+        "نسبة التحصيل (٪)",
+    ]
+    yield _row_to_str(headers)
+
+    grand_sessions = 0
+    grand_piastres = 0
+
+    for op in operator_data:
+        s_cnt = int(getattr(op, "session_count", None) if hasattr(op, "session_count") else (op.get("session_count", 0) if isinstance(op, dict) else 0) or 0)
+        t_piastres = int(getattr(op, "total_piastres", None) if hasattr(op, "total_piastres") else (op.get("total_piastres", 0) if isinstance(op, dict) else 0) or 0)
+        grand_sessions += s_cnt
+        grand_piastres += t_piastres
+
+    for op in operator_data:
+        op_name = str(getattr(op, "operator_name", None) or (op.get("operator_name") if isinstance(op, dict) else "") or "")
+        op_id = getattr(op, "operator_id", None) if hasattr(op, "operator_id") else (op.get("operator_id") if isinstance(op, dict) else "")
+        s_cnt = int(getattr(op, "session_count", None) if hasattr(op, "session_count") else (op.get("session_count", 0) if isinstance(op, dict) else 0) or 0)
+        t_piastres = int(getattr(op, "total_piastres", None) if hasattr(op, "total_piastres") else (op.get("total_piastres", 0) if isinstance(op, dict) else 0) or 0)
+
+        avg_str = (
+            _piastres_to_egp_str(t_piastres // s_cnt)
+            if s_cnt > 0
+            else "0.00"
+        )
+        pct = (t_piastres / grand_piastres * 100) if grand_piastres > 0 else 0.0
+
+        row = [
+            op_name,
+            op_id if op_id is not None else "",
+            s_cnt,
+            _piastres_to_egp_str(t_piastres),
+            avg_str,
+            f"{pct:.1f}%",
+        ]
+        yield _row_to_str(row)
+        await asyncio.sleep(0)
+
+    grand_avg_str = (
+        _piastres_to_egp_str(grand_piastres // grand_sessions)
+        if grand_sessions > 0
+        else "0.00"
+    )
+    summary_row = [
+        "الإجمالي العام",
+        "",
+        grand_sessions,
+        _piastres_to_egp_str(grand_piastres),
+        grand_avg_str,
+        "100%" if grand_piastres > 0 else "0%",
+    ]
+    yield _row_to_str(summary_row)
+
+
+__all__ = [
+    "generate_sessions_csv",
+    "generate_shifts_csv",
+    "generate_monthly_revenue_csv",
+    "generate_daily_revenue_csv",
+    "generate_operator_revenue_csv",
+]

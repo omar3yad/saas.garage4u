@@ -11,8 +11,11 @@
       <p class="text-sm text-gray-400 mt-1">إدارة حسابات العمال والمشرفين وصلاحيات الدخول</p>
     </div>
     <div>
-      <button id="toggle-new-user-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow">
-        <span>➕</span>
+      <button id="toggle-new-user-btn"
+        class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+        </svg>
         <span>إنشاء مستخدم / عامل جديد</span>
       </button>
     </div>
@@ -21,36 +24,43 @@
   <!-- Inline New Operator Form (Collapsible) -->
   <div id="new-user-container" class="hidden bg-gray-800/90 border border-indigo-500/40 rounded-xl p-5 shadow-lg">
     <h2 class="text-base font-bold text-white mb-4 flex items-center gap-2">
-      <span>➕</span>
+      <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+      </svg>
       <span>إنشاء حساب مستخدم جديد</span>
     </h2>
 
-    <div id="user-form-error" class="hidden bg-red-950/80 border border-red-500 text-red-200 text-sm p-3 rounded-lg mb-4"></div>
+    <div id="user-form-error"
+      class="hidden bg-red-950/80 border border-red-500 text-red-200 text-sm p-3 rounded-lg mb-4"></div>
 
     <form id="create-user-form" class="space-y-4">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <!-- Full Name -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">الاسم بالكامل *</label>
-          <input type="text" id="user-fullname" required placeholder="مثال: أحمد محمود" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+          <input type="text" id="user-fullname" required placeholder="مثال: أحمد محمود"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
         </div>
 
         <!-- Username -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">اسم المستخدم (إنجليزي) *</label>
-          <input type="text" id="user-username" required pattern="^[a-zA-Z0-9_]+$" placeholder="ahmed_op" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+          <input type="text" id="user-username" required pattern="^[a-zA-Z0-9_]+$" placeholder="ahmed_op"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
         </div>
 
         <!-- Password -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">كلمة المرور (٤ خانات على الأقل) *</label>
-          <input type="password" id="user-password" required minlength="4" placeholder="••••••••" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+          <input type="password" id="user-password" required minlength="4" placeholder="••••••••"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
         </div>
 
         <!-- Role -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">الدور والصلاحية *</label>
-          <select id="user-role" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+          <select id="user-role" required
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
             <option value="operator" selected>عامل بوابة (Operator)</option>
             <option value="admin">مسؤول نظام (Admin)</option>
           </select>
@@ -59,16 +69,20 @@
         <!-- Gate Number (only for operator) -->
         <div id="gate-number-field">
           <label class="block text-xs font-medium text-gray-300 mb-1">نوع العامل والصلاحية *</label>
-          <select id="user-gate" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-            <option value="1">🟢 عامل دخول (تسجيل دخول السيارات فقط)</option>
-            <option value="2">🔵 عامل خروج (تسجيل خروج وحساب التكلفة)</option>
+          <select id="user-gate"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+            <option value="1">عامل دخول (تسجيل دخول السيارات فقط)</option>
+            <option value="2">عامل خروج (تسجيل خروج وحساب التكلفة)</option>
           </select>
         </div>
       </div>
 
       <div class="flex items-center justify-end gap-3 pt-2">
-        <button type="button" id="cancel-user-btn" class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2 rounded-lg text-sm transition">إلغاء</button>
-        <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-2 rounded-lg text-sm transition">إنشاء الحساب</button>
+        <button type="button" id="cancel-user-btn"
+          class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2 rounded-lg text-sm transition">إلغاء</button>
+        <button type="submit"
+          class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-2 rounded-lg text-sm transition">إنشاء
+          الحساب</button>
       </div>
     </form>
   </div>
@@ -100,35 +114,40 @@
             <td class="p-3 font-semibold text-white">{{ u.full_name }}</td>
             <td class="p-3 font-mono text-gray-300">{{ u.username }}</td>
             <td class="p-3 text-xs">
-              <span class="inline-flex items-center px-2 py-0.5 rounded {{ 'bg-indigo-900/60 text-indigo-300' if u.role.value == 'admin' or u.role == 'admin' else 'bg-gray-700 text-gray-300' }}">
+              <span
+                class="inline-flex items-center px-2 py-0.5 rounded {{ 'bg-indigo-900/60 text-indigo-300' if u.role.value == 'admin' or u.role == 'admin' else 'bg-gray-700 text-gray-300' }}">
                 {{ "مسؤول" if u.role.value == 'admin' or u.role == 'admin' else "عامل" }}
               </span>
             </td>
             <td class="p-3">
               {% if u.role.value == 'admin' or u.role == 'admin' %}
-                <span class="text-gray-500">—</span>
+              <span class="text-gray-500">—</span>
               {% elif u.gate_number == 1 %}
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 shadow-sm">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  🟢 عامل دخول
-                </span>
+              <span
+                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                عامل دخول
+              </span>
               {% elif u.gate_number == 2 %}
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-950/80 text-blue-300 border border-blue-500/40 shadow-sm">
-                  <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-                  🔵 عامل خروج
-                </span>
+              <span
+                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-950/80 text-blue-300 border border-blue-500/40 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                عامل خروج
+              </span>
               {% else %}
-                <span class="text-gray-400">بوابة {{ u.gate_number | to_arabic_indic }}</span>
+              <span class="text-gray-400">بوابة {{ u.gate_number | to_arabic_indic }}</span>
               {% endif %}
             </td>
             <td class="p-3">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ 'bg-emerald-900/60 text-emerald-300 border border-emerald-700/50' if u.is_active else 'bg-red-900/60 text-red-300 border border-red-700/50' }}">
+              <span
+                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ 'bg-emerald-900/60 text-emerald-300 border border-emerald-700/50' if u.is_active else 'bg-red-900/60 text-red-300 border border-red-700/50' }}">
                 {{ "نشط" if u.is_active else "معطل" }}
               </span>
             </td>
             <td class="p-3">
               {% if item.active_shift %}
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-900/60 text-emerald-300 border border-emerald-700/50">
+              <span
+                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-900/60 text-emerald-300 border border-emerald-700/50">
                 شيفت مفتوح (#{{ item.active_shift.id | to_arabic_indic }})
               </span>
               {% else %}
@@ -140,21 +159,24 @@
             </td>
             <td class="p-3">
               <div class="flex items-center gap-2">
-                <button type="button" 
-                        data-user-id="{{ u.id }}" 
-                        data-full-name="{{ u.full_name }}" 
-                        data-username="{{ u.username }}"
-                        data-role="{{ u.role.value if u.role.value is defined else u.role }}"
-                        data-gate-number="{{ u.gate_number or '' }}"
-                        class="edit-user-btn bg-indigo-600/90 hover:bg-indigo-500 text-white text-xs px-2.5 py-1 rounded transition flex items-center gap-1 shadow-sm font-medium">
-                  <span>✏️</span>
+                <button type="button" data-user-id="{{ u.id }}" data-full-name="{{ u.full_name }}"
+                  data-username="{{ u.username }}" data-role="{{ u.role.value if u.role.value is defined else u.role }}"
+                  data-gate-number="{{ u.gate_number or '' }}"
+                  class="edit-user-btn bg-indigo-600/90 hover:bg-indigo-500 text-white text-xs px-2.5 py-1 rounded transition flex items-center gap-1 shadow-sm font-medium">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10">
+                    </path>
+                  </svg>
                   <span>تعديل</span>
                 </button>
-                <button type="button" data-user-id="{{ u.id }}" data-full-name="{{ u.full_name }}" class="reset-pwd-btn bg-gray-700 hover:bg-gray-600 text-gray-200 text-xs px-2.5 py-1 rounded transition">
+                <button type="button" data-user-id="{{ u.id }}" data-full-name="{{ u.full_name }}"
+                  class="reset-pwd-btn bg-gray-700 hover:bg-gray-600 text-gray-200 text-xs px-2.5 py-1 rounded transition">
                   إعادة كلمة المرور
                 </button>
                 {% if u.is_active %}
-                <button type="button" data-user-id="{{ u.id }}" class="deactivate-user-btn bg-red-900/60 hover:bg-red-800 text-red-200 text-xs px-2.5 py-1 rounded transition border border-red-700/50">
+                <button type="button" data-user-id="{{ u.id }}"
+                  class="deactivate-user-btn bg-red-900/60 hover:bg-red-800 text-red-200 text-xs px-2.5 py-1 rounded transition border border-red-700/50">
                   تعطيل
                 </button>
                 {% endif %}
@@ -173,45 +195,56 @@
 </div>
 
 <!-- Edit User Modal -->
-<dialog id="edit-user-dialog" class="bg-gray-900 border border-gray-700 text-white rounded-2xl p-6 max-w-sm w-full backdrop:bg-black/70 shadow-2xl">
+<dialog id="edit-user-dialog"
+  class="bg-gray-900 border border-gray-700 text-white rounded-2xl p-6 max-w-sm w-full backdrop:bg-black/70 shadow-2xl">
   <div class="space-y-4">
     <div class="flex items-center justify-between border-b border-gray-800 pb-3">
       <div class="flex items-center gap-2">
-        <span class="text-indigo-400 text-base">✏️</span>
+        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10">
+          </path>
+        </svg>
         <h3 class="text-base font-bold text-white">تعديل بيانات العامل</h3>
       </div>
-      <button type="button" onclick="document.getElementById('edit-user-dialog').close()" class="text-gray-400 hover:text-white text-xl leading-none">&times;</button>
+      <button type="button" onclick="document.getElementById('edit-user-dialog').close()"
+        class="text-gray-400 hover:text-white text-xl leading-none">&times;</button>
     </div>
 
     <div id="edit-error-msg" class="hidden bg-red-950/80 border border-red-500 text-red-200 text-xs p-2 rounded"></div>
 
     <form id="edit-user-form" class="space-y-3">
       <input type="hidden" id="edit-user-id">
-      
+
       <!-- Username (Readonly) -->
       <div>
         <label class="block text-xs font-medium text-gray-400 mb-1">اسم المستخدم</label>
-        <input type="text" id="edit-username" readonly disabled class="w-full bg-gray-800/60 border border-gray-700/60 rounded-lg px-3 py-2 text-sm text-gray-400 cursor-not-allowed font-mono">
+        <input type="text" id="edit-username" readonly disabled
+          class="w-full bg-gray-800/60 border border-gray-700/60 rounded-lg px-3 py-2 text-sm text-gray-400 cursor-not-allowed font-mono">
       </div>
 
       <!-- Full Name -->
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">الاسم بالكامل *</label>
-        <input type="text" id="edit-fullname" required placeholder="مثال: أحمد محمود" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+        <input type="text" id="edit-fullname" required placeholder="مثال: أحمد محمود"
+          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
       </div>
 
       <!-- Operator Type / Gate Number -->
       <div id="edit-gate-container">
         <label class="block text-xs font-medium text-gray-300 mb-1">نوع العامل والصلاحية *</label>
-        <select id="edit-gate" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
-          <option value="1">🟢 عامل دخول (بوابة 1 - تسجيل دخول السيارات فقط)</option>
-          <option value="2">🔵 عامل خروج (بوابة 2 - تسجيل خروج وحساب التكلفة)</option>
+        <select id="edit-gate"
+          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+          <option value="1">عامل دخول (بوابة 1 - تسجيل دخول السيارات فقط)</option>
+          <option value="2">عامل خروج (بوابة 2 - تسجيل خروج وحساب التكلفة)</option>
         </select>
       </div>
 
       <div class="flex justify-end gap-2 pt-2 border-t border-gray-800">
-        <button type="button" onclick="document.getElementById('edit-user-dialog').close()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg text-xs transition">إلغاء</button>
-        <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-1.5 rounded-lg text-xs transition shadow flex items-center gap-1">
+        <button type="button" onclick="document.getElementById('edit-user-dialog').close()"
+          class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg text-xs transition">إلغاء</button>
+        <button type="submit"
+          class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-1.5 rounded-lg text-xs transition shadow flex items-center gap-1">
           <span>حفظ التعديلات</span>
         </button>
       </div>
@@ -220,13 +253,16 @@
 </dialog>
 
 <!-- Reset Password Modal -->
-<dialog id="reset-password-dialog" class="bg-gray-900 border border-gray-700 text-white rounded-2xl p-6 max-w-sm w-full backdrop:bg-black/70 shadow-2xl">
+<dialog id="reset-password-dialog"
+  class="bg-gray-900 border border-gray-700 text-white rounded-2xl p-6 max-w-sm w-full backdrop:bg-black/70 shadow-2xl">
   <div class="space-y-4">
     <div class="flex items-center justify-between border-b border-gray-800 pb-3">
       <h3 class="text-base font-bold text-white">إعادة تعيين كلمة المرور</h3>
-      <button onclick="document.getElementById('reset-password-dialog').close()" class="text-gray-400 hover:text-white text-xl leading-none">&times;</button>
+      <button onclick="document.getElementById('reset-password-dialog').close()"
+        class="text-gray-400 hover:text-white text-xl leading-none">&times;</button>
     </div>
-    <p class="text-xs text-gray-300">للمستخدم: <span id="reset-modal-username" class="font-bold text-indigo-300"></span></p>
+    <p class="text-xs text-gray-300">للمستخدم: <span id="reset-modal-username" class="font-bold text-indigo-300"></span>
+    </p>
 
     <div id="reset-error-msg" class="hidden bg-red-950/80 border border-red-500 text-red-200 text-xs p-2 rounded"></div>
 
@@ -234,11 +270,14 @@
       <input type="hidden" id="reset-user-id">
       <div>
         <label class="block text-xs font-medium text-gray-300 mb-1">كلمة المرور الجديدة (٤ خانات على الأقل)</label>
-        <input type="password" id="reset-new-password" required minlength="4" placeholder="••••••••" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+        <input type="password" id="reset-new-password" required minlength="4" placeholder="••••••••"
+          class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
       </div>
       <div class="flex justify-end gap-2 pt-2">
-        <button type="button" onclick="document.getElementById('reset-password-dialog').close()" class="bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg text-xs">إلغاء</button>
-        <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-1.5 rounded-lg text-xs">حفظ</button>
+        <button type="button" onclick="document.getElementById('reset-password-dialog').close()"
+          class="bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg text-xs">إلغاء</button>
+        <button type="submit"
+          class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-1.5 rounded-lg text-xs">حفظ</button>
       </div>
     </form>
   </div>

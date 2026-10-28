@@ -7,8 +7,10 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-gray-900 via-gray-900 to-indigo-950/40 p-6 rounded-2xl border border-gray-800 shadow-xl">
         <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-3xl shadow-inner">
-                📑
+            <div class="w-14 h-14 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shadow-inner">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path>
+                </svg>
             </div>
             <div>
                 <h1 class="text-2xl font-bold text-white tracking-wide flex items-center gap-2">
@@ -21,12 +23,16 @@
         <div class="flex items-center gap-3">
             <a href="/ui/admin/subscribers/template-excel" download
                 class="bg-gray-800 hover:bg-gray-700 text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 px-4 py-2.5 rounded-xl font-medium text-sm transition flex items-center gap-2 shadow-sm">
-                <span>📥</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path>
+                </svg>
                 <span>تحميل نموذج إكسيل تجريبي</span>
             </a>
             <a href="/ui/admin/subscribers"
                 class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-4 py-2.5 rounded-xl font-medium text-sm transition flex items-center gap-2">
-                <span>🔙</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                </svg>
                 <span>قائمة المشتركين</span>
             </a>
         </div>
@@ -68,8 +74,10 @@
                         class="border-2 border-dashed border-gray-700 hover:border-indigo-500 rounded-2xl p-8 text-center cursor-pointer transition bg-gray-950/50 hover:bg-indigo-950/20 group relative">
                         <input type="file" id="file-input" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleFileSelected(this)">
                         <div class="space-y-3">
-                            <div class="w-16 h-16 rounded-full bg-gray-800 group-hover:bg-indigo-600/30 text-indigo-400 flex items-center justify-center mx-auto text-3xl transition">
-                                📊
+                            <div class="w-16 h-16 rounded-full bg-gray-800 group-hover:bg-indigo-600/30 text-indigo-400 flex items-center justify-center mx-auto transition">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"></path>
+                                </svg>
                             </div>
                             <div class="text-white font-semibold text-base" id="file-name-display">
                                 اسحب وأفلت ملف الإكسيل هنا، أو اضغط للتصفح
@@ -90,7 +98,11 @@
                     <div class="relative">
                         <input type="text" id="default-company" placeholder="مثال: بنك مصر / شركة فودافون"
                             class="w-full bg-gray-800/80 border border-gray-700 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 text-sm">
-                        <span class="absolute left-3 top-2.5 text-gray-500">🏢</span>
+                        <span class="absolute left-3 top-2.5 text-gray-500">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"></path>
+                          </svg>
+                        </span>
                     </div>
                 </div>
 
@@ -103,7 +115,7 @@
                         class="w-full bg-gray-800/80 border border-gray-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 text-sm">
                         <option value="">-- بدون تفعيل اشتراك (إضافة كروت ومشتركين فقط) --</option>
                         {% for plan in plans %}
-                        <option value="{{ plan.id }}">{{ plan.label }} - {{ (plan.price_piastres / 100) | int }} ج.م ({{ plan.duration_days }} يوم)</option>
+                        <option value="{{ plan.id }}">{{ plan.label }} - {{ (plan.price_piastres / 100) }} ج.م ({{ plan.duration_days }} يوم)</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -124,7 +136,9 @@
             <div class="mt-6 flex justify-end">
                 <button type="submit" id="btn-analyze"
                     class="bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-semibold px-8 py-3 rounded-xl transition shadow-lg shadow-indigo-600/20 flex items-center gap-2 text-sm disabled:opacity-50">
-                    <span>🔍</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+                    </svg>
                     <span>تحليل ومعاينة الملف ذكياً</span>
                 </button>
             </div>
@@ -160,7 +174,9 @@
         <!-- Filter / Search in preview -->
         <div class="flex items-center justify-between gap-4">
             <div class="text-sm font-semibold text-white flex items-center gap-2">
-                <span>📋</span>
+                <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"></path>
+                </svg>
                 <span>جدول المعاينة التلقائية للبيانات</span>
             </div>
             <input type="text" id="preview-filter" placeholder="تصفية في نتائج المعاينة..." oninput="filterPreviewTable()"
@@ -189,12 +205,17 @@
         <!-- Actions -->
         <div class="flex items-center justify-between pt-4 border-t border-gray-800">
             <button type="button" onclick="resetToStep1()"
-                class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-5 py-2.5 rounded-xl text-sm font-medium transition">
-                ← تعديل الملف أو الإعدادات
+                class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-5 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                </svg>
+                <span>تعديل الملف أو الإعدادات</span>
             </button>
             <button type="button" id="btn-confirm-import" onclick="handleConfirmImport()"
                 class="bg-green-600 hover:bg-green-500 text-white font-bold px-8 py-3 rounded-xl transition shadow-lg shadow-green-600/30 flex items-center gap-2 text-sm">
-                <span>🚀</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+                </svg>
                 <span>تأكيد وتنفيذ استيراد المشتركين الآن</span>
             </button>
         </div>
@@ -202,8 +223,10 @@
 
     <!-- Step 3: Success Result Section -->
     <div id="section-step-3" class="hidden bg-gray-900 border border-gray-800 rounded-2xl p-8 shadow-xl text-center space-y-6">
-        <div class="w-20 h-20 rounded-full bg-green-500/20 border border-green-500/40 text-green-400 flex items-center justify-center mx-auto text-4xl shadow-lg">
-            ✓
+        <div class="w-20 h-20 rounded-full bg-green-500/20 border border-green-500/40 text-green-400 flex items-center justify-center mx-auto shadow-lg">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+            </svg>
         </div>
         <div>
             <h2 class="text-2xl font-bold text-white">تم الاستيراد والتسجيل بنجاح!</h2>
@@ -232,17 +255,23 @@
         <div class="flex items-center justify-center gap-4 pt-4">
             <a href="/ui/admin/subscribers"
                 class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-2.5 rounded-xl transition text-sm flex items-center gap-2">
-                <span>👥</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"></path>
+                </svg>
                 <span>الانتقال لقائمة المشتركين</span>
             </a>
             <a href="/ui/admin/cards"
                 class="bg-gray-800 hover:bg-gray-700 text-cyan-300 font-semibold px-6 py-2.5 rounded-xl transition text-sm flex items-center gap-2">
-                <span>💳</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"></path>
+                </svg>
                 <span>إدارة الكروت</span>
             </a>
             <button type="button" onclick="location.reload()"
                 class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold px-6 py-2.5 rounded-xl transition text-sm flex items-center gap-2">
-                <span>➕</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+                </svg>
                 <span>استيراد ملف إكسيل آخر</span>
             </button>
         </div>
@@ -293,7 +322,7 @@ async function handlePreview() {
 
     const btn = document.getElementById("btn-analyze");
     btn.disabled = true;
-    btn.innerHTML = `<span>⏳</span><span>جاري قراءة وتحليل البيانات...</span>`;
+    btn.innerHTML = `<span class="inline-block animate-spin mr-1">↻</span><span>جاري قراءة وتحليل البيانات...</span>`;
 
     const defaultCompany = document.getElementById("default-company").value;
 
@@ -318,7 +347,7 @@ async function handlePreview() {
         alert("خطأ: " + err.message);
     } finally {
         btn.disabled = false;
-        btn.innerHTML = `<span>🔍</span><span>تحليل ومعاينة الملف ذكياً</span>`;
+        btn.innerHTML = `<svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path></svg><span>تحليل ومعاينة الملف ذكياً</span>`;
     }
 }
 
@@ -399,7 +428,7 @@ async function handleConfirmImport() {
 
     const btn = document.getElementById("btn-confirm-import");
     btn.disabled = true;
-    btn.innerHTML = `<span>⏳</span><span>جاري حفظ وتسجيل المشتركين...</span>`;
+    btn.innerHTML = `<span class="inline-block animate-spin mr-1">↻</span><span>جاري حفظ وتسجيل المشتركين...</span>`;
 
     const defaultCompany = document.getElementById("default-company").value;
     const planId = document.getElementById("plan-id").value;
@@ -440,7 +469,7 @@ async function handleConfirmImport() {
     } catch (err) {
         alert("خطأ: " + err.message);
         btn.disabled = false;
-        btn.innerHTML = `<span>🚀</span><span>تأكيد وتنفيذ استيراد المشتركين الآن</span>`;
+        btn.innerHTML = `<svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg><span>تأكيد وتنفيذ استيراد المشتركين الآن</span>`;
     }
 }
 </script>

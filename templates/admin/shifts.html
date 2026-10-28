@@ -29,11 +29,12 @@
 
       <!-- Gate Number -->
       <div>
-        <label class="block text-xs font-medium text-gray-300 mb-1">نوع العامل / البوابة</label>
+        <label class="block text-xs font-medium text-gray-300 mb-1">البوابة</label>
         <select name="gate_number" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
           <option value="">{{ t("admin.filter.all_gates") }}</option>
-          <option value="1" {% if filters.gate_number == 1 %}selected{% endif %}>🟢 عامل دخول</option>
-          <option value="2" {% if filters.gate_number == 2 %}selected{% endif %}>🔵 عامل خروج</option>
+          {% for g in range(1, 6) %}
+          <option value="{{ g }}" {% if filters.gate_number == g %}selected{% endif %}>بوابة {{ g | to_arabic_indic }}</option>
+          {% endfor %}
         </select>
       </div>
 
@@ -90,7 +91,7 @@
           <tr>
             <th class="p-3">رقم الشيفت</th>
             <th class="p-3">العامل</th>
-            <th class="p-3">نوع الشيفت</th>
+            <th class="p-3">البوابة</th>
             <th class="p-3">البداية</th>
             <th class="p-3">النهاية</th>
             <th class="p-3">الإيراد المحسوب</th>
@@ -106,28 +107,24 @@
           <tr onclick="window.location.href='/ui/admin/shifts/{{ s.id }}'" class="cursor-pointer hover:bg-gray-700/40 transition">
             <td class="p-3 font-mono font-medium text-white">#{{ s.id | to_arabic_indic }}</td>
             <td class="p-3 text-gray-200">{{ operator_names.get(s.operator_id, "—") }}</td>
-            <td class="p-3">
-              {% if s.gate_number == 1 %}
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-950/80 text-emerald-300 border border-emerald-500/40">🟢 دخول</span>
-              {% elif s.gate_number == 2 %}
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-950/80 text-blue-300 border border-blue-500/40">🔵 خروج</span>
-              {% else %}
-                <span class="text-gray-300 text-xs">بوابة {{ s.gate_number | to_arabic_indic }}</span>
-              {% endif %}
-            </td>
+            <td class="p-3 text-gray-300">بوابة {{ s.gate_number | to_arabic_indic }}</td>
             <td class="p-3 text-gray-400 text-xs">{{ s.started_at | format_datetime }}</td>
             <td class="p-3 text-gray-400 text-xs">{{ s.ended_at | format_datetime if s.ended_at else "مفتوح" }}</td>
-            {% if s.gate_number == 1 %}
-            <td class="p-3 text-gray-500 text-xs font-medium">لا ينطبق (دخول)</td>
-            <td class="p-3 text-gray-500 text-xs">—</td>
-            <td class="p-3 text-gray-500 text-xs">—</td>
-            {% else %}
-            <td class="p-3 font-semibold text-emerald-400">{{ computed | format_egp }}</td>
-            <td class="p-3 font-semibold text-white">{{ s.closing_cash_egp | format_egp if s.closing_cash_egp is not none else "—" }}</td>
-            <td class="p-3 font-semibold {{ discrepancy | discrepancy_class(computed) }}">
-              {{ discrepancy | format_egp if discrepancy is not none else "—" }}
+            <td class="p-3 font-semibold text-emerald-400"><span>{{ computed | format_egp }}</span> <span class="text-xs font-normal text-gray-400 mr-1">ج.م</span></td>
+            <td class="p-3 font-semibold text-white">
+              {% if s.closing_cash_egp is not none %}
+                <span>{{ s.closing_cash_egp | format_egp }}</span> <span class="text-xs font-normal text-gray-400 mr-1">ج.م</span>
+              {% else %}
+                —
+              {% endif %}
             </td>
-            {% endif %}
+            <td class="p-3 font-semibold {{ discrepancy | discrepancy_class(computed) }}">
+              {% if discrepancy is not none %}
+                <span>{{ discrepancy | format_egp }}</span> <span class="text-xs font-normal text-gray-400 mr-1">ج.م</span>
+              {% else %}
+                —
+              {% endif %}
+            </td>
             <td class="p-3">
               <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ 'bg-emerald-900/60 text-emerald-300 border border-emerald-700/50' if not s.ended_at else 'bg-gray-700 text-gray-300' }}">
                 {{ s.ended_at | shift_status_label }}

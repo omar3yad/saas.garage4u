@@ -10,29 +10,48 @@
                 <span>/</span>
                 <span class="text-gray-200">{{ subscriber.full_name }}</span>
             </div>
-            <h1 class="text-2xl font-black text-white flex items-center gap-2">
-                <span>👤</span>
+            <h1 class="text-2xl font-black text-white flex items-center gap-2.5">
+                <svg class="w-6 h-6 text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z">
+                    </path>
+                </svg>
                 <span>{{ subscriber.full_name }}</span>
             </h1>
             <p class="text-sm text-gray-400 mt-1">تاريخ التسجيل: {{ subscriber.created_at | format_datetime }}</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="/ui/admin/subscribers" class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold px-4 py-2 rounded-xl transition text-sm">
+            <a href="/ui/admin/subscribers"
+                class="bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold px-4 py-2 rounded-xl transition text-sm">
                 العودة للقائمة
             </a>
-            <button type="button" data-id="{{ subscriber.id }}" data-name="{{ subscriber.full_name }}" onclick="deleteSubscriberDetailBtn(this)"
+            <button type="button" data-id="{{ subscriber.id }}" data-name="{{ subscriber.full_name }}"
+                onclick="deleteSubscriberDetailBtn(this)"
                 class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 font-bold px-4 py-2 rounded-xl transition text-sm flex items-center gap-1.5">
-                <span>🗑️</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0">
+                    </path>
+                </svg>
                 <span>حذف المشترك</span>
             </button>
             {% if active_subscription %}
-            <a href="/ui/admin/subscribers/{{ subscriber.id }}/renew" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-4 py-2 rounded-xl transition text-sm flex items-center gap-1.5">
-                <span>🔄</span>
+            <a href="/ui/admin/subscribers/{{ subscriber.id }}/renew"
+                class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-4 py-2 rounded-xl transition text-sm flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99">
+                    </path>
+                </svg>
                 <span>تجديد الاشتراك</span>
             </a>
             {% else %}
-            <a href="/ui/admin/subscribers/{{ subscriber.id }}/subscribe" class="bg-green-600 hover:bg-green-500 text-white font-bold px-4 py-2 rounded-xl transition text-sm flex items-center gap-1.5">
-                <span>➕</span>
+            <a href="/ui/admin/subscribers/{{ subscriber.id }}/subscribe"
+                class="bg-green-600 hover:bg-green-500 text-white font-bold px-4 py-2 rounded-xl transition text-sm flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+                </svg>
                 <span>اشتراك جديد</span>
             </a>
             {% endif %}
@@ -44,7 +63,12 @@
         <!-- Subscriber Card -->
         <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-sm">
             <h2 class="text-base font-bold text-white mb-4 border-b border-gray-800 pb-3 flex items-center gap-2">
-                <span>📋</span>
+                <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                    </path>
+                </svg>
                 <span>بيانات المشترك</span>
             </h2>
             <dl class="space-y-3 text-sm">
@@ -54,7 +78,8 @@
                 </div>
                 <div>
                     <dt class="text-gray-400">رقم اللوحة</dt>
-                    <dd class="font-bold text-indigo-400 text-base mt-0.5" dir="rtl">{{ subscriber.plate_number or "—" }}</dd>
+                    <dd class="font-bold text-indigo-400 text-base mt-0.5" dir="rtl">{{ subscriber.plate_number or "—"
+                        }}</dd>
                 </div>
                 <div>
                     <dt class="text-gray-400">رقم الهاتف</dt>
@@ -68,19 +93,28 @@
         </div>
 
         <!-- Active Subscription Summary Card -->
-        <div class="md:col-span-2 bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+        <div
+            class="md:col-span-2 bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
             <div>
-                <h2 class="text-base font-bold text-white mb-4 border-b border-gray-800 pb-3 flex items-center justify-between">
+                <h2
+                    class="text-base font-bold text-white mb-4 border-b border-gray-800 pb-3 flex items-center justify-between">
                     <span class="flex items-center gap-2">
-                        <span>💳</span>
+                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z">
+                            </path>
+                        </svg>
                         <span>الاشتراك الحالي</span>
                     </span>
                     {% if active_subscription %}
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-500/20 text-green-400 border border-green-500/30">
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-500/20 text-green-400 border border-green-500/30">
                         نشط
                     </span>
                     {% else %}
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-800 text-gray-400 border border-gray-700">
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-800 text-gray-400 border border-gray-700">
                         لا يوجد اشتراك نشط
                     </span>
                     {% endif %}
@@ -90,33 +124,39 @@
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
                     <div class="bg-gray-800/40 p-3 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-400 block">الباقة</span>
-                        <span class="font-bold text-white text-base mt-1 block">{{ active_plan.label if active_plan else "اشتراك" }}</span>
+                        <span class="font-bold text-white text-base mt-1 block">{{ active_plan.label if active_plan else
+                            "اشتراك" }}</span>
                     </div>
                     <div class="bg-gray-800/40 p-3 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-400 block">رقم الكرت</span>
-                        <span class="font-mono font-bold text-indigo-400 text-base mt-1 block">{{ active_card.card_code if active_card else (active_subscription.card_id or "—") }}</span>
+                        <span class="font-mono font-bold text-indigo-400 text-base mt-1 block">{{ active_card.card_code
+                            if active_card else (active_subscription.card_id or "—") }}</span>
                     </div>
                     <div class="bg-gray-800/40 p-3 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-400 block">تاريخ الانتهاء</span>
-                        <span class="font-mono font-bold text-white text-base mt-1 block">{{ active_subscription.end_date | cairo_date }}</span>
+                        <span class="font-mono font-bold text-white text-base mt-1 block">{{
+                            active_subscription.end_date | cairo_date }}</span>
                     </div>
                     <div class="bg-gray-800/40 p-3 rounded-xl border border-gray-800">
                         <span class="text-xs text-gray-400 block">الأيام المتبقية</span>
-                        <span class="font-bold text-base mt-1 block {% if (active_subscription.end_date | days_remaining) <= 0 %}text-red-400{% elif (active_subscription.end_date | days_remaining) <= 7 %}text-amber-400{% else %}text-green-400{% endif %}">
+                        <span
+                            class="font-bold text-base mt-1 block {% if (active_subscription.end_date | days_remaining) <= 0 %}text-red-400{% elif (active_subscription.end_date | days_remaining) <= 7 %}text-amber-400{% else %}text-green-400{% endif %}">
                             {{ active_subscription.end_date | days_remaining }} يوم
                         </span>
                     </div>
                 </div>
 
                 <div class="flex items-center justify-between text-xs text-gray-400 border-t border-gray-800/60 pt-4">
-                    <div>بدأ في: <span class="font-mono text-gray-300">{{ active_subscription.start_date | cairo_date }}</span></div>
+                    <div>بدأ في: <span class="font-mono text-gray-300">{{ active_subscription.start_date | cairo_date
+                            }}</span></div>
                     <div class="flex items-center gap-2">
-                        <button type="button" data-id="{{ active_subscription.id }}" onclick="deleteSubscriptionBtn(this)"
+                        <button type="button" data-id="{{ active_subscription.id }}"
+                            onclick="deleteSubscriptionBtn(this)"
                             class="bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 font-semibold px-3 py-1.5 rounded-lg transition">
                             حذف الاشتراك
                         </button>
-                        <a href="/ui/admin/subscribers/{{ subscriber.id }}/renew" 
-                           class="bg-amber-600 hover:bg-amber-500 text-white font-semibold px-3 py-1.5 rounded-lg transition">
+                        <a href="/ui/admin/subscribers/{{ subscriber.id }}/renew"
+                            class="bg-amber-600 hover:bg-amber-500 text-white font-semibold px-3 py-1.5 rounded-lg transition">
                             تجديد الاشتراك
                         </a>
                     </div>
@@ -124,9 +164,11 @@
                 {% else %}
                 <div class="text-center py-8">
                     <p class="text-gray-500 mb-4">لا يوجد اشتراك نشط لهذا المشترك حالياً</p>
-                    <a href="/ui/admin/subscribers/{{ subscriber.id }}/subscribe" 
-                       class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-bold px-5 py-2.5 rounded-xl transition text-sm">
-                        <span>➕</span>
+                    <a href="/ui/admin/subscribers/{{ subscriber.id }}/subscribe"
+                        class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-bold px-5 py-2.5 rounded-xl transition text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+                        </svg>
                         <span>إنشاء اشتراك الآن</span>
                     </a>
                 </div>
@@ -139,7 +181,14 @@
     <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-sm">
         <div class="p-4 border-b border-gray-800 flex items-center justify-between">
             <h2 class="text-base font-bold text-white flex items-center gap-2">
-                <span>🚗</span>
+                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M8 17a2 2 0 100-4 2 2 0 000 4zm8 0a2 2 0 100-4 2 2 0 000 4z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 11l2-6h14l2 6v6a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H5v1a1 1 0 01-1 1H3a1 1 0 01-1-1v-6z">
+                    </path>
+                </svg>
                 <span>آخر حركات الدخول والخروج (آخر ١٠)</span>
             </h2>
         </div>
@@ -160,22 +209,25 @@
                     <tr class="hover:bg-gray-800/40 transition">
                         <td class="p-4 font-mono font-bold text-white">{{ sess.card_code }}</td>
                         <td class="p-4 font-mono text-xs">{{ sess.entry_time | format_datetime }}</td>
-                        <td class="p-4 font-mono text-xs">{{ sess.exit_time | format_datetime if sess.exit_time else "داخل الجراج" }}</td>
+                        <td class="p-4 font-mono text-xs">{{ sess.exit_time | format_datetime if sess.exit_time else
+                            "داخل الجراج" }}</td>
                         <td class="p-4">{{ sess.duration_minutes | duration_ar if sess.duration_minutes else "—" }}</td>
                         <td class="p-4 font-mono font-bold text-green-400">
                             {% if sess.is_subscribed %}
-                            ٠ ج.م
+                            ٠٫٠٠ ج.م
                             {% else %}
                             {{ sess.amount_charged | format_egp }}
                             {% endif %}
                         </td>
                         <td class="p-4">
                             {% if sess.is_subscribed %}
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-indigo-950 text-indigo-300 border border-indigo-800">
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-indigo-950 text-indigo-300 border border-indigo-800">
                                 اشتراك
                             </span>
                             {% else %}
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-gray-800 text-gray-300">
+                            <span
+                                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-gray-800 text-gray-300">
                                 نقدي
                             </span>
                             {% endif %}
@@ -197,7 +249,11 @@
     <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-sm">
         <div class="p-4 border-b border-gray-800">
             <h2 class="text-base font-bold text-white flex items-center gap-2">
-                <span>📜</span>
+                <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
                 <span>سجل الاشتراكات السابقة</span>
             </h2>
         </div>
@@ -221,16 +277,24 @@
                         <td class="p-4 font-bold text-white">{{ item.plan.label if item.plan else "اشتراك" }}</td>
                         <td class="p-4 font-mono text-xs">{{ item.subscription.start_date | cairo_date }}</td>
                         <td class="p-4 font-mono text-xs">{{ item.subscription.end_date | cairo_date }}</td>
-                        <td class="p-4 font-mono font-bold text-green-400">{{ item.subscription.amount_paid_piastres | format_egp }}</td>
+                        <td class="p-4 font-mono font-bold text-green-400">{{ item.subscription.amount_paid_piastres |
+                            format_egp }}</td>
                         <td class="p-4">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold {{ item.subscription.status.value | subscription_status_class }}">
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold {{ item.subscription.status.value | subscription_status_class }}">
                                 {{ item.subscription.status.value }}
                             </span>
                         </td>
                         <td class="p-4 text-center">
-                            <button type="button" data-id="{{ item.subscription.id }}" onclick="deleteSubscriptionBtn(this)"
+                            <button type="button" data-id="{{ item.subscription.id }}"
+                                onclick="deleteSubscriptionBtn(this)"
                                 class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white border border-red-500/30 transition">
-                                <span>🗑️</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0">
+                                    </path>
+                                </svg>
                                 <span>حذف</span>
                             </button>
                         </td>
@@ -249,52 +313,51 @@
 </div>
 
 <script>
-async function deleteSubscriberDetailBtn(btn) {
-    const subscriberId = btn.getAttribute('data-id');
-    const name = btn.getAttribute('data-name');
-    if (!confirm(`هل أنت متأكد من حذف المشترك "${name}" نهائياً وجميع اشتراكاته؟`)) {
-        return;
-    }
-    try {
-        const res = await fetch(`/api/v1/subscriptions/subscribers/${subscriberId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        if (res.ok || res.status === 204) {
-            window.location.href = '/ui/admin/subscribers';
-        } else {
-            const data = await res.json().catch(() => ({}));
-            alert(data.detail || 'حدث خطأ أثناء حذف المشترك');
+    async function deleteSubscriberDetailBtn(btn) {
+        const subscriberId = btn.getAttribute('data-id');
+        const name = btn.getAttribute('data-name');
+        if (!confirm(`هل أنت متأكد من حذف المشترك "${name}" نهائياً وجميع اشتراكاته؟`)) {
+            return;
         }
-    } catch (err) {
-        alert('حدث خطأ في الاتصال بالسيرفر');
+        try {
+            const res = await fetch(`/api/v1/subscriptions/subscribers/${subscriberId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (res.ok || res.status === 204) {
+                window.location.href = '/ui/admin/subscribers';
+            } else {
+                const data = await res.json().catch(() => ({}));
+                alert(data.detail || 'حدث خطأ أثناء حذف المشترك');
+            }
+        } catch (err) {
+            alert('حدث خطأ في الاتصال بالسيرفر');
+        }
     }
-}
 
-async function deleteSubscriptionBtn(btn) {
-    const subscriptionId = btn.getAttribute('data-id');
-    if (!confirm(`هل أنت متأكد من حذف هذا الاشتراك نهائياً وإلغاء ربط الكرت؟`)) {
-        return;
-    }
-    try {
-        const res = await fetch(`/api/v1/subscriptions/${subscriptionId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        if (res.ok || res.status === 204) {
-            window.location.reload();
-        } else {
-            const data = await res.json().catch(() => ({}));
-            alert(data.detail || 'حدث خطأ أثناء حذف الاشتراك');
+    async function deleteSubscriptionBtn(btn) {
+        const subscriptionId = btn.getAttribute('data-id');
+        if (!confirm(`هل أنت متأكد من حذف هذا الاشتراك نهائياً وإلغاء ربط الكرت؟`)) {
+            return;
         }
-    } catch (err) {
-        alert('حدث خطأ في الاتصال بالسيرفر');
+        try {
+            const res = await fetch(`/api/v1/subscriptions/${subscriptionId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (res.ok || res.status === 204) {
+                window.location.reload();
+            } else {
+                const data = await res.json().catch(() => ({}));
+                alert(data.detail || 'حدث خطأ أثناء حذف الاشتراك');
+            }
+        } catch (err) {
+            alert('حدث خطأ في الاتصال بالسيرفر');
+        }
     }
-}
 </script>
 {% endblock %}
-

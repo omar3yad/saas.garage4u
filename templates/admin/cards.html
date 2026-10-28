@@ -8,18 +8,30 @@
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
       <h1 class="text-2xl font-bold text-white flex items-center gap-2.5">
-        <span>💳</span>
+        <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z">
+          </path>
+        </svg>
         <span>إدارة كروت الوقوف والباركود</span>
       </h1>
       <p class="text-sm text-gray-400 mt-1">إضافة كروت فردية، أو توليد مجموعات ونطاقات متسلسلة، وتحديث حالات الكروت</p>
     </div>
     <div class="flex items-center gap-3">
-      <a href="/ui/admin/subscribers/import" class="bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 border border-indigo-500/40 font-semibold px-4 py-2.5 rounded-xl text-sm transition flex items-center gap-2">
-        <span>📥</span>
+      <a href="/ui/admin/subscribers/import"
+        class="bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 border border-indigo-500/40 font-semibold px-4 py-2.5 rounded-xl text-sm transition flex items-center gap-2">
+        <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3">
+          </path>
+        </svg>
         <span>استيراد كروت من إكسيل</span>
       </a>
-      <button id="toggle-add-panel-btn" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition shadow-lg shadow-cyan-600/20 flex items-center gap-2">
-        <span>➕</span>
+      <button id="toggle-add-panel-btn"
+        class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition shadow-lg shadow-cyan-600/20 flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+        </svg>
         <span>إضافة كروت جديدة</span>
       </button>
     </div>
@@ -30,7 +42,13 @@
     <div class="bg-gray-800/90 border border-gray-700/80 rounded-xl p-4 shadow-sm">
       <div class="flex items-center justify-between">
         <span class="text-xs font-semibold text-gray-400">إجمالي الكروت</span>
-        <span class="p-2 bg-gray-700/60 rounded-lg text-sm">🗂️</span>
+        <span class="p-2 bg-gray-700/60 rounded-lg text-gray-300">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m-15 0A2.25 2.25 0 003 12v6a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18v-6a2.25 2.25 0 00-1.5-2.122">
+            </path>
+          </svg>
+        </span>
       </div>
       <div class="text-2xl font-extrabold text-white mt-2">{{ counts.total }}</div>
     </div>
@@ -38,7 +56,12 @@
     <div class="bg-gray-800/90 border border-emerald-500/30 rounded-xl p-4 shadow-sm">
       <div class="flex items-center justify-between">
         <span class="text-xs font-semibold text-emerald-400">كروت متاحة للدخول</span>
-        <span class="p-2 bg-emerald-950/60 text-emerald-400 rounded-lg text-sm">🟢</span>
+        <span class="p-2 bg-emerald-950/60 text-emerald-400 rounded-lg">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </span>
       </div>
       <div class="text-2xl font-extrabold text-emerald-400 mt-2">{{ counts.available }}</div>
     </div>
@@ -46,7 +69,14 @@
     <div class="bg-gray-800/90 border border-cyan-500/30 rounded-xl p-4 shadow-sm">
       <div class="flex items-center justify-between">
         <span class="text-xs font-semibold text-cyan-400">داخل الجراج حالياً</span>
-        <span class="p-2 bg-cyan-950/60 text-cyan-400 rounded-lg text-sm">🚗</span>
+        <span class="p-2 bg-cyan-950/60 text-cyan-400 rounded-lg">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 17a2 2 0 100-4 2 2 0 000 4zm8 0a2 2 0 100-4 2 2 0 000 4z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 11l2-6h14l2 6v6a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1H5v1a1 1 0 01-1 1H3a1 1 0 01-1-1v-6z"></path>
+          </svg>
+        </span>
       </div>
       <div class="text-2xl font-extrabold text-cyan-400 mt-2">{{ counts.in_use }}</div>
     </div>
@@ -54,34 +84,64 @@
     <div class="bg-gray-800/90 border border-amber-500/30 rounded-xl p-4 shadow-sm">
       <div class="flex items-center justify-between">
         <span class="text-xs font-semibold text-amber-400">مفقود / تالف</span>
-        <span class="p-2 bg-amber-950/60 text-amber-400 rounded-lg text-sm">⚠️</span>
+        <span class="p-2 bg-amber-950/60 text-amber-400 rounded-lg">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z">
+            </path>
+          </svg>
+        </span>
       </div>
       <div class="text-2xl font-extrabold text-amber-400 mt-2">{{ counts.lost + counts.damaged }}</div>
     </div>
   </div>
 
   <!-- Collapsible Card Creation Panel -->
-  <div id="add-cards-panel" class="hidden bg-gray-800/95 border-2 border-cyan-500/40 rounded-2xl p-6 shadow-2xl transition-all">
+  <div id="add-cards-panel"
+    class="hidden bg-gray-800/95 border-2 border-cyan-500/40 rounded-2xl p-6 shadow-2xl transition-all">
     <div class="flex items-center justify-between pb-4 mb-4 border-b border-gray-700">
       <div class="flex items-center gap-2.5">
-        <span class="text-xl">✨</span>
+        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z">
+          </path>
+        </svg>
         <h2 class="text-lg font-bold text-white">إضافة كروت جديدة إلى النظام</h2>
       </div>
-      <button id="close-add-panel-btn" class="text-gray-400 hover:text-white p-1 rounded-lg text-lg">✕</button>
+      <button id="close-add-panel-btn" class="text-gray-400 hover:text-white p-1 rounded-lg transition" title="إغلاق">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
     </div>
 
     <!-- Mode Tabs -->
     <div class="flex border-b border-gray-700 mb-6 gap-2">
-      <button id="tab-range-btn" class="tab-btn active px-4 py-2.5 text-sm font-bold text-cyan-400 border-b-2 border-cyan-400 transition flex items-center gap-2">
-        <span>🔢</span>
+      <button id="tab-range-btn"
+        class="tab-btn active px-4 py-2.5 text-sm font-bold text-cyan-400 border-b-2 border-cyan-400 transition flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5"></path>
+        </svg>
         <span>إضافة نطاق متسلسل (مثال: 3100 إلى 3400)</span>
       </button>
-      <button id="tab-single-btn" class="tab-btn px-4 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-200 border-b-2 border-transparent transition flex items-center gap-2">
-        <span>🏷️</span>
+      <button id="tab-single-btn"
+        class="tab-btn px-4 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-200 border-b-2 border-transparent transition flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z">
+          </path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z"></path>
+        </svg>
         <span>كارت مفرد</span>
       </button>
-      <button id="tab-bulk-btn" class="tab-btn px-4 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-200 border-b-2 border-transparent transition flex items-center gap-2">
-        <span>📋</span>
+      <button id="tab-bulk-btn"
+        class="tab-btn px-4 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-200 border-b-2 border-transparent transition flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z">
+          </path>
+        </svg>
         <span>قائمة أكواد مخصصة</span>
       </button>
     </div>
@@ -93,22 +153,26 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1.5">من رقم (بداية النطاق) *</label>
-          <input type="number" id="range-start" required min="1" placeholder="مثال: 3100" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+          <input type="number" id="range-start" required min="1" placeholder="مثال: 3100"
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1.5">إلى رقم (نهاية النطاق) *</label>
-          <input type="number" id="range-end" required min="1" placeholder="مثال: 3400" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+          <input type="number" id="range-end" required min="1" placeholder="مثال: 3400"
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1.5">بادئة الكود (Prefix - اختياري)</label>
-          <input type="text" id="range-prefix" placeholder="مثال: CARD- أو اتركه فارغاً" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono uppercase focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+          <input type="text" id="range-prefix" placeholder="مثال: CARD- أو اتركه فارغاً"
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono uppercase focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1.5">إكمال خانات بأصفار (Padding)</label>
-          <select id="range-pad" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+          <select id="range-pad"
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
             <option value="0" selected>بدون أصفار إضافية (3100)</option>
             <option value="4">4 خانات (0001)</option>
             <option value="5">5 خانات (00001)</option>
@@ -118,18 +182,30 @@
       </div>
 
       <!-- Live Preview Banner -->
-      <div id="range-preview" class="bg-gray-900/80 border border-cyan-500/30 rounded-xl p-4 text-sm flex items-center justify-between">
+      <div id="range-preview"
+        class="bg-gray-900/80 border border-cyan-500/30 rounded-xl p-4 text-sm flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <span class="text-cyan-400 text-lg">💡</span>
+          <svg class="w-5 h-5 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.516 0c.85.493 1.509 1.333 1.509 2.316V18">
+            </path>
+          </svg>
           <span id="range-preview-text" class="text-gray-300">أدخل رقم البداية والنهاية لمعاينة النطاق...</span>
         </div>
-        <span id="range-count-badge" class="hidden text-xs bg-cyan-900/60 text-cyan-300 border border-cyan-500/40 px-3 py-1 rounded-full font-bold"></span>
+        <span id="range-count-badge"
+          class="hidden text-xs bg-cyan-900/60 text-cyan-300 border border-cyan-500/40 px-3 py-1 rounded-full font-bold"></span>
       </div>
 
       <div class="flex items-center justify-end gap-3 pt-3">
-        <button type="button" class="close-panel-btn bg-gray-700 hover:bg-gray-600 text-gray-300 px-5 py-2.5 rounded-xl text-sm transition">إلغاء</button>
-        <button type="submit" id="submit-range-btn" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-7 py-2.5 rounded-xl text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-600/30">
-          <span>⚡</span>
+        <button type="button"
+          class="close-panel-btn bg-gray-700 hover:bg-gray-600 text-gray-300 px-5 py-2.5 rounded-xl text-sm transition">إلغاء</button>
+        <button type="submit" id="submit-range-btn"
+          class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-7 py-2.5 rounded-xl text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-600/30">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"></path>
+          </svg>
           <span>توليد وإضافة الكروت</span>
         </button>
       </div>
@@ -140,16 +216,27 @@
       <div class="max-w-md">
         <label class="block text-xs font-semibold text-gray-300 mb-1.5">كود الكارت / الباركود *</label>
         <div class="relative">
-          <input type="text" id="single-code" required placeholder="امسح الكارت أو اكتب رقمه (مثال: 3100 أو CARD-101)" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-3 text-sm text-white font-mono uppercase focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
-          <span class="absolute left-3 top-3 text-gray-500 text-sm">💳</span>
+          <input type="text" id="single-code" required placeholder="امسح الكارت أو اكتب رقمه (مثال: 3100 أو CARD-101)"
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-3 text-sm text-white font-mono uppercase focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+          <span class="absolute left-3 top-3 text-gray-500">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z">
+              </path>
+            </svg>
+          </span>
         </div>
         <p class="text-xs text-gray-400 mt-1.5">يمكنك مسح الكارت بالماسح الضوئي مباشرة في هذا الحقل.</p>
       </div>
 
       <div class="flex items-center justify-end gap-3 pt-3">
-        <button type="button" class="close-panel-btn bg-gray-700 hover:bg-gray-600 text-gray-300 px-5 py-2.5 rounded-xl text-sm transition">إلغاء</button>
-        <button type="submit" id="submit-single-btn" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-7 py-2.5 rounded-xl text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-600/30">
-          <span>➕</span>
+        <button type="button"
+          class="close-panel-btn bg-gray-700 hover:bg-gray-600 text-gray-300 px-5 py-2.5 rounded-xl text-sm transition">إلغاء</button>
+        <button type="submit" id="submit-single-btn"
+          class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-7 py-2.5 rounded-xl text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-600/30">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+          </svg>
           <span>إضافة الكارت</span>
         </button>
       </div>
@@ -158,14 +245,22 @@
     <!-- Form 3: Custom List Bulk Creation -->
     <form id="bulk-form" class="tab-content hidden space-y-4">
       <div>
-        <label class="block text-xs font-semibold text-gray-300 mb-1.5">أكواد الكروت (كود في كل سطر أو مفصولة بفواصل) *</label>
-        <textarea id="bulk-codes" rows="5" required placeholder="3101&#10;3102&#10;3103&#10;CARD-A1&#10;CARD-A2" class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3.5 text-sm text-white font-mono uppercase focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"></textarea>
+        <label class="block text-xs font-semibold text-gray-300 mb-1.5">أكواد الكروت (كود في كل سطر أو مفصولة بفواصل)
+          *</label>
+        <textarea id="bulk-codes" rows="5" required placeholder="3101&#10;3102&#10;3103&#10;CARD-A1&#10;CARD-A2"
+          class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3.5 text-sm text-white font-mono uppercase focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"></textarea>
       </div>
 
       <div class="flex items-center justify-end gap-3 pt-3">
-        <button type="button" class="close-panel-btn bg-gray-700 hover:bg-gray-600 text-gray-300 px-5 py-2.5 rounded-xl text-sm transition">إلغاء</button>
-        <button type="submit" id="submit-bulk-btn" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-7 py-2.5 rounded-xl text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-600/30">
-          <span>📋</span>
+        <button type="button"
+          class="close-panel-btn bg-gray-700 hover:bg-gray-600 text-gray-300 px-5 py-2.5 rounded-xl text-sm transition">إلغاء</button>
+        <button type="submit" id="submit-bulk-btn"
+          class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-7 py-2.5 rounded-xl text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-600/30">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z">
+            </path>
+          </svg>
           <span>إضافة القائمة</span>
         </button>
       </div>
@@ -175,22 +270,29 @@
   <!-- Cards List Table and Filters -->
   <div class="bg-gray-800/80 border border-gray-700/60 rounded-2xl shadow-xl overflow-hidden">
     <!-- Filters and Search Bar -->
-    <div class="p-4 sm:p-5 border-b border-gray-700/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+    <div
+      class="p-4 sm:p-5 border-b border-gray-700/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
       <!-- Status Tabs / Filter Links -->
-      <div class="flex items-center gap-1.5 bg-gray-900/80 p-1 rounded-xl border border-gray-700/60 overflow-x-auto text-xs">
-        <a href="/ui/admin/cards?status={% if search %}&search={{ search }}{% endif %}" class="px-3 py-1.5 rounded-lg transition font-medium whitespace-nowrap {% if not selected_status %}bg-cyan-600 text-white font-bold{% else %}text-gray-400 hover:text-white{% endif %}">
+      <div
+        class="flex items-center gap-1.5 bg-gray-900/80 p-1 rounded-xl border border-gray-700/60 overflow-x-auto text-xs">
+        <a href="/ui/admin/cards?status={% if search %}&search={{ search }}{% endif %}"
+          class="px-3 py-1.5 rounded-lg transition font-medium whitespace-nowrap {% if not selected_status %}bg-cyan-600 text-white font-bold{% else %}text-gray-400 hover:text-white{% endif %}">
           الكل ({{ counts.total }})
         </a>
-        <a href="/ui/admin/cards?status=available{% if search %}&search={{ search }}{% endif %}" class="px-3 py-1.5 rounded-lg transition font-medium whitespace-nowrap {% if selected_status == 'available' %}bg-emerald-600 text-white font-bold{% else %}text-emerald-400 hover:text-emerald-300{% endif %}">
+        <a href="/ui/admin/cards?status=available{% if search %}&search={{ search }}{% endif %}"
+          class="px-3 py-1.5 rounded-lg transition font-medium whitespace-nowrap {% if selected_status == 'available' %}bg-emerald-600 text-white font-bold{% else %}text-emerald-400 hover:text-emerald-300{% endif %}">
           متاح ({{ counts.available }})
         </a>
-        <a href="/ui/admin/cards?status=in_use{% if search %}&search={{ search }}{% endif %}" class="px-3 py-1.5 rounded-lg transition font-medium whitespace-nowrap {% if selected_status == 'in_use' %}bg-cyan-600 text-white font-bold{% else %}text-cyan-400 hover:text-cyan-300{% endif %}">
+        <a href="/ui/admin/cards?status=in_use{% if search %}&search={{ search }}{% endif %}"
+          class="px-3 py-1.5 rounded-lg transition font-medium whitespace-nowrap {% if selected_status == 'in_use' %}bg-cyan-600 text-white font-bold{% else %}text-cyan-400 hover:text-cyan-300{% endif %}">
           في الجراج ({{ counts.in_use }})
         </a>
-        <a href="/ui/admin/cards?status=lost{% if search %}&search={{ search }}{% endif %}" class="px-3 py-1.5 rounded-lg transition font-medium whitespace-nowrap {% if selected_status == 'lost' %}bg-amber-600 text-white font-bold{% else %}text-amber-400 hover:text-amber-300{% endif %}">
+        <a href="/ui/admin/cards?status=lost{% if search %}&search={{ search }}{% endif %}"
+          class="px-3 py-1.5 rounded-lg transition font-medium whitespace-nowrap {% if selected_status == 'lost' %}bg-amber-600 text-white font-bold{% else %}text-amber-400 hover:text-amber-300{% endif %}">
           مفقود ({{ counts.lost }})
         </a>
-        <a href="/ui/admin/cards?status=damaged{% if search %}&search={{ search }}{% endif %}" class="px-3 py-1.5 rounded-lg transition font-medium whitespace-nowrap {% if selected_status == 'damaged' %}bg-rose-600 text-white font-bold{% else %}text-rose-400 hover:text-rose-300{% endif %}">
+        <a href="/ui/admin/cards?status=damaged{% if search %}&search={{ search }}{% endif %}"
+          class="px-3 py-1.5 rounded-lg transition font-medium whitespace-nowrap {% if selected_status == 'damaged' %}bg-rose-600 text-white font-bold{% else %}text-rose-400 hover:text-rose-300{% endif %}">
           تالف ({{ counts.damaged }})
         </a>
       </div>
@@ -201,12 +303,20 @@
         <input type="hidden" name="status" value="{{ selected_status }}">
         {% endif %}
         <div class="relative w-full sm:w-64">
-          <input type="text" name="search" value="{{ search }}" placeholder="بحث بكود الكارت..." class="w-full bg-gray-900 border border-gray-700 rounded-xl pr-9 pl-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500">
-          <span class="absolute right-3 top-2 text-gray-500 text-xs">🔍</span>
+          <input type="text" name="search" value="{{ search }}" placeholder="بحث بكود الكارت..."
+            class="w-full bg-gray-900 border border-gray-700 rounded-xl pr-9 pl-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+          <span class="absolute right-3 top-2 text-gray-500">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+            </svg>
+          </span>
         </div>
-        <button type="submit" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition">بحث</button>
+        <button type="submit"
+          class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition">بحث</button>
         {% if search %}
-        <a href="/ui/admin/cards{% if selected_status %}?status={{ selected_status }}{% endif %}" class="text-xs text-gray-400 hover:text-rose-400 px-1 py-1.5">إلغاء</a>
+        <a href="/ui/admin/cards{% if selected_status %}?status={{ selected_status }}{% endif %}"
+          class="text-xs text-gray-400 hover:text-rose-400 px-1 py-1.5">إلغاء</a>
         {% endif %}
       </form>
     </div>
@@ -226,55 +336,61 @@
         </thead>
         <tbody class="divide-y divide-gray-700/60">
           {% if cards %}
-            {% for c in cards %}
-            <tr id="card-row-{{ c.card_code }}" class="hover:bg-gray-700/30 transition">
-              <td class="p-3.5 text-gray-500 text-xs font-mono">{{ c.id }}</td>
-              <td class="p-3.5 font-bold font-mono text-white text-base">
-                <span class="inline-block bg-gray-900/90 border border-gray-700 px-2.5 py-1 rounded-lg text-cyan-300">
-                  {{ c.card_code }}
-                </span>
-              </td>
-              <td class="p-3.5">
-                {% if c.status.value == 'AVAILABLE' %}
-                  <span class="inline-flex items-center gap-1.5 bg-emerald-950/80 text-emerald-300 border border-emerald-600/50 px-2.5 py-1 rounded-full text-xs font-semibold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> متاح
-                  </span>
-                {% elif c.status.value == 'IN_USE' %}
-                  <span class="inline-flex items-center gap-1.5 bg-cyan-950/80 text-cyan-300 border border-cyan-600/50 px-2.5 py-1 rounded-full text-xs font-semibold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span> داخل الجراج
-                  </span>
-                {% elif c.status.value == 'LOST' %}
-                  <span class="inline-flex items-center gap-1.5 bg-amber-950/80 text-amber-300 border border-amber-600/50 px-2.5 py-1 rounded-full text-xs font-semibold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> مفقود
-                  </span>
-                {% elif c.status.value == 'DAMAGED' %}
-                  <span class="inline-flex items-center gap-1.5 bg-rose-950/80 text-rose-300 border border-rose-600/50 px-2.5 py-1 rounded-full text-xs font-semibold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> تالف
-                  </span>
-                {% endif %}
-              </td>
-              <td class="p-3.5 text-xs text-gray-400">
-                {{ c.last_seen_at.strftime('%Y-%m-%d %H:%M') if c.last_seen_at else '—' }}
-              </td>
-              <td class="p-3.5 text-xs text-gray-400 font-mono">
-                {{ c.created_at.strftime('%Y-%m-%d') if c.created_at else '—' }}
-              </td>
-              <td class="p-3.5 text-center">
-                <select class="status-select bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition" data-card="{{ c.card_code }}">
-                  <option value="AVAILABLE" {% if c.status.value == 'AVAILABLE' %}selected{% endif %}>متاح</option>
-                  <option value="IN_USE" {% if c.status.value == 'IN_USE' %}selected{% endif %}>قيد الاستخدام</option>
-                  <option value="LOST" {% if c.status.value == 'LOST' %}selected{% endif %}>مفقود</option>
-                  <option value="DAMAGED" {% if c.status.value == 'DAMAGED' %}selected{% endif %}>تالف</option>
-                </select>
-              </td>
-            </tr>
-            {% endfor %}
+          {% for c in cards %}
+          <tr id="card-row-{{ c.card_code }}" class="hover:bg-gray-700/30 transition">
+            <td class="p-3.5 text-gray-500 text-xs font-mono">{{ c.id }}</td>
+            <td class="p-3.5 font-bold font-mono text-white text-base">
+              <span class="inline-block bg-gray-900/90 border border-gray-700 px-2.5 py-1 rounded-lg text-cyan-300">
+                {{ c.card_code }}
+              </span>
+            </td>
+            <td class="p-3.5">
+              {% if c.status.value == 'AVAILABLE' %}
+              <span
+                class="inline-flex items-center gap-1.5 bg-emerald-950/80 text-emerald-300 border border-emerald-600/50 px-2.5 py-1 rounded-full text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> متاح
+              </span>
+              {% elif c.status.value == 'IN_USE' %}
+              <span
+                class="inline-flex items-center gap-1.5 bg-cyan-950/80 text-cyan-300 border border-cyan-600/50 px-2.5 py-1 rounded-full text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span> داخل الجراج
+              </span>
+              {% elif c.status.value == 'LOST' %}
+              <span
+                class="inline-flex items-center gap-1.5 bg-amber-950/80 text-amber-300 border border-amber-600/50 px-2.5 py-1 rounded-full text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> مفقود
+              </span>
+              {% elif c.status.value == 'DAMAGED' %}
+              <span
+                class="inline-flex items-center gap-1.5 bg-rose-950/80 text-rose-300 border border-rose-600/50 px-2.5 py-1 rounded-full text-xs font-semibold">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> تالف
+              </span>
+              {% endif %}
+            </td>
+            <td class="p-3.5 text-xs text-gray-400">
+              {{ c.last_seen_at.strftime('%Y-%m-%d %H:%M') if c.last_seen_at else '—' }}
+            </td>
+            <td class="p-3.5 text-xs text-gray-400 font-mono">
+              {{ c.created_at.strftime('%Y-%m-%d') if c.created_at else '—' }}
+            </td>
+            <td class="p-3.5 text-center">
+              <select
+                class="status-select bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-cyan-500 transition"
+                data-card="{{ c.card_code }}">
+                <option value="AVAILABLE" {% if c.status.value=='AVAILABLE' %}selected{% endif %}>متاح</option>
+                <option value="IN_USE" {% if c.status.value=='IN_USE' %}selected{% endif %}>قيد الاستخدام</option>
+                <option value="LOST" {% if c.status.value=='LOST' %}selected{% endif %}>مفقود</option>
+                <option value="DAMAGED" {% if c.status.value=='DAMAGED' %}selected{% endif %}>تالف</option>
+              </select>
+            </td>
+          </tr>
+          {% endfor %}
           {% else %}
-            <tr>
-              <td colspan="6" class="p-8 text-center text-gray-400 text-sm">
-                لا توجد كروت مطابقة لمعايير البحث الحالية. اضغط على زر "إضافة كروت جديدة" لإضافة كروت.
-              </td>
-            </tr>
+          <tr>
+            <td colspan="6" class="p-8 text-center text-gray-400 text-sm">
+              لا توجد كروت مطابقة لمعايير البحث الحالية. اضغط على زر "إضافة كروت جديدة" لإضافة كروت.
+            </td>
+          </tr>
           {% endif %}
         </tbody>
       </table>
@@ -284,28 +400,31 @@
     {% if total_pages > 1 %}
     <div class="p-4 border-t border-gray-700/80 flex items-center justify-between text-xs text-gray-400">
       <div>
-        عرض الصفحة <span class="font-bold text-white">{{ current_page }}</span> من إجمالي <span class="font-bold text-white">{{ total_pages }}</span> صفحة ({{ total }} كارت)
+        عرض الصفحة <span class="font-bold text-white">{{ current_page }}</span> من إجمالي <span
+          class="font-bold text-white">{{ total_pages }}</span> صفحة ({{ total }} كارت)
       </div>
       <div class="flex items-center gap-1.5">
         {% if current_page > 1 %}
-        <a href="/ui/admin/cards?page={{ current_page - 1 }}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg transition font-bold">السابق</a>
+        <a href="/ui/admin/cards?page={{ current_page - 1 }}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if search %}&search={{ search }}{% endif %}"
+          class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg transition font-bold">السابق</a>
         {% endif %}
 
         {% for p in range(1, total_pages + 1) %}
-          {% if p == current_page %}
-          <span class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg font-bold">{{ p }}</span>
-          {% elif p <= 3 or p >= total_pages - 2 or (p >= current_page - 1 and p <= current_page + 1) %}
-          <a href="/ui/admin/cards?page={{ p }}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition">{{ p }}</a>
-          {% elif p == 4 and current_page > 5 %}
-          <span class="px-2">...</span>
-          {% elif p == total_pages - 3 and current_page < total_pages - 4 %}
-          <span class="px-2">...</span>
-          {% endif %}
-        {% endfor %}
+        {% if p == current_page %}
+        <span class="bg-cyan-600 text-white px-3 py-1.5 rounded-lg font-bold">{{ p }}</span>
+        {% elif p <= 3 or p>= total_pages - 2 or (p >= current_page - 1 and p <= current_page + 1) %} <a
+            href="/ui/admin/cards?page={{ p }}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if search %}&search={{ search }}{% endif %}"
+            class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition">{{ p }}</a>
+            {% elif p == 4 and current_page > 5 %}
+            <span class="px-2">...</span>
+            {% elif p == total_pages - 3 and current_page < total_pages - 4 %} <span class="px-2">...</span>
+              {% endif %}
+              {% endfor %}
 
-        {% if current_page < total_pages %}
-        <a href="/ui/admin/cards?page={{ current_page + 1 }}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if search %}&search={{ search }}{% endif %}" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg transition font-bold">التالي</a>
-        {% endif %}
+              {% if current_page < total_pages %} <a
+                href="/ui/admin/cards?page={{ current_page + 1 }}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if search %}&search={{ search }}{% endif %}"
+                class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg transition font-bold">التالي</a>
+                {% endif %}
       </div>
     </div>
     {% endif %}
@@ -313,242 +432,242 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const panel = document.getElementById('add-cards-panel');
-  const toggleBtn = document.getElementById('toggle-add-panel-btn');
-  const closeBtns = document.querySelectorAll('.close-panel-btn, #close-add-panel-btn');
-  const alertBox = document.getElementById('panel-alert');
+  document.addEventListener('DOMContentLoaded', () => {
+    const panel = document.getElementById('add-cards-panel');
+    const toggleBtn = document.getElementById('toggle-add-panel-btn');
+    const closeBtns = document.querySelectorAll('.close-panel-btn, #close-add-panel-btn');
+    const alertBox = document.getElementById('panel-alert');
 
-  // Toggle Panel
-  toggleBtn?.addEventListener('click', () => {
-    panel.classList.toggle('hidden');
-    if (!panel.classList.contains('hidden')) {
-      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      document.getElementById('range-start')?.focus();
-    }
-  });
+    // Toggle Panel
+    toggleBtn?.addEventListener('click', () => {
+      panel.classList.toggle('hidden');
+      if (!panel.classList.contains('hidden')) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('range-start')?.focus();
+      }
+    });
 
-  closeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      panel.classList.add('hidden');
+    closeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        panel.classList.add('hidden');
+        alertBox.classList.add('hidden');
+      });
+    });
+
+    // Tab Switching
+    const tabRange = document.getElementById('tab-range-btn');
+    const tabSingle = document.getElementById('tab-single-btn');
+    const tabBulk = document.getElementById('tab-bulk-btn');
+
+    const formRange = document.getElementById('range-form');
+    const formSingle = document.getElementById('single-form');
+    const formBulk = document.getElementById('bulk-form');
+
+    function switchTab(activeTab, activeForm) {
+      [tabRange, tabSingle, tabBulk].forEach(t => {
+        t.classList.remove('active', 'text-cyan-400', 'border-cyan-400', 'font-bold');
+        t.classList.add('text-gray-400', 'border-transparent');
+      });
+      [formRange, formSingle, formBulk].forEach(f => f.classList.add('hidden'));
+
+      activeTab.classList.add('active', 'text-cyan-400', 'border-cyan-400', 'font-bold');
+      activeTab.classList.remove('text-gray-400', 'border-transparent');
+      activeForm.classList.remove('hidden');
       alertBox.classList.add('hidden');
-    });
-  });
+    }
 
-  // Tab Switching
-  const tabRange = document.getElementById('tab-range-btn');
-  const tabSingle = document.getElementById('tab-single-btn');
-  const tabBulk = document.getElementById('tab-bulk-btn');
+    tabRange?.addEventListener('click', () => switchTab(tabRange, formRange));
+    tabSingle?.addEventListener('click', () => switchTab(tabSingle, formSingle));
+    tabBulk?.addEventListener('click', () => switchTab(tabBulk, formBulk));
 
-  const formRange = document.getElementById('range-form');
-  const formSingle = document.getElementById('single-form');
-  const formBulk = document.getElementById('bulk-form');
+    // Live Range Preview Calculation
+    const startInput = document.getElementById('range-start');
+    const endInput = document.getElementById('range-end');
+    const prefixInput = document.getElementById('range-prefix');
+    const padInput = document.getElementById('range-pad');
+    const previewText = document.getElementById('range-preview-text');
+    const countBadge = document.getElementById('range-count-badge');
 
-  function switchTab(activeTab, activeForm) {
-    [tabRange, tabSingle, tabBulk].forEach(t => {
-      t.classList.remove('active', 'text-cyan-400', 'border-cyan-400', 'font-bold');
-      t.classList.add('text-gray-400', 'border-transparent');
-    });
-    [formRange, formSingle, formBulk].forEach(f => f.classList.add('hidden'));
+    function updateRangePreview() {
+      const start = parseInt(startInput.value, 10);
+      const end = parseInt(endInput.value, 10);
+      const prefix = prefixInput.value.trim().toUpperCase();
+      const pad = parseInt(padInput.value, 10);
 
-    activeTab.classList.add('active', 'text-cyan-400', 'border-cyan-400', 'font-bold');
-    activeTab.classList.remove('text-gray-400', 'border-transparent');
-    activeForm.classList.remove('hidden');
-    alertBox.classList.add('hidden');
-  }
+      if (!isNaN(start) && !isNaN(end)) {
+        if (start > end) {
+          previewText.innerHTML = '<span class="text-rose-400 font-bold">خطأ: رقم البداية أكبر من رقم النهاية!</span>';
+          countBadge.classList.add('hidden');
+          return;
+        }
+        const count = end - start + 1;
+        const formatCode = (n) => {
+          const s = pad > 0 ? String(n).padStart(pad, '0') : String(n);
+          return `${prefix}${s}`;
+        };
 
-  tabRange?.addEventListener('click', () => switchTab(tabRange, formRange));
-  tabSingle?.addEventListener('click', () => switchTab(tabSingle, formSingle));
-  tabBulk?.addEventListener('click', () => switchTab(tabBulk, formBulk));
+        const firstCard = formatCode(start);
+        const lastCard = formatCode(end);
 
-  // Live Range Preview Calculation
-  const startInput = document.getElementById('range-start');
-  const endInput = document.getElementById('range-end');
-  const prefixInput = document.getElementById('range-prefix');
-  const padInput = document.getElementById('range-pad');
-  const previewText = document.getElementById('range-preview-text');
-  const countBadge = document.getElementById('range-count-badge');
-
-  function updateRangePreview() {
-    const start = parseInt(startInput.value, 10);
-    const end = parseInt(endInput.value, 10);
-    const prefix = prefixInput.value.trim().toUpperCase();
-    const pad = parseInt(padInput.value, 10);
-
-    if (!isNaN(start) && !isNaN(end)) {
-      if (start > end) {
-        previewText.innerHTML = '<span class="text-rose-400 font-bold">⚠️ خطأ: رقم البداية أكبر من رقم النهاية!</span>';
+        previewText.innerHTML = `سيتم توليد <strong class="text-cyan-300">${count}</strong> كارت، تبدأ بـ <span class="bg-gray-800 font-mono px-2 py-0.5 rounded text-white font-bold">${firstCard}</span> وتنتهي بـ <span class="bg-gray-800 font-mono px-2 py-0.5 rounded text-white font-bold">${lastCard}</span>`;
+        countBadge.textContent = `${count} كارت`;
+        countBadge.classList.remove('hidden');
+      } else {
+        previewText.textContent = 'أدخل رقم البداية والنهاية لمعاينة النطاق...';
         countBadge.classList.add('hidden');
-        return;
       }
-      const count = end - start + 1;
-      const formatCode = (n) => {
-        const s = pad > 0 ? String(n).padStart(pad, '0') : String(n);
-        return `${prefix}${s}`;
-      };
-
-      const firstCard = formatCode(start);
-      const lastCard = formatCode(end);
-
-      previewText.innerHTML = `سيتم توليد <strong class="text-cyan-300">${count}</strong> كارت، تبدأ بـ <span class="bg-gray-800 font-mono px-2 py-0.5 rounded text-white font-bold">${firstCard}</span> وتنتهي بـ <span class="bg-gray-800 font-mono px-2 py-0.5 rounded text-white font-bold">${lastCard}</span>`;
-      countBadge.textContent = `${count} كارت`;
-      countBadge.classList.remove('hidden');
-    } else {
-      previewText.textContent = 'أدخل رقم البداية والنهاية لمعاينة النطاق...';
-      countBadge.classList.add('hidden');
-    }
-  }
-
-  [startInput, endInput, prefixInput, padInput].forEach(el => {
-    el?.addEventListener('input', updateRangePreview);
-    el?.addEventListener('change', updateRangePreview);
-  });
-
-  function showAlert(msg, isSuccess = true) {
-    alertBox.className = isSuccess
-      ? 'p-4 rounded-xl text-sm mb-4 bg-emerald-950/80 border border-emerald-500 text-emerald-200'
-      : 'p-4 rounded-xl text-sm mb-4 bg-rose-950/80 border border-rose-500 text-rose-200';
-    alertBox.innerHTML = msg;
-    alertBox.classList.remove('hidden');
-  }
-
-  // Handle Range Submit
-  formRange?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const start = parseInt(startInput.value, 10);
-    const end = parseInt(endInput.value, 10);
-    const prefix = prefixInput.value.trim().toUpperCase();
-    const pad = parseInt(padInput.value, 10);
-
-    const submitBtn = document.getElementById('submit-range-btn');
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span>⏳</span><span>جاري الإضافة...</span>';
-
-    try {
-      const res = await fetch('/api/v1/cards/range', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          start_number: start,
-          end_number: end,
-          prefix: prefix,
-          pad_zeros: pad
-        })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.detail || 'حدث خطأ أثناء إضافة النطاق');
-      }
-
-      let msg = `✅ تم بنجاح إضافة <strong>${data.created}</strong> كارت جديدة إلى النظام!`;
-      if (data.skipped > 0) {
-        msg += ` (تم تخطي ${data.skipped} كارت مسجلة مسبقاً)`;
-      }
-      showAlert(msg, true);
-      setTimeout(() => window.location.reload(), 1500);
-    } catch (err) {
-      showAlert(`❌ ${err.message}`, false);
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span>⚡</span><span>توليد وإضافة الكروت</span>';
-    }
-  });
-
-  // Handle Single Card Submit
-  formSingle?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const code = document.getElementById('single-code').value.trim().toUpperCase();
-    const submitBtn = document.getElementById('submit-single-btn');
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span>⏳</span><span>جاري الحفظ...</span>';
-
-    try {
-      const res = await fetch('/api/v1/cards/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ card_code: code })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.detail || 'فشلت إضافة الكارت');
-      }
-
-      showAlert(`✅ تم إضافة الكارت <strong>${code}</strong> بنجاح!`, true);
-      setTimeout(() => window.location.reload(), 1200);
-    } catch (err) {
-      showAlert(`❌ ${err.message}`, false);
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span>➕</span><span>إضافة الكارت</span>';
-    }
-  });
-
-  // Handle Bulk List Submit
-  formBulk?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const rawText = document.getElementById('bulk-codes').value;
-    const codes = rawText.split(/[\n,]+/).map(c => c.trim().toUpperCase()).filter(Boolean);
-
-    if (codes.length === 0) {
-      showAlert('يرجى إدخال كود كارت واحد على الأقل', false);
-      return;
     }
 
-    const submitBtn = document.getElementById('submit-bulk-btn');
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span>⏳</span><span>جاري المعالجة...</span>';
+    [startInput, endInput, prefixInput, padInput].forEach(el => {
+      el?.addEventListener('input', updateRangePreview);
+      el?.addEventListener('change', updateRangePreview);
+    });
 
-    try {
-      const res = await fetch('/api/v1/cards/bulk', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ card_codes: codes })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.detail || 'فشلت إضافة الكروت');
-      }
-
-      let msg = `✅ تم إضافة <strong>${data.created}</strong> كارت بنجاح!`;
-      if (data.skipped > 0) {
-        msg += ` (تم تخطي ${data.skipped} كارت مكررة)`;
-      }
-      showAlert(msg, true);
-      setTimeout(() => window.location.reload(), 1500);
-    } catch (err) {
-      showAlert(`❌ ${err.message}`, false);
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span>📋</span><span>إضافة القائمة</span>';
+    function showAlert(msg, isSuccess = true) {
+      alertBox.className = isSuccess
+        ? 'p-4 rounded-xl text-sm mb-4 bg-emerald-950/80 border border-emerald-500 text-emerald-200'
+        : 'p-4 rounded-xl text-sm mb-4 bg-rose-950/80 border border-rose-500 text-rose-200';
+      alertBox.innerHTML = msg;
+      alertBox.classList.remove('hidden');
     }
-  });
 
-  // Status Change Inline Dropdown
-  document.querySelectorAll('.status-select').forEach(selectEl => {
-    selectEl.addEventListener('change', async (e) => {
-      const cardCode = e.target.getAttribute('data-card');
-      const newStatus = e.target.value;
-      const originalValue = e.target.getAttribute('data-original') || newStatus;
+    // Handle Range Submit
+    formRange?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const start = parseInt(startInput.value, 10);
+      const end = parseInt(endInput.value, 10);
+      const prefix = prefixInput.value.trim().toUpperCase();
+      const pad = parseInt(padInput.value, 10);
+
+      const submitBtn = document.getElementById('submit-range-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="inline-block animate-spin mr-1">↻</span><span>جاري الإضافة...</span>';
 
       try {
-        const res = await fetch(`/api/v1/cards/${encodeURIComponent(cardCode)}/status`, {
-          method: 'PATCH',
+        const res = await fetch('/api/v1/cards/range', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: newStatus })
+          body: JSON.stringify({
+            start_number: start,
+            end_number: end,
+            prefix: prefix,
+            pad_zeros: pad
+          })
         });
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.detail || 'فشل تحديث الحالة');
+          throw new Error(data.detail || 'حدث خطأ أثناء إضافة النطاق');
         }
-        // Brief visual feedback
-        selectEl.classList.add('border-emerald-500', 'bg-emerald-950');
-        setTimeout(() => {
-          selectEl.classList.remove('border-emerald-500', 'bg-emerald-950');
-          window.location.reload();
-        }, 600);
+
+        let msg = `تم بنجاح إضافة <strong>${data.created}</strong> كارت جديدة إلى النظام!`;
+        if (data.skipped > 0) {
+          msg += ` (تم تخطي ${data.skipped} كارت مسجلة مسبقاً)`;
+        }
+        showAlert(msg, true);
+        setTimeout(() => window.location.reload(), 1500);
       } catch (err) {
-        alert(`❌ حدث خطأ: ${err.message}`);
-        selectEl.value = originalValue;
+        showAlert(err.message, false);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"></path></svg><span>توليد وإضافة الكروت</span>';
       }
     });
+
+    // Handle Single Card Submit
+    formSingle?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = document.getElementById('single-code').value.trim().toUpperCase();
+      const submitBtn = document.getElementById('submit-single-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="inline-block animate-spin mr-1">↻</span><span>جاري الحفظ...</span>';
+
+      try {
+        const res = await fetch('/api/v1/cards/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ card_code: code })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || 'فشلت إضافة الكارت');
+        }
+
+        showAlert(`تم إضافة الكارت <strong>${code}</strong> بنجاح!`, true);
+        setTimeout(() => window.location.reload(), 1200);
+      } catch (err) {
+        showAlert(err.message, false);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg><span>إضافة الكارت</span>';
+      }
+    });
+
+    // Handle Bulk List Submit
+    formBulk?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const rawText = document.getElementById('bulk-codes').value;
+      const codes = rawText.split(/[\n,]+/).map(c => c.trim().toUpperCase()).filter(Boolean);
+
+      if (codes.length === 0) {
+        showAlert('يرجى إدخال كود كارت واحد على الأقل', false);
+        return;
+      }
+
+      const submitBtn = document.getElementById('submit-bulk-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="inline-block animate-spin mr-1">↻</span><span>جاري المعالجة...</span>';
+
+      try {
+        const res = await fetch('/api/v1/cards/bulk', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ card_codes: codes })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || 'فشلت إضافة الكروت');
+        }
+
+        let msg = `تم إضافة <strong>${data.created}</strong> كارت بنجاح!`;
+        if (data.skipped > 0) {
+          msg += ` (تم تخطي ${data.skipped} كارت مكررة)`;
+        }
+        showAlert(msg, true);
+        setTimeout(() => window.location.reload(), 1500);
+      } catch (err) {
+        showAlert(err.message, false);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"></path></svg><span>إضافة القائمة</span>';
+      }
+    });
+
+    // Status Change Inline Dropdown
+    document.querySelectorAll('.status-select').forEach(selectEl => {
+      selectEl.addEventListener('change', async (e) => {
+        const cardCode = e.target.getAttribute('data-card');
+        const newStatus = e.target.value;
+        const originalValue = e.target.getAttribute('data-original') || newStatus;
+
+        try {
+          const res = await fetch(`/api/v1/cards/${encodeURIComponent(cardCode)}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            throw new Error(data.detail || 'فشل تحديث الحالة');
+          }
+          // Brief visual feedback
+          selectEl.classList.add('border-emerald-500', 'bg-emerald-950');
+          setTimeout(() => {
+            selectEl.classList.remove('border-emerald-500', 'bg-emerald-950');
+            window.location.reload();
+          }, 600);
+        } catch (err) {
+          alert(`حدث خطأ: ${err.message}`);
+          selectEl.value = originalValue;
+        }
+      });
+    });
   });
-});
 </script>
 {% endblock %}

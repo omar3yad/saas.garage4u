@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>عرض فني ومالي | نظام garage4u لإدارة المواقف الذكية (GPMS)</title>
-  
+
   <!-- Google Fonts: Cairo -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -44,6 +46,7 @@
     * {
       box-sizing: border-box;
     }
+
     body {
       font-family: 'Cairo', sans-serif;
       background-color: #020617;
@@ -61,16 +64,20 @@
     }
 
     @media print {
-      html, body {
+
+      html,
+      body {
         background-color: #020617 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         width: 100% !important;
         height: 100% !important;
       }
+
       .no-print {
         display: none !important;
       }
+
       .slide-page {
         page-break-after: always !important;
         break-after: page !important;
@@ -118,25 +125,34 @@
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(51, 65, 85, 0.7);
     }
+
     .glow-emerald {
       box-shadow: 0 0 35px -5px rgba(16, 185, 129, 0.22);
     }
+
     .glow-blue {
       box-shadow: 0 0 35px -5px rgba(14, 165, 233, 0.22);
     }
   </style>
 </head>
+
 <body class="bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-white">
 
   <!-- Interactive Controls Toolbar (Hidden in Print) -->
-  <header class="no-print fixed top-3 left-3 md:top-4 md:left-6 z-50 flex items-center gap-2 md:gap-3 bg-slate-900/95 backdrop-blur-md px-3 py-1.5 md:px-4 md:py-2.5 rounded-full border border-slate-700 shadow-2xl">
+  <header
+    class="no-print fixed top-3 left-3 md:top-4 md:left-6 z-50 flex items-center gap-2 md:gap-3 bg-slate-900/95 backdrop-blur-md px-3 py-1.5 md:px-4 md:py-2.5 rounded-full border border-slate-700 shadow-2xl">
     <div class="flex items-center gap-2">
       <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
       <span class="text-[11px] md:text-xs font-bold text-slate-200">garage4u GPMS</span>
     </div>
     <div class="h-3.5 w-px bg-slate-700"></div>
-    <button onclick="window.print()" class="flex items-center gap-1.5 md:gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] md:text-xs font-bold px-3 py-1 md:px-4 md:py-1.5 rounded-full transition-all duration-200 shadow-lg shadow-emerald-900/50 cursor-pointer">
-      <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+    <button onclick="window.print()"
+      class="flex items-center gap-1.5 md:gap-2 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] md:text-xs font-bold px-3 py-1 md:px-4 md:py-1.5 rounded-full transition-all duration-200 shadow-lg shadow-emerald-900/50 cursor-pointer">
+      <svg class="w-4 h-4 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+        </path>
+      </svg>
       <span>طباعة / حفظ PDF</span>
     </button>
   </header>
@@ -144,39 +160,51 @@
   <!-- ========================================================================= -->
   <!-- SLIDE 1: EXECUTIVE COVER (GENERAL) -->
   <!-- ========================================================================= -->
-  <section class="slide-page bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
+  <section
+    class="slide-page bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
     <!-- Ambient Lighting Background -->
     <div class="absolute -top-32 -right-32 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b0d_1px,transparent_1px),linear-gradient(to_bottom,#1e293b0d_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none"></div>
+    <div
+      class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b0d_1px,transparent_1px),linear-gradient(to_bottom,#1e293b0d_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none">
+    </div>
 
     <!-- Top Header -->
-    <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-800 pb-4">
+    <div
+      class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-800 pb-4">
       <div class="flex items-center gap-3 md:gap-4">
-        <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center p-0.5 shadow-lg shadow-emerald-500/20 shrink-0">
+        <div
+          class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center p-0.5 shadow-lg shadow-emerald-500/20 shrink-0">
           <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-            <svg class="w-5 h-5 md:w-7 md:h-7 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.9 2 11.2 2 11.5V16c0 .6.4 1 1 1h2"/>
-              <circle cx="7" cy="17" r="2"/>
-              <path d="M9 17h6"/>
-              <circle cx="17" cy="17" r="2"/>
+            <svg class="w-5 h-5 md:w-7 md:h-7 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.9 2 11.2 2 11.5V16c0 .6.4 1 1 1h2" />
+              <circle cx="7" cy="17" r="2" />
+              <path d="M9 17h6" />
+              <circle cx="17" cy="17" r="2" />
             </svg>
           </div>
         </div>
         <div>
           <h1 class="text-xl md:text-2xl font-black tracking-tight text-white flex items-center gap-2">
-            garage4u <span class="text-[10px] md:text-xs font-bold text-emerald-400 bg-emerald-950/90 border border-emerald-500/30 px-2 py-0.5 rounded-full">SMART GPMS</span>
+            garage4u <span
+              class="text-[10px] md:text-xs font-bold text-emerald-400 bg-emerald-950/90 border border-emerald-500/30 px-2 py-0.5 rounded-full">SMART
+              GPMS</span>
           </h1>
-          <p class="text-[11px] md:text-xs text-slate-400 font-medium tracking-wide">المنظومة الذكية لإدارة وتشغيل مواقف السيارات والرقابة المالية</p>
+          <p class="text-[11px] md:text-xs text-slate-400 font-medium tracking-wide">المنظومة الذكية لإدارة وتشغيل مواقف
+            السيارات والرقابة المالية</p>
         </div>
       </div>
 
       <div class="flex items-center gap-3 self-end sm:self-auto">
         <div class="text-left hidden sm:block">
-          <span class="text-[10px] md:text-[11px] uppercase tracking-widest text-slate-400 font-semibold block">وثيقة رسمية</span>
+          <span class="text-[10px] md:text-[11px] uppercase tracking-widest text-slate-400 font-semibold block">وثيقة
+            رسمية</span>
           <span class="text-xs font-bold text-emerald-400 font-mono">G4U-PROP-2026-GEN</span>
         </div>
-        <div class="px-3 py-1 md:px-3.5 md:py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] md:text-xs font-bold flex items-center gap-1.5">
+        <div
+          class="px-3 py-1 md:px-3.5 md:py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] md:text-xs font-bold flex items-center gap-1.5">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
           عرض فني ومالي معتمد
         </div>
@@ -186,8 +214,13 @@
     <!-- Center Content -->
     <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-auto py-4">
       <div class="col-span-1 lg:col-span-8 space-y-4 md:space-y-5">
-        <div class="inline-flex items-center gap-2 bg-slate-900/90 border border-slate-700 px-3.5 py-1.5 rounded-2xl shadow-inner text-xs">
-          <svg class="w-4 h-4 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+        <div
+          class="inline-flex items-center gap-2 bg-slate-900/90 border border-slate-700 px-3.5 py-1.5 rounded-2xl shadow-inner text-xs">
+          <svg class="w-4 h-4 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+            </path>
+          </svg>
           <span class="font-bold text-slate-200">حل تقني متكامل: تشغيل محلي (Offline LAN) مع ربط سحابي فوري</span>
         </div>
 
@@ -196,15 +229,19 @@
             عرض الحل المتكامل لإدارة وتشغيل مواقف السيارات والرقابة المالية
           </h2>
           <p class="text-sm md:text-base text-slate-300 font-normal leading-relaxed max-w-2xl">
-            منظومة برمجية متطورة مصممة خصيصاً للتحكم التام في بوابات الدخول والخروج، تحصيل الإيرادات بالثانية، ومنع التسريب المالي بنسبة 100% مع إدارة الاشتراكات بكفاءة قصوى.
+            منظومة برمجية متطورة مصممة خصيصاً للتحكم التام في بوابات الدخول والخروج، تحصيل الإيرادات بالثانية، ومنع
+            التسريب المالي بنسبة 100% مع إدارة الاشتراكات بكفاءة قصوى.
           </p>
         </div>
 
         <!-- Target Client Box (General) -->
-        <div class="p-4 rounded-2xl bg-gradient-to-r from-slate-900/95 to-slate-800/85 border-r-4 border-emerald-500 border border-slate-700 shadow-xl">
+        <div
+          class="p-4 rounded-2xl bg-gradient-to-r from-slate-900/95 to-slate-800/85 border-r-4 border-emerald-500 border border-slate-700 shadow-xl">
           <div class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-0.5">مُقــدم إلـــى:</div>
-          <div class="text-lg sm:text-xl md:text-2xl font-black text-white">السادة / إدارة تشغيل وإدارة مواقف السيارات</div>
-          <div class="text-[11px] md:text-xs text-slate-400 mt-0.5">General Operations & Facility Management — الإدارة العامة للتشغيل والمرافق</div>
+          <div class="text-lg sm:text-xl md:text-2xl font-black text-white">السادة / إدارة تشغيل وإدارة مواقف السيارات
+          </div>
+          <div class="text-[11px] md:text-xs text-slate-400 mt-0.5">General Operations & Facility Management — الإدارة
+            العامة للتشغيل والمرافق</div>
         </div>
       </div>
 
@@ -215,7 +252,8 @@
             <span class="text-xs text-slate-400 font-semibold">نسبة منع التسريب</span>
             <span class="text-emerald-400 text-base md:text-lg font-black font-mono">100%</span>
           </div>
-          <p class="text-[11px] md:text-xs text-slate-300 mt-1">تسوية آلية للكاش بالقرش ومطابقة فورية للتذاكر والورديات</p>
+          <p class="text-[11px] md:text-xs text-slate-300 mt-1">تسوية آلية للكاش بالقرش ومطابقة فورية للتذاكر والورديات
+          </p>
         </div>
 
         <div class="glass-card p-3.5 md:p-4 rounded-2xl border border-slate-700/80">
@@ -231,13 +269,15 @@
             <span class="text-xs text-slate-400 font-semibold">المرونة التشغيلية</span>
             <span class="text-purple-400 text-base md:text-lg font-black font-mono">Zero Lock-in</span>
           </div>
-          <p class="text-[11px] md:text-xs text-slate-300 mt-1">يعمل على أجهزة الكمبيوتر وPOS المحمول والهواتف الذكية</p>
+          <p class="text-[11px] md:text-xs text-slate-300 mt-1">يعمل على أجهزة الكمبيوتر وPOS المحمول والهواتف الذكية
+          </p>
         </div>
       </div>
     </div>
 
     <!-- Bottom Footer -->
-    <div class="relative z-10 flex flex-col sm:flex-row justify-between items-center gap-2 pt-3 border-t border-slate-800 text-[11px] md:text-xs text-slate-400 font-medium">
+    <div
+      class="relative z-10 flex flex-col sm:flex-row justify-between items-center gap-2 pt-3 border-t border-slate-800 text-[11px] md:text-xs text-slate-400 font-medium">
       <div>فريق عمل وتطوير منظومة <span class="text-emerald-400 font-bold">garage4u</span> للحلول الذكية</div>
       <div class="flex items-center gap-4 md:gap-6">
         <span>تاريخ الإصدار: أكتوبر 2026</span>
@@ -251,15 +291,20 @@
   <!-- ========================================================================= -->
   <!-- SLIDE 2: TRACK RECORD & SOCIAL PROOF -->
   <!-- ========================================================================= -->
-  <section class="slide-page bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
+  <section
+    class="slide-page bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 border-b border-slate-800 pb-3">
+    <div
+      class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 border-b border-slate-800 pb-3">
       <div>
-        <div class="text-xs font-extrabold text-emerald-400 tracking-wider uppercase mb-1">سابقة الأعمال والمصداقية التشغيلية</div>
-        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white">ثقة كبرى المشاريع والمواقف الحيوية الأكثر كثافة في مصر</h2>
+        <div class="text-xs font-extrabold text-emerald-400 tracking-wider uppercase mb-1">سابقة الأعمال والمصداقية
+          التشغيلية</div>
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white">ثقة كبرى المشاريع والمواقف الحيوية الأكثر
+          كثافة في مصر</h2>
       </div>
       <div class="text-right shrink-0">
-        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-3 py-1 rounded-full font-bold">
+        <span
+          class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-3 py-1 rounded-full font-bold">
           نظام ميداني مجرب ومعتمد
         </span>
       </div>
@@ -267,20 +312,24 @@
 
     <!-- Center Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 my-auto py-4">
-      
+
       <!-- Project 1: Bab El-Louk -->
       <div class="glass-card rounded-3xl p-4 md:p-5 flex flex-col justify-between border border-slate-700 glow-emerald">
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <span class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-black text-sm md:text-base">01</span>
-            <span class="bg-emerald-950 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-800">تشغيل فعلي كامل</span>
+            <span
+              class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-black text-sm md:text-base">01</span>
+            <span
+              class="bg-emerald-950 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-800">تشغيل
+              فعلي كامل</span>
           </div>
           <div>
             <h3 class="text-base md:text-lg font-black text-white">جراج باب اللوق</h3>
             <p class="text-xs font-semibold text-emerald-400 mt-0.5">ميدان التحرير — قلب القاهرة</p>
           </div>
           <p class="text-xs text-slate-300 leading-relaxed">
-            تشغيل وإدارة كاملة لجميع البوابات، معالجة آلاف الحركات اليومية في ذروة الزحام، والتحكم الفوري في تسليم الورديات وتقفيل الخزينة دون أي تأخير.
+            تشغيل وإدارة كاملة لجميع البوابات، معالجة آلاف الحركات اليومية في ذروة الزحام، والتحكم الفوري في تسليم
+            الورديات وتقفيل الخزينة دون أي تأخير.
           </p>
         </div>
         <div class="pt-3 mt-3 border-t border-slate-800 flex justify-between items-center text-xs">
@@ -293,15 +342,19 @@
       <div class="glass-card rounded-3xl p-4 md:p-5 flex flex-col justify-between border border-slate-700 glow-blue">
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <span class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 font-black text-sm md:text-base">02</span>
-            <span class="bg-blue-950 text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-800">إدارة الاشتراكات واليومي</span>
+            <span
+              class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 font-black text-sm md:text-base">02</span>
+            <span
+              class="bg-blue-950 text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-800">إدارة
+              الاشتراكات واليومي</span>
           </div>
           <div>
             <h3 class="text-base md:text-lg font-black text-white">جراج سانت كاترين</h3>
             <p class="text-xs font-semibold text-blue-400 mt-0.5">المنشية الإسكندرية</p>
           </div>
           <p class="text-xs text-slate-300 leading-relaxed">
-            إدارة متقدمة لقاعدة المشتركين والشركات المجاورة، مع نظام الباقات الشهرية والمحاسبة الدقيقة للتذاكر العابرة، وتوليد تقارير الأداء المالي للملاك.
+            إدارة متقدمة لقاعدة المشتركين والشركات المجاورة، مع نظام الباقات الشهرية والمحاسبة الدقيقة للتذاكر العابرة،
+            وتوليد تقارير الأداء المالي للملاك.
           </p>
         </div>
         <div class="pt-3 mt-3 border-t border-slate-800 flex justify-between items-center text-xs">
@@ -314,15 +367,19 @@
       <div class="glass-card rounded-3xl p-4 md:p-5 flex flex-col justify-between border border-slate-700">
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <span class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-black text-sm md:text-base">03</span>
-            <span class="bg-amber-950 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-800">قيد التجهيز الميداني</span>
+            <span
+              class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-black text-sm md:text-base">03</span>
+            <span
+              class="bg-amber-950 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-800">قيد
+              التجهيز الميداني</span>
           </div>
           <div>
             <h3 class="text-base md:text-lg font-black text-white">جراج دار الأوبرا المصرية</h3>
             <p class="text-xs font-semibold text-amber-400 mt-0.5">الجزيرة / وسط البلد — القاهرة</p>
           </div>
           <p class="text-xs text-slate-300 leading-relaxed">
-            يتم حالياً تجهيز وضبط النظام للعمل في واحد من أهم المعالم الثقافية الحيوية لاستقبال رواد الفعاليات الكبرى بمرونة وسرعة تحصيل استثنائية.
+            يتم حالياً تجهيز وضبط النظام للعمل في واحد من أهم المعالم الثقافية الحيوية لاستقبال رواد الفعاليات الكبرى
+            بمرونة وسرعة تحصيل استثنائية.
           </p>
         </div>
         <div class="pt-3 mt-3 border-t border-slate-800 flex justify-between items-center text-xs">
@@ -334,14 +391,19 @@
     </div>
 
     <!-- Bottom Proof Banner -->
-    <div class="glass-card p-3.5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2">
+    <div
+      class="glass-card p-3.5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2">
       <div class="flex items-center gap-3">
-        <div class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">✓</div>
+        <div
+          class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
+          ✓</div>
         <div class="text-xs text-slate-200 font-medium leading-relaxed">
-          <strong class="text-white font-bold">لماذا garage4u؟</strong> تم اختبار النظام تحت أقسى درجات الضغط لضمان استمرارية الخدمة بنسبة 100%، مما يوفر تجربة راقية للرواد وحماية كاملة لإيرادات الإدارة.
+          <strong class="text-white font-bold">لماذا garage4u؟</strong> تم اختبار النظام تحت أقسى درجات الضغط لضمان
+          استمرارية الخدمة بنسبة 100%، مما يوفر تجربة راقية للرواد وحماية كاملة لإيرادات الإدارة.
         </div>
       </div>
-      <div class="text-xs text-slate-400 font-mono font-bold bg-slate-900 px-3 py-1 rounded-lg shrink-0">الشريحة 2 من 5</div>
+      <div class="text-xs text-slate-400 font-mono font-bold bg-slate-900 px-3 py-1 rounded-lg shrink-0">الشريحة 2 من 5
+      </div>
     </div>
   </section>
 
@@ -349,12 +411,16 @@
   <!-- ========================================================================= -->
   <!-- SLIDE 3: MULTI-PLATFORM FLEXIBILITY (REAL HARDWARE VISUALS) -->
   <!-- ========================================================================= -->
-  <section class="slide-page bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
+  <section
+    class="slide-page bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 border-b border-slate-800 pb-3">
+    <div
+      class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 border-b border-slate-800 pb-3">
       <div>
-        <div class="text-xs font-extrabold text-blue-400 tracking-wider uppercase mb-1">المرونة المعمارية ودعم العتاد المتوفر</div>
-        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white">يعمل على أي عتاد متوفر لديك دون إجبارك على شراء أجهزة باهظة</h2>
+        <div class="text-xs font-extrabold text-blue-400 tracking-wider uppercase mb-1">المرونة المعمارية ودعم العتاد
+          المتوفر</div>
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white">يعمل على أي عتاد متوفر لديك دون إجبارك على
+          شراء أجهزة باهظة</h2>
       </div>
       <div class="text-right shrink-0">
         <span class="bg-blue-500/10 text-blue-400 border border-blue-500/30 text-xs px-3 py-1 rounded-full font-bold">
@@ -365,14 +431,17 @@
 
     <!-- Center Content: 3 Hardware Cards with Actual Visual Images -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 my-auto py-2 items-stretch">
-      
+
       <!-- Device 1: POS Terminals (Sunmi / Handheld) -->
       <div class="glass-card rounded-3xl p-4 border border-slate-700/90 flex flex-col justify-between glow-emerald">
         <div class="space-y-2.5">
           <!-- Image Mockup -->
-          <div class="w-full h-40 sm:h-36 rounded-2xl overflow-hidden border border-slate-700 bg-slate-900 relative shadow-inner">
-            <img src="/static/proposal/device_pos.jpg" alt="جهاز POS محمول مع طباعة الفاتورة" class="w-full h-full object-cover object-center">
-            <span class="absolute bottom-2 right-2 bg-emerald-950/90 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-700 backdrop-blur-sm">
+          <div
+            class="w-full h-40 sm:h-36 rounded-2xl overflow-hidden border border-slate-700 bg-slate-900 relative shadow-inner">
+            <img src="/static/proposal/device_pos.jpg" alt="جهاز POS محمول مع طباعة الفاتورة"
+              class="w-full h-full object-cover object-center">
+            <span
+              class="absolute bottom-2 right-2 bg-emerald-950/90 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-700 backdrop-blur-sm">
               طباعة إيصال فوري 58mm
             </span>
           </div>
@@ -380,15 +449,18 @@
           <div>
             <div class="flex items-center justify-between">
               <h3 class="text-base font-black text-white">أجهزة الـ POS المحمولة (Sunmi)</h3>
-              <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded-full">للبوابات المتحركة</span>
+              <span class="text-[10px] font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded-full">للبوابات
+                المتحركة</span>
             </div>
             <p class="text-xs text-slate-300 leading-relaxed mt-1">
-              جهاز ذكي محمول باليد يحتوي على شاشة لمس وقارئ باركود وطابعة حرارية مدمجة تطبع التذكرة في ثوانٍ بدون أي أسلاك.
+              جهاز ذكي محمول باليد يحتوي على شاشة لمس وقارئ باركود وطابعة حرارية مدمجة تطبع التذكرة في ثوانٍ بدون أي
+              أسلاك.
             </p>
           </div>
         </div>
 
-        <div class="mt-3 pt-2.5 border-t border-slate-800 text-[11px] text-emerald-300 font-semibold flex items-center gap-1.5">
+        <div
+          class="mt-3 pt-2.5 border-t border-slate-800 text-[11px] text-emerald-300 font-semibold flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
           الخيار الأسرع والأنسب للكاشير على البوابات
         </div>
@@ -398,9 +470,12 @@
       <div class="glass-card rounded-3xl p-4 border border-slate-700/90 flex flex-col justify-between glow-blue">
         <div class="space-y-2.5">
           <!-- Image Mockup -->
-          <div class="w-full h-40 sm:h-36 rounded-2xl overflow-hidden border border-slate-700 bg-slate-900 relative shadow-inner">
-            <img src="/static/proposal/device_desktop.jpg" alt="أجهزة الكمبيوتر المكتبية وشاشات الكاشير" class="w-full h-full object-cover object-center">
-            <span class="absolute bottom-2 right-2 bg-blue-950/90 text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-700 backdrop-blur-sm">
+          <div
+            class="w-full h-40 sm:h-36 rounded-2xl overflow-hidden border border-slate-700 bg-slate-900 relative shadow-inner">
+            <img src="/static/proposal/device_desktop.jpg" alt="أجهزة الكمبيوتر المكتبية وشاشات الكاشير"
+              class="w-full h-full object-cover object-center">
+            <span
+              class="absolute bottom-2 right-2 bg-blue-950/90 text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-700 backdrop-blur-sm">
               شاشة كاشير + طابعة USB
             </span>
           </div>
@@ -408,15 +483,18 @@
           <div>
             <div class="flex items-center justify-between">
               <h3 class="text-base font-black text-white">أجهزة الكمبيوتر المكتبية (PC)</h3>
-              <span class="text-[10px] font-bold text-blue-400 bg-blue-950 px-2 py-0.5 rounded-full">أكشاك البوابات الثابتة</span>
+              <span class="text-[10px] font-bold text-blue-400 bg-blue-950 px-2 py-0.5 rounded-full">أكشاك البوابات
+                الثابتة</span>
             </div>
             <p class="text-xs text-slate-300 leading-relaxed mt-1">
-              يعمل عبر المتصفح على أي جهاز كمبيوتر عادي متصل بسكانر باركود USB وطابعة إيصالات، مثالي لأكشاك البوابات وغرفة الحسابات.
+              يعمل عبر المتصفح على أي جهاز كمبيوتر عادي متصل بسكانر باركود USB وطابعة إيصالات، مثالي لأكشاك البوابات
+              وغرفة الحسابات.
             </p>
           </div>
         </div>
 
-        <div class="mt-3 pt-2.5 border-t border-slate-800 text-[11px] text-blue-300 font-semibold flex items-center gap-1.5">
+        <div
+          class="mt-3 pt-2.5 border-t border-slate-800 text-[11px] text-blue-300 font-semibold flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
           شاشات تحصيل عريضة وإدارة مالية متكاملة
         </div>
@@ -426,9 +504,12 @@
       <div class="glass-card rounded-3xl p-4 border border-slate-700/90 flex flex-col justify-between">
         <div class="space-y-2.5">
           <!-- Image Mockup -->
-          <div class="w-full h-40 sm:h-36 rounded-2xl overflow-hidden border border-slate-700 bg-slate-900 relative shadow-inner">
-            <img src="/static/proposal/device_mobile.jpg" alt="الهواتف الذكية والأجهزة اللوحية" class="w-full h-full object-cover object-center">
-            <span class="absolute bottom-2 right-2 bg-purple-950/90 text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-purple-700 backdrop-blur-sm">
+          <div
+            class="w-full h-40 sm:h-36 rounded-2xl overflow-hidden border border-slate-700 bg-slate-900 relative shadow-inner">
+            <img src="/static/proposal/device_mobile.jpg" alt="الهواتف الذكية والأجهزة اللوحية"
+              class="w-full h-full object-cover object-center">
+            <span
+              class="absolute bottom-2 right-2 bg-purple-950/90 text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-purple-700 backdrop-blur-sm">
               متابعة الإدارة عن بُعد
             </span>
           </div>
@@ -436,15 +517,18 @@
           <div>
             <div class="flex items-center justify-between">
               <h3 class="text-base font-black text-white">الهواتف والأجهزة اللوحية (Mobile)</h3>
-              <span class="text-[10px] font-bold text-purple-400 bg-purple-950 px-2 py-0.5 rounded-full">للمديرين والمسؤولين</span>
+              <span class="text-[10px] font-bold text-purple-400 bg-purple-950 px-2 py-0.5 rounded-full">للمديرين
+                والمسؤولين</span>
             </div>
             <p class="text-xs text-slate-300 leading-relaxed mt-1">
-              لوحة تحكم تفاعلية للمدير والمسؤولين تتيح متابعة الإشغال، عدد السيارات داخل الجراج، ومجمل الإيرادات لحظة بلحظة من أي مكان.
+              لوحة تحكم تفاعلية للمدير والمسؤولين تتيح متابعة الإشغال، عدد السيارات داخل الجراج، ومجمل الإيرادات لحظة
+              بلحظة من أي مكان.
             </p>
           </div>
         </div>
 
-        <div class="mt-3 pt-2.5 border-t border-slate-800 text-[11px] text-purple-300 font-semibold flex items-center gap-1.5">
+        <div
+          class="mt-3 pt-2.5 border-t border-slate-800 text-[11px] text-purple-300 font-semibold flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
           رقابة حية 24/7 دون الحاجة للتواجد الميداني
         </div>
@@ -453,11 +537,14 @@
     </div>
 
     <!-- Hybrid Mode Banner -->
-    <div class="p-3 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+    <div
+      class="p-3 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
       <div class="flex items-center gap-3">
-        <span class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-xs shrink-0">⚡</span>
+        <span
+          class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-xs shrink-0">⚡</span>
         <div class="text-slate-200">
-          <strong class="text-white">يعمل محلياً وسحابياً:</strong> في حال انقطاع الإنترنت، يستمر الجراج في التحصيل وإصدار التذاكر على الشبكة الداخلية (Offline LAN 100%) دون توقف.
+          <strong class="text-white">يعمل محلياً وسحابياً:</strong> في حال انقطاع الإنترنت، يستمر الجراج في التحصيل
+          وإصدار التذاكر على الشبكة الداخلية (Offline LAN 100%) دون توقف.
         </div>
       </div>
       <div class="text-xs text-slate-400 font-mono font-bold shrink-0">الشريحة 3 من 5</div>
@@ -468,15 +555,20 @@
   <!-- ========================================================================= -->
   <!-- SLIDE 4: CORE BUSINESS VALUE & EXPANDED REAL SCREENSHOTS -->
   <!-- ========================================================================= -->
-  <section class="slide-page bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
+  <section
+    class="slide-page bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 border-b border-slate-800 pb-2.5">
+    <div
+      class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 border-b border-slate-800 pb-2.5">
       <div>
-        <div class="text-xs font-extrabold text-emerald-400 tracking-wider uppercase mb-0.5">القيمة المضافة وشاشات النظام الحقيقية (Core Value & Real System Screens)</div>
-        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white">رقابة صارمة، منع التسريب المالي، وسهولة مطلقة للمشغلين</h2>
+        <div class="text-xs font-extrabold text-emerald-400 tracking-wider uppercase mb-0.5">القيمة المضافة وشاشات
+          النظام الحقيقية (Core Value & Real System Screens)</div>
+        <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white">رقابة صارمة، منع التسريب المالي، وسهولة مطلقة
+          للمشغلين</h2>
       </div>
       <div class="text-right shrink-0">
-        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-3 py-1 rounded-full font-bold">
+        <span
+          class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-3 py-1 rounded-full font-bold">
           واجهات عربية متوافقة 100% مع الـ RTL
         </span>
       </div>
@@ -484,10 +576,10 @@
 
     <!-- Center Content: Right Text Column (4 cols on desktop) + Left Large Screenshots (8 cols on desktop) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 my-auto py-2 items-stretch">
-      
+
       <!-- Right Column (4 Cols on desktop): Detailed Value Pillars -->
       <div class="col-span-1 lg:col-span-4 flex flex-col space-y-2.5 my-auto">
-        
+
         <!-- Pillar 1 -->
         <div class="glass-card p-3 rounded-2xl border border-slate-700/80 hover:border-emerald-500/40 transition-all">
           <div class="flex items-center gap-2 text-emerald-400 font-bold text-xs mb-1">
@@ -497,7 +589,8 @@
             <span>منع التسريب المالي وتسوية الورديات</span>
           </div>
           <p class="text-[11px] text-slate-300 leading-relaxed">
-            احتساب إلكتروني دقيق للمبلغ المستحق بالدقيقة، وإلزام الكاشير بتسليم نقدية الوردية مع كشف فوري لأي عجز أو زيادة وتلوينها محاسبياً (أخضر / أصفر / أحمر).
+            احتساب إلكتروني دقيق للمبلغ المستحق بالدقيقة، وإلزام الكاشير بتسليم نقدية الوردية مع كشف فوري لأي عجز أو
+            زيادة وتلوينها محاسبياً (أخضر / أصفر / أحمر).
           </p>
         </div>
 
@@ -510,7 +603,8 @@
             <span>سرعة التحصيل وتفادي التكدس</span>
           </div>
           <p class="text-[11px] text-slate-300 leading-relaxed">
-            مسح الباركود أو رقم الكرت في ثانية، مع تطبيق فترات السماح (Grace Period) وطباعة إيصال حراري رسمي موثق يضمن سرعة المرور وعدم تعطيل البوابات.
+            مسح الباركود أو رقم الكرت في ثانية، مع تطبيق فترات السماح (Grace Period) وطباعة إيصال حراري رسمي موثق يضمن
+            سرعة المرور وعدم تعطيل البوابات.
           </p>
         </div>
 
@@ -523,7 +617,8 @@
             <span>منظومة الاشتراكات الشهرية</span>
           </div>
           <p class="text-[11px] text-slate-300 leading-relaxed">
-            إدارة اشتراكات رواد المواقف وموظفي الشركات والجهات المجاورة مع باقات متعددة، ودخول وخروج سلس بدون دفع نقدي وتنبيه تلقائي عند قرب انتهاء الصلاحية.
+            إدارة اشتراكات رواد المواقف وموظفي الشركات والجهات المجاورة مع باقات متعددة، ودخول وخروج سلس بدون دفع نقدي
+            وتنبيه تلقائي عند قرب انتهاء الصلاحية.
           </p>
         </div>
 
@@ -531,55 +626,73 @@
 
       <!-- Left Column (8 Cols on desktop): Expanded, Wide, High-Visibility Screenshots -->
       <div class="col-span-1 lg:col-span-8 grid grid-cols-1 sm:grid-cols-12 gap-4 items-stretch">
-        
+
         <!-- Left Side 1: POS Operator Mobile Screen (5 of 12 on tablet/desktop) -->
-        <div class="col-span-1 sm:col-span-5 glass-card rounded-2xl p-2.5 border-2 border-slate-700 hover:border-emerald-500/60 transition-all shadow-2xl flex flex-col justify-between glow-emerald group cursor-pointer" onclick="openLightbox('/static/proposal/pos_operator_screen.png', 'شاشة الكاشير (Sunmi POS)')">
-          <div class="text-[11px] font-bold text-slate-200 bg-slate-900/95 px-2.5 py-1 rounded-t-xl mb-1.5 flex items-center justify-between border-b border-slate-800">
+        <div
+          class="col-span-1 sm:col-span-5 glass-card rounded-2xl p-2.5 border-2 border-slate-700 hover:border-emerald-500/60 transition-all shadow-2xl flex flex-col justify-between glow-emerald group cursor-pointer"
+          onclick="openLightbox('/static/proposal/pos_operator_screen.png', 'شاشة الكاشير (Sunmi POS)')">
+          <div
+            class="text-[11px] font-bold text-slate-200 bg-slate-900/95 px-2.5 py-1 rounded-t-xl mb-1.5 flex items-center justify-between border-b border-slate-800">
             <span class="text-emerald-400">شاشة الكاشير (POS)</span>
             <span class="text-[10px] text-slate-400 font-normal">🔍 تكبير</span>
           </div>
-          <div class="rounded-xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center p-0.5 my-auto">
-            <img src="/static/proposal/pos_operator_screen.png" alt="واجهة الكاشير POS كاملة" class="w-full h-auto object-contain max-h-[300px] sm:max-h-[350px] rounded-lg shadow-inner group-hover:scale-[1.02] transition-transform duration-200">
+          <div
+            class="rounded-xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center p-0.5 my-auto">
+            <img src="/static/proposal/pos_operator_screen.png" alt="واجهة الكاشير POS كاملة"
+              class="w-full h-auto object-contain max-h-[300px] sm:max-h-[350px] rounded-lg shadow-inner group-hover:scale-[1.02] transition-transform duration-200">
           </div>
-          <div class="text-[10px] text-emerald-400 text-center font-bold mt-1 bg-slate-900/80 py-1 rounded border border-slate-800">
+          <div
+            class="text-[10px] text-emerald-400 text-center font-bold mt-1 bg-slate-900/80 py-1 rounded border border-slate-800">
             أزرار لمس ضخمة لدخول وخروج المركبات
           </div>
         </div>
 
         <!-- Left Side 2: WIDE Stack of Dashboard & Shift Reconciliation (7 of 12 on tablet/desktop) -->
         <div class="col-span-1 sm:col-span-7 flex flex-col justify-between space-y-3">
-          
+
           <!-- Top: Admin Live Dashboard (Wide & Tall) -->
-          <div class="glass-card rounded-2xl p-2.5 border-2 border-slate-700 hover:border-blue-500/60 transition-all shadow-xl flex-1 flex flex-col justify-between glow-blue group cursor-pointer" onclick="openLightbox('/static/proposal/screen_dashboard.png', 'لوحة تحكم الإدارة ومؤشرات الإشغال الحية')">
-            <div class="text-[11px] font-bold text-slate-200 bg-slate-900/95 px-3 py-1 rounded-t-xl mb-1.5 flex items-center justify-between border-b border-slate-800">
+          <div
+            class="glass-card rounded-2xl p-2.5 border-2 border-slate-700 hover:border-blue-500/60 transition-all shadow-xl flex-1 flex flex-col justify-between glow-blue group cursor-pointer"
+            onclick="openLightbox('/static/proposal/screen_dashboard.png', 'لوحة تحكم الإدارة ومؤشرات الإشغال الحية')">
+            <div
+              class="text-[11px] font-bold text-slate-200 bg-slate-900/95 px-3 py-1 rounded-t-xl mb-1.5 flex items-center justify-between border-b border-slate-800">
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
                 <span class="text-cyan-300 font-bold">لوحة تحكم الإدارة الحية (Live KPI)</span>
               </div>
               <div class="flex items-center gap-2">
-                <span class="text-cyan-400 font-mono text-[10px] font-bold bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">تحديث 30s</span>
+                <span
+                  class="text-cyan-400 font-mono text-[10px] font-bold bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">تحديث
+                  30s</span>
                 <span class="text-[10px] text-slate-400 font-normal">🔍 تكبير</span>
               </div>
             </div>
             <div class="rounded-xl overflow-hidden border border-slate-800 bg-slate-950 my-auto shadow-inner">
-              <img src="/static/proposal/screen_dashboard.png" alt="لوحة تحكم الإدارة" class="w-full h-auto object-cover max-h-[140px] sm:max-h-[160px] group-hover:scale-[1.02] transition-transform duration-200">
+              <img src="/static/proposal/screen_dashboard.png" alt="لوحة تحكم الإدارة"
+                class="w-full h-auto object-cover max-h-[140px] sm:max-h-[160px] group-hover:scale-[1.02] transition-transform duration-200">
             </div>
           </div>
 
           <!-- Bottom: Shift Cash Reconciliation & Discrepancy (Wide & Tall) -->
-          <div class="glass-card rounded-2xl p-2.5 border-2 border-slate-700 hover:border-amber-500/60 transition-all shadow-xl flex-1 flex flex-col justify-between group cursor-pointer" onclick="openLightbox('/static/proposal/screen_shifts.png', 'مطابقة الخزينة وإغلاق الوردية وكشف العجز')">
-            <div class="text-[11px] font-bold text-slate-200 bg-slate-900/95 px-3 py-1 rounded-t-xl mb-1.5 flex items-center justify-between border-b border-slate-800">
+          <div
+            class="glass-card rounded-2xl p-2.5 border-2 border-slate-700 hover:border-amber-500/60 transition-all shadow-xl flex-1 flex flex-col justify-between group cursor-pointer"
+            onclick="openLightbox('/static/proposal/screen_shifts.png', 'مطابقة الخزينة وإغلاق الوردية وكشف العجز')">
+            <div
+              class="text-[11px] font-bold text-slate-200 bg-slate-900/95 px-3 py-1 rounded-t-xl mb-1.5 flex items-center justify-between border-b border-slate-800">
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-amber-400"></span>
                 <span class="text-amber-300 font-bold">تسوية الخزينة وإغلاق الوردية</span>
               </div>
               <div class="flex items-center gap-2">
-                <span class="text-amber-400 text-[10px] font-bold bg-amber-950 px-2 py-0.5 rounded border border-amber-800">كشف فوري للعجز</span>
+                <span
+                  class="text-amber-400 text-[10px] font-bold bg-amber-950 px-2 py-0.5 rounded border border-amber-800">كشف
+                  فوري للعجز</span>
                 <span class="text-[10px] text-slate-400 font-normal">🔍 تكبير</span>
               </div>
             </div>
             <div class="rounded-xl overflow-hidden border border-slate-800 bg-slate-950 my-auto shadow-inner">
-              <img src="/static/proposal/screen_shifts.png" alt="تسوية الورديات والخزينة" class="w-full h-auto object-cover max-h-[135px] sm:max-h-[155px] group-hover:scale-[1.02] transition-transform duration-200">
+              <img src="/static/proposal/screen_shifts.png" alt="تسوية الورديات والخزينة"
+                class="w-full h-auto object-cover max-h-[135px] sm:max-h-[155px] group-hover:scale-[1.02] transition-transform duration-200">
             </div>
           </div>
 
@@ -590,7 +703,8 @@
     </div>
 
     <!-- Bottom Footer -->
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2 border-t border-slate-800 text-[11px] md:text-xs text-slate-400 font-medium">
+    <div
+      class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2 border-t border-slate-800 text-[11px] md:text-xs text-slate-400 font-medium">
       <div class="flex items-center gap-2 md:gap-4">
         <span>✓ واجهات حقيقية مجربة ومصممة لتحقيق أقصى درجات السرعة والسهولة</span>
         <span class="hidden sm:inline">|</span>
@@ -604,15 +718,19 @@
   <!-- ========================================================================= -->
   <!-- SLIDE 5: FINANCIAL PROPOSAL & DETAILED QUOTATION TABLE (GENERAL) -->
   <!-- ========================================================================= -->
-  <section class="slide-page bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
+  <section
+    class="slide-page bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 border-b border-slate-800 pb-2.5">
+    <div
+      class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2 border-b border-slate-800 pb-2.5">
       <div>
-        <div class="text-xs font-extrabold text-emerald-400 tracking-wider uppercase mb-0.5">عرض السعر وجدول التكاليف التفصيلي</div>
+        <div class="text-xs font-extrabold text-emerald-400 tracking-wider uppercase mb-0.5">عرض السعر وجدول التكاليف
+          التفصيلي</div>
         <h2 class="text-xl sm:text-2xl md:text-3xl font-black text-white">العرض المالي الشامل وباقة التعاقد الرسمية</h2>
       </div>
       <div class="text-right shrink-0">
-        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-3 py-1 rounded-full font-bold">
+        <span
+          class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs px-3 py-1 rounded-full font-bold">
           عرض سعر معتمد — أنظمة إدارة المواقف الذكية garage4u
         </span>
       </div>
@@ -620,7 +738,7 @@
 
     <!-- Center Content: Exact Structured Quotation Table -->
     <div class="my-auto py-2 space-y-3">
-      
+
       <!-- Table Container with Horizontal Scroll for Mobile -->
       <div class="overflow-hidden rounded-2xl border border-slate-700 bg-slate-900/90 shadow-2xl">
         <div class="overflow-x-auto">
@@ -633,7 +751,7 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-800/70 text-slate-300 text-[11px]">
-              
+
               <!-- Section 1 Header: Mandatory Setup Options -->
               <tr class="bg-blue-950/40 text-cyan-300 font-bold text-xs border-y border-blue-900/50">
                 <td colspan="3" class="p-2 pr-4">
@@ -644,30 +762,36 @@
               <tr class="hover:bg-slate-800/40 transition-colors">
                 <td class="p-1.5 pr-4 font-semibold text-white">دخول وخروج السيارات (Vehicle Entry & Exit)</td>
                 <td class="p-1.5 text-slate-300">تسجيل آلي لحركة الدخول والخروج وربط البوابات والتذاكر</td>
-                <td rowspan="4" class="p-2 text-center align-middle font-black text-emerald-400 text-sm bg-slate-900/60 border-r border-slate-800 font-mono">
+                <td rowspan="4"
+                  class="p-2 text-center align-middle font-black text-emerald-400 text-sm bg-slate-900/60 border-r border-slate-800 font-mono">
                   5,500.00 ج.م
                   <div class="text-[9px] text-slate-400 font-normal mt-0.5">(رسوم تأسيس لمرة واحدة)</div>
                 </td>
               </tr>
 
               <tr class="hover:bg-slate-800/40 transition-colors">
-                <td class="p-1.5 pr-4 font-semibold text-white">الحساب الآلي للتكلفة وإدارة الكروت (Auto Cost & Cards)</td>
+                <td class="p-1.5 pr-4 font-semibold text-white">الحساب الآلي للتكلفة وإدارة الكروت (Auto Cost & Cards)
+                </td>
                 <td class="p-1.5 text-slate-300">احتساب فوري للمدة وفترة السماح والتسعيرات وإدارة أرقام الكروت</td>
               </tr>
 
               <tr class="hover:bg-slate-800/40 transition-colors">
-                <td class="p-1.5 pr-4 font-semibold text-white">لوحات التشغيل والإدارة (Operator & Admin Dashboards)</td>
-                <td class="p-1.5 text-slate-300">واجهات الكاشير السريعة، لوحة تحكم الإدارة، ودعم أجهزة POS والموبايل</td>
+                <td class="p-1.5 pr-4 font-semibold text-white">لوحات التشغيل والإدارة (Operator & Admin Dashboards)
+                </td>
+                <td class="p-1.5 text-slate-300">واجهات الكاشير السريعة، لوحة تحكم الإدارة، ودعم أجهزة POS والموبايل
+                </td>
               </tr>
 
               <tr class="hover:bg-slate-800/40 transition-colors">
                 <td class="p-1.5 pr-4 font-semibold text-white">التقارير المالية والصلاحيات (Reports & User Roles)</td>
-                <td class="p-1.5 text-slate-300">تقارير الإيرادات اليومية والتحليل المالي وإدارة المشغلين والصلاحيات</td>
+                <td class="p-1.5 text-slate-300">تقارير الإيرادات اليومية والتحليل المالي وإدارة المشغلين والصلاحيات
+                </td>
               </tr>
 
               <tr class="hover:bg-slate-800/40 transition-colors">
                 <td class="p-1.5 pr-4 font-semibold text-white">تدريب طاقم التشغيل (Multiple Operators Training)</td>
-                <td class="p-1.5 text-slate-300">شامل تدريب حتى 3 مشغلين مجاناً (أكثر من 3 مشغلين: 750 ج.م للمشغل الإضافي)</td>
+                <td class="p-1.5 text-slate-300">شامل تدريب حتى 3 مشغلين مجاناً (أكثر من 3 مشغلين: 750 ج.م للمشغل
+                  الإضافي)</td>
                 <td class="p-1.5 text-center font-bold text-slate-400 font-mono">0.00 ج.م</td>
               </tr>
 
@@ -679,14 +803,18 @@
               </tr>
 
               <tr class="hover:bg-slate-800/40 transition-colors">
-                <td class="p-1.5 pr-4 font-semibold text-white">الاستضافة السحابية الآمنة وحفظ البيانات (Cloud & Hosting)</td>
-                <td class="p-1.5 text-slate-300">استضافة عالية الأداء مع نسخ احتياطي يومي مشفر وحماية من فقدان البيانات (إجباري)</td>
+                <td class="p-1.5 pr-4 font-semibold text-white">الاستضافة السحابية الآمنة وحفظ البيانات (Cloud &
+                  Hosting)</td>
+                <td class="p-1.5 text-slate-300">استضافة عالية الأداء مع نسخ احتياطي يومي مشفر وحماية من فقدان البيانات
+                  (إجباري)</td>
                 <td class="p-1.5 text-center font-bold text-cyan-400 font-mono">6,300.00 ج.م</td>
               </tr>
 
               <tr class="hover:bg-slate-800/40 transition-colors">
-                <td class="p-1.5 pr-4 font-semibold text-white">الاشتراك السنوي والدعم الفني (Subscription & Support)</td>
-                <td class="p-1.5 text-slate-300">خيارات التجديد مستقبلاً: (1,700 ج.م شهرياً | 9,000 ج.م لـ 6 شهور | 12,000 ج.م سنوياً)</td>
+                <td class="p-1.5 pr-4 font-semibold text-white">الاشتراك السنوي والدعم الفني (Subscription & Support)
+                </td>
+                <td class="p-1.5 text-slate-300">خيارات التجديد مستقبلاً: (1,700 ج.م شهرياً | 9,000 ج.م لـ 6 شهور |
+                  12,000 ج.م سنوياً)</td>
                 <td class="p-1.5 text-center font-bold text-slate-400 font-mono">0.00 ج.م</td>
               </tr>
 
@@ -701,7 +829,8 @@
               <span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
               عرض متكامل يشمل التأسيس والتهيئة والاستضافة السحابية والتدريب الميداني
             </div>
-            <div class="text-[10px] text-slate-400 leading-relaxed">يشمل جلسة تشغيل تجريبية حية (Live Demo) لطاقم الإدارة الموقر قبل بدء التعاقد.</div>
+            <div class="text-[10px] text-slate-400 leading-relaxed">يشمل جلسة تشغيل تجريبية حية (Live Demo) لطاقم
+              الإدارة الموقر قبل بدء التعاقد.</div>
           </div>
 
           <div class="col-span-1 md:col-span-6 flex flex-col gap-1.5 text-xs">
@@ -713,7 +842,8 @@
               <span>ضريبة القيمة المضافة (VAT 14%):</span>
               <span class="font-bold font-mono text-amber-400">1,652.00 ج.م</span>
             </div>
-            <div class="flex justify-between items-center text-slate-950 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 font-black shadow-lg">
+            <div
+              class="flex justify-between items-center text-slate-950 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 font-black shadow-lg">
               <span class="text-xs">الإجمالي النهائي شامل الضريبة (Grand Total):</span>
               <span class="text-sm font-mono tracking-tight">13,452.00 ج.م</span>
             </div>
@@ -725,14 +855,16 @@
     </div>
 
     <!-- Bottom Action Bar -->
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2 border-t border-slate-800 text-xs text-slate-400">
+    <div
+      class="flex flex-col sm:flex-row justify-between items-center gap-2 pt-2 border-t border-slate-800 text-xs text-slate-400">
       <div class="flex items-center gap-2 md:gap-4">
         <span>فترة سريان العرض: 15 يوماً من تاريخ الإصدار</span>
         <span class="hidden sm:inline">|</span>
         <span class="hidden sm:inline">مدة التسليم والتشغيل: 5-7 أيام عمل</span>
       </div>
       <div class="flex items-center gap-3">
-        <button onclick="window.print()" class="no-print bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-4 py-1.5 rounded-xl transition-all shadow-md cursor-pointer">
+        <button onclick="window.print()"
+          class="no-print bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-4 py-1.5 rounded-xl transition-all shadow-md cursor-pointer">
           طباعة هذا العرض
         </button>
         <span class="font-mono font-bold text-slate-300">الشريحة 5 من 5</span>
@@ -741,23 +873,31 @@
   </section>
 
   <!-- High-Definition Lightbox Modal for Fullscreen Image Inspection (No-Print) -->
-  <div id="imageLightbox" class="no-print fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 md:p-8" onclick="closeLightbox(event)">
-    <div class="relative max-w-5xl w-full max-h-[90vh] bg-slate-900 rounded-3xl border border-slate-700 p-4 shadow-2xl flex flex-col items-center justify-between animate-in fade-in zoom-in duration-200" onclick="event.stopPropagation()">
+  <div id="imageLightbox"
+    class="no-print fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 md:p-8"
+    onclick="closeLightbox(event)">
+    <div
+      class="relative max-w-5xl w-full max-h-[90vh] bg-slate-900 rounded-3xl border border-slate-700 p-4 shadow-2xl flex flex-col items-center justify-between animate-in fade-in zoom-in duration-200"
+      onclick="event.stopPropagation()">
       <div class="w-full flex items-center justify-between pb-3 mb-2 border-b border-slate-800">
         <h3 id="lightboxTitle" class="text-sm md:text-base font-bold text-white flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
           <span>معاينة الشاشة بدقة كاملة</span>
         </h3>
-        <button onclick="closeLightbox()" class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+        <button onclick="closeLightbox()"
+          class="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-full w-8 h-8 flex items-center justify-center transition-colors">
           ✕
         </button>
       </div>
       <div class="w-full overflow-auto flex items-center justify-center p-2 rounded-2xl bg-slate-950 max-h-[75vh]">
-        <img id="lightboxImg" src="" alt="معاينة الشاشة المكبرة" class="max-w-full max-h-[72vh] object-contain rounded-xl shadow-2xl">
+        <img id="lightboxImg" src="" alt="معاينة الشاشة المكبرة"
+          class="max-w-full max-h-[72vh] object-contain rounded-xl shadow-2xl">
       </div>
-      <div class="w-full pt-2 mt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+      <div
+        class="w-full pt-2 mt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
         <span>اضغط على أي مكان بالخارج أو مفتاح Esc للإغلاق</span>
-        <button onclick="closeLightbox()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-1 rounded-xl text-xs transition-colors">
+        <button onclick="closeLightbox()"
+          class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-1 rounded-xl text-xs transition-colors">
           إغلاق المعاينة
         </button>
       </div>
@@ -804,7 +944,7 @@
       const slides = document.querySelectorAll('.slide-page');
       let currentIdx = 0;
       const scrollPos = window.scrollY;
-      
+
       slides.forEach((slide, idx) => {
         const top = slide.offsetTop - 50;
         if (scrollPos >= top) {
@@ -824,4 +964,5 @@
     });
   </script>
 </body>
+
 </html>

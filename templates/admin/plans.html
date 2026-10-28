@@ -6,24 +6,33 @@
 <div class="space-y-6">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold text-white">{{ t("subscriptions.plan.title") if t is defined else "خطط الاشتراك" }}</h1>
+            <h1 class="text-2xl font-bold text-white">{{ t("subscriptions.plan.title") if t is defined else "خطط
+                الاشتراك" }}</h1>
             <p class="text-sm text-gray-400 mt-1">إدارة وتكوين وتعديل باقات وخطط الاشتراك الدورية</p>
         </div>
         <button id="toggleCreatePlanBtn" onclick="toggleCreatePlanForm()"
             class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg transition flex items-center gap-2 justify-center">
-            <span>➕</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+            </svg>
             <span>إنشاء خطة جديدة</span>
         </button>
     </div>
 
     <!-- Inline Create Plan Form -->
-    <div id="createPlanFormContainer" style="display: none;" class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-xl">
+    <div id="createPlanFormContainer" style="display: none;"
+        class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-xl">
         <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-            <span>✨</span>
+            <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z">
+                </path>
+            </svg>
             <span>إضافة خطة اشتراك جديدة</span>
         </h2>
-        
-        <div id="planFormError" class="hidden mb-4 bg-red-950/60 border border-red-500/60 text-red-300 px-4 py-3 rounded-lg text-sm"></div>
+
+        <div id="planFormError"
+            class="hidden mb-4 bg-red-950/60 border border-red-500/60 text-red-300 px-4 py-3 rounded-lg text-sm"></div>
 
         <form id="createPlanForm" onsubmit="handleCreatePlan(event)" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -39,14 +48,15 @@
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1.5">السعر (ج.م)</label>
-                    <input type="number" id="planPrice" step="1" min="0" placeholder="500" required
+                    <input type="number" id="planPrice" step="0.01" min="0" placeholder="500.00" required
                         class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500">
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">أقصى عدد دخول يومياً (اختياري)</label>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">أقصى عدد دخول يومياً
+                        (اختياري)</label>
                     <input type="number" id="planMaxEntries" min="1" placeholder="اتركه فارغاً لغير محدود"
                         class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500">
                 </div>
@@ -91,7 +101,8 @@
                         <td class="p-4 font-mono text-gray-500">{{ plan.id | to_arabic_indic }}</td>
                         <td class="p-4 font-bold text-white">{{ plan.label }}</td>
                         <td class="p-4">{{ plan.duration_days | to_arabic_indic }} يوم</td>
-                        <td class="p-4 font-bold text-green-400 font-mono">{{ plan.price_piastres | format_egp }}</td>
+                        <td class="p-4 font-bold text-green-400 font-mono"><span>{{ plan.price_piastres | format_egp
+                                }}</span> <span class="text-xs text-gray-400 font-normal mr-1">ج.م</span></td>
                         <td class="p-4">
                             {% if plan.max_entries_per_day %}
                             {{ plan.max_entries_per_day | to_arabic_indic }} مرات/يوم
@@ -101,20 +112,28 @@
                         </td>
                         <td class="p-4">
                             {% if plan.is_active %}
-                            <span id="badge-plan-{{ plan.id }}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-950 text-green-300 border border-green-800">
+                            <span id="badge-plan-{{ plan.id }}"
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-950 text-green-300 border border-green-800">
                                 نشط
                             </span>
                             {% else %}
-                            <span id="badge-plan-{{ plan.id }}" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-800 text-gray-400 border border-gray-700">
+                            <span id="badge-plan-{{ plan.id }}"
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-800 text-gray-400 border border-gray-700">
                                 غير نشط
                             </span>
                             {% endif %}
                         </td>
                         <td class="p-4 text-center">
                             <div class="flex items-center justify-center gap-2">
-                                <button onclick="openEditPlanModal({{ plan.id }}, '{{ plan.label | e }}', {{ plan.duration_days }}, {{ (plan.price_piastres / 100) | int }}, {{ plan.max_entries_per_day or 'null' }}, '{{ (plan.description or '') | e }}', {{ 'true' if plan.is_active else 'false' }})"
+                                <button
+                                    onclick="openEditPlanModal({{ plan.id }}, '{{ plan.label | e }}', {{ plan.duration_days }}, {{ plan.price_piastres / 100.0 }}, {{ plan.max_entries_per_day or 'null' }}, '{{ (plan.description or '') | e }}', {{ 'true' if plan.is_active else 'false' }})"
                                     class="bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border border-indigo-800/60 px-3 py-1 rounded text-xs font-medium transition flex items-center gap-1">
-                                    <span>✏️</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10">
+                                        </path>
+                                    </svg>
                                     <span>تعديل</span>
                                 </button>
                                 {% if plan.is_active %}
@@ -123,7 +142,8 @@
                                     تعطيل
                                 </button>
                                 {% else %}
-                                <button disabled class="bg-gray-800/50 text-gray-600 border border-gray-800 px-3 py-1 rounded text-xs font-medium cursor-not-allowed">
+                                <button disabled
+                                    class="bg-gray-800/50 text-gray-600 border border-gray-800 px-3 py-1 rounded text-xs font-medium cursor-not-allowed">
                                     معطلة
                                 </button>
                                 {% endif %}
@@ -144,21 +164,29 @@
 </div>
 
 <!-- Edit Plan Modal -->
-<div id="editPlanModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+<div id="editPlanModal"
+    class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 w-full max-w-xl shadow-2xl space-y-4">
         <div class="flex items-center justify-between border-b border-gray-800 pb-3">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <span>✏️</span>
+                <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10">
+                    </path>
+                </svg>
                 <span>تعديل خطة الاشتراك</span>
             </h3>
-            <button onclick="closeEditPlanModal()" class="text-gray-400 hover:text-white text-lg font-bold">&times;</button>
+            <button onclick="closeEditPlanModal()"
+                class="text-gray-400 hover:text-white text-lg font-bold">&times;</button>
         </div>
 
-        <div id="editPlanError" class="hidden bg-red-950/60 border border-red-500/60 text-red-300 px-4 py-2.5 rounded-lg text-sm"></div>
+        <div id="editPlanError"
+            class="hidden bg-red-950/60 border border-red-500/60 text-red-300 px-4 py-2.5 rounded-lg text-sm"></div>
 
         <form id="editPlanForm" onsubmit="handleUpdatePlan(event)" class="space-y-4">
             <input type="hidden" id="editPlanId">
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1.5">اسم الخطة (مطلوب)</label>
@@ -175,11 +203,12 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1.5">السعر (ج.م) (مطلوب)</label>
-                    <input type="number" id="editPlanPrice" step="1" min="0" required
+                    <input type="number" id="editPlanPrice" step="0.01" min="0" required
                         class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">أقصى عدد دخول يومياً (اختياري)</label>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1.5">أقصى عدد دخول يومياً
+                        (اختياري)</label>
                     <input type="number" id="editPlanMaxEntries" min="1" placeholder="فارغ لغير محدود"
                         class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500">
                 </div>
@@ -215,146 +244,146 @@
 </div>
 
 <script>
-function toggleCreatePlanForm() {
-    var el = document.getElementById('createPlanFormContainer');
-    var isHidden = el.style.display === 'none';
-    el.style.display = isHidden ? 'block' : 'none';
-    if (isHidden) {
-        document.getElementById('planLabel').focus();
+    function toggleCreatePlanForm() {
+        var el = document.getElementById('createPlanFormContainer');
+        var isHidden = el.style.display === 'none';
+        el.style.display = isHidden ? 'block' : 'none';
+        if (isHidden) {
+            document.getElementById('planLabel').focus();
+        }
     }
-}
 
-function openEditPlanModal(id, label, duration, price, maxEntries, description, isActive) {
-    document.getElementById('editPlanId').value = id;
-    document.getElementById('editPlanLabel').value = label;
-    document.getElementById('editPlanDuration').value = duration;
-    document.getElementById('editPlanPrice').value = Math.round(parseFloat(price));
-    document.getElementById('editPlanMaxEntries').value = maxEntries !== null ? maxEntries : '';
-    document.getElementById('editPlanDescription').value = description || '';
-    document.getElementById('editPlanIsActive').value = isActive ? 'true' : 'false';
+    function openEditPlanModal(id, label, duration, price, maxEntries, description, isActive) {
+        document.getElementById('editPlanId').value = id;
+        document.getElementById('editPlanLabel').value = label;
+        document.getElementById('editPlanDuration').value = duration;
+        document.getElementById('editPlanPrice').value = price;
+        document.getElementById('editPlanMaxEntries').value = maxEntries !== null ? maxEntries : '';
+        document.getElementById('editPlanDescription').value = description || '';
+        document.getElementById('editPlanIsActive').value = isActive ? 'true' : 'false';
 
-    var errEl = document.getElementById('editPlanError');
-    errEl.classList.add('hidden');
-    errEl.innerText = '';
+        var errEl = document.getElementById('editPlanError');
+        errEl.classList.add('hidden');
+        errEl.innerText = '';
 
-    document.getElementById('editPlanModal').classList.remove('hidden');
-}
+        document.getElementById('editPlanModal').classList.remove('hidden');
+    }
 
-function closeEditPlanModal() {
-    document.getElementById('editPlanModal').classList.add('hidden');
-}
+    function closeEditPlanModal() {
+        document.getElementById('editPlanModal').classList.add('hidden');
+    }
 
-async function handleCreatePlan(e) {
-    e.preventDefault();
-    var errorDiv = document.getElementById('planFormError');
-    errorDiv.classList.add('hidden');
-    errorDiv.innerText = '';
+    async function handleCreatePlan(e) {
+        e.preventDefault();
+        var errorDiv = document.getElementById('planFormError');
+        errorDiv.classList.add('hidden');
+        errorDiv.innerText = '';
 
-    var label = document.getElementById('planLabel').value.trim();
-    var duration_days = parseInt(document.getElementById('planDuration').value);
-    var price_egp = parseFloat(document.getElementById('planPrice').value);
-    var maxEntriesVal = document.getElementById('planMaxEntries').value.trim();
-    var max_entries_per_day = maxEntriesVal ? parseInt(maxEntriesVal) : null;
-    var description = document.getElementById('planDescription').value.trim() || null;
+        var label = document.getElementById('planLabel').value.trim();
+        var duration_days = parseInt(document.getElementById('planDuration').value);
+        var price_egp = parseFloat(document.getElementById('planPrice').value);
+        var maxEntriesVal = document.getElementById('planMaxEntries').value.trim();
+        var max_entries_per_day = maxEntriesVal ? parseInt(maxEntriesVal) : null;
+        var description = document.getElementById('planDescription').value.trim() || null;
 
-    var payload = {
-        label: label,
-        duration_days: duration_days,
-        price_egp: price_egp,
-        max_entries_per_day: max_entries_per_day,
-        description: description
-    };
+        var payload = {
+            label: label,
+            duration_days: duration_days,
+            price_egp: price_egp,
+            max_entries_per_day: max_entries_per_day,
+            description: description
+        };
 
-    try {
-        var res = await fetch('/api/v1/subscriptions/plans', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
+        try {
+            var res = await fetch('/api/v1/subscriptions/plans', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
 
-        if (res.ok) {
-            window.location.reload();
-        } else {
-            var data = await res.json();
-            errorDiv.innerText = data.detail || 'حدث خطأ أثناء إنشاء الخطة';
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                var data = await res.json();
+                errorDiv.innerText = data.detail || 'حدث خطأ أثناء إنشاء الخطة';
+                errorDiv.classList.remove('hidden');
+            }
+        } catch (err) {
+            errorDiv.innerText = 'تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً';
             errorDiv.classList.remove('hidden');
         }
-    } catch (err) {
-        errorDiv.innerText = 'تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً';
-        errorDiv.classList.remove('hidden');
     }
-}
 
-async function handleUpdatePlan(e) {
-    e.preventDefault();
-    var planId = document.getElementById('editPlanId').value;
-    var errorDiv = document.getElementById('editPlanError');
-    var btn = document.getElementById('submitEditPlanBtn');
-    errorDiv.classList.add('hidden');
-    errorDiv.innerText = '';
-    btn.disabled = true;
+    async function handleUpdatePlan(e) {
+        e.preventDefault();
+        var planId = document.getElementById('editPlanId').value;
+        var errorDiv = document.getElementById('editPlanError');
+        var btn = document.getElementById('submitEditPlanBtn');
+        errorDiv.classList.add('hidden');
+        errorDiv.innerText = '';
+        btn.disabled = true;
 
-    var label = document.getElementById('editPlanLabel').value.trim();
-    var duration_days = parseInt(document.getElementById('editPlanDuration').value);
-    var price_egp = parseFloat(document.getElementById('editPlanPrice').value);
-    var maxEntriesVal = document.getElementById('editPlanMaxEntries').value.trim();
-    var max_entries_per_day = maxEntriesVal ? parseInt(maxEntriesVal) : null;
-    var description = document.getElementById('editPlanDescription').value.trim() || null;
-    var is_active = document.getElementById('editPlanIsActive').value === 'true';
+        var label = document.getElementById('editPlanLabel').value.trim();
+        var duration_days = parseInt(document.getElementById('editPlanDuration').value);
+        var price_egp = parseFloat(document.getElementById('editPlanPrice').value);
+        var maxEntriesVal = document.getElementById('editPlanMaxEntries').value.trim();
+        var max_entries_per_day = maxEntriesVal ? parseInt(maxEntriesVal) : null;
+        var description = document.getElementById('editPlanDescription').value.trim() || null;
+        var is_active = document.getElementById('editPlanIsActive').value === 'true';
 
-    var payload = {
-        label: label,
-        duration_days: duration_days,
-        price_egp: price_egp,
-        max_entries_per_day: max_entries_per_day,
-        description: description,
-        is_active: is_active
-    };
+        var payload = {
+            label: label,
+            duration_days: duration_days,
+            price_egp: price_egp,
+            max_entries_per_day: max_entries_per_day,
+            description: description,
+            is_active: is_active
+        };
 
-    try {
-        var res = await fetch('/api/v1/subscriptions/plans/' + planId, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
+        try {
+            var res = await fetch('/api/v1/subscriptions/plans/' + planId, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
 
-        if (res.ok) {
-            window.location.reload();
-        } else {
-            var data = await res.json();
-            errorDiv.innerText = data.detail || 'حدث خطأ أثناء تعديل الخطة';
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                var data = await res.json();
+                errorDiv.innerText = data.detail || 'حدث خطأ أثناء تعديل الخطة';
+                errorDiv.classList.remove('hidden');
+                btn.disabled = false;
+            }
+        } catch (err) {
+            errorDiv.innerText = 'تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً';
             errorDiv.classList.remove('hidden');
             btn.disabled = false;
         }
-    } catch (err) {
-        errorDiv.innerText = 'تعذر الاتصال بالخادم، يرجى المحاولة لاحقاً';
-        errorDiv.classList.remove('hidden');
-        btn.disabled = false;
     }
-}
 
-async function deactivatePlan(planId) {
-    if (!confirm('هل أنت متأكد من رغبتك في تعطيل هذه الخطة؟')) return;
+    async function deactivatePlan(planId) {
+        if (!confirm('هل أنت متأكد من رغبتك في تعطيل هذه الخطة؟')) return;
 
-    try {
-        var res = await fetch('/api/v1/subscriptions/plans/' + planId + '/deactivate', {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' }
-        });
+        try {
+            var res = await fetch('/api/v1/subscriptions/plans/' + planId + '/deactivate', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' }
+            });
 
-        if (res.ok) {
-            window.location.reload();
-        } else {
-            var data = await res.json();
-            alert(data.detail || 'تعذر تعطيل الخطة');
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                var data = await res.json();
+                alert(data.detail || 'تعذر تعطيل الخطة');
+            }
+        } catch (err) {
+            alert('تعذر الاتصال بالخادم');
         }
-    } catch (err) {
-        alert('تعذر الاتصال بالخادم');
     }
-}
 </script>
 {% endblock %}

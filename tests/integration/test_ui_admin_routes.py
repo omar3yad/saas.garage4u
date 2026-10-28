@@ -9,6 +9,7 @@ from models.parking_session import ParkingSession, SessionStatus
 from models.parking_card import ParkingCard, CardStatus
 from models.pricing_rule import PricingRule
 from services.auth_service import AuthService
+from utils.time import cairo_now
 
 
 async def setup_admin(
@@ -79,6 +80,10 @@ async def test_shifts_page_renders(
     res = await async_client.get("/ui/admin/shifts")
     assert res.status_code == 200
     assert "الشيفتات" in res.text
+    today_str = cairo_now().date().isoformat()
+    assert f'name="start_date" value="{today_str}"' in res.text
+    assert f'name="end_date" value="{today_str}"' in res.text
+    assert 'name="size" value="100"' in res.text
 
 
 @pytest.mark.asyncio
@@ -89,6 +94,24 @@ async def test_sessions_page_renders(
     res = await async_client.get("/ui/admin/sessions")
     assert res.status_code == 200
     assert "دخول وخروج" in res.text
+    today_str = cairo_now().date().isoformat()
+    assert f'name="start_date" value="{today_str}"' in res.text
+    assert f'name="end_date" value="{today_str}"' in res.text
+    assert 'name="size" value="100"' in res.text
+
+
+@pytest.mark.asyncio
+async def test_sessions_page_status_filter_and_pagination(
+    async_client: AsyncClient, db_session: AsyncSession, auth_service: AuthService
+):
+    await setup_admin(db_session, auth_service, async_client)
+    res = await async_client.get("/ui/admin/sessions?status=ACTIVE")
+    assert res.status_code == 200
+    assert '<option value="ACTIVE" selected>داخل</option>' in res.text
+
+    res_enum = await async_client.get("/ui/admin/sessions?status=SessionStatus.ACTIVE")
+    assert res_enum.status_code == 200
+    assert '<option value="ACTIVE" selected>داخل</option>' in res_enum.text
 
 
 @pytest.mark.asyncio

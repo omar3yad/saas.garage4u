@@ -178,7 +178,7 @@ async def admin_shifts_page(
     end_date: _OptStr = Query(None),
     overdue: bool = Query(False),
     page: int = Query(1, ge=1),
-    size: int = Query(20, ge=1, le=100),
+    size: int = Query(100, ge=1, le=200),
     current_user: User = Depends(require_admin_ui),
     db: AsyncSession = Depends(get_db),
 ):
@@ -194,6 +194,7 @@ async def admin_shifts_page(
     except (ValueError, TypeError):
         filters = ShiftFilters()
 
+    today = cairo_now().date()
     admin_shift_repo = AdminShiftRepository(db)
     shifts, total = await admin_shift_repo.get_shifts_filtered(filters, page, size)
 
@@ -226,6 +227,7 @@ async def admin_shifts_page(
             "page": page,
             "size": size,
             "filters": filters,
+            "today": today,
             "operator_names": operator_names,
             "session_totals": session_totals,
             "all_operators": all_operators,
@@ -308,14 +310,22 @@ async def admin_sessions_page(
     plate_number: str | None = Query(None, max_length=30),
     long_stay: bool = Query(False),
     page: int = Query(1, ge=1),
-    size: int = Query(20, ge=1, le=100),
+    size: int = Query(100, ge=1, le=200),
     current_user: User = Depends(require_admin_ui),
     db: AsyncSession = Depends(get_db),
 ):
     try:
-        parsed_status = SessionStatus(status) if status else None
+        if status:
+            val = status.value if hasattr(status, "value") else str(status)
+            if val.startswith("SessionStatus."):
+                val = val.split(".", 1)[1]
+            parsed_status = SessionStatus(val)
+        else:
+            parsed_status = None
     except ValueError:
         parsed_status = None
+
+    today = cairo_now().date()
     try:
         filters = ReportFilters(
             start_date=date.fromisoformat(start_date) if start_date else None,
@@ -361,6 +371,7 @@ async def admin_sessions_page(
             "page": page,
             "size": size,
             "filters": filters,
+            "today": today,
             "operator_names": operator_names,
             "all_operators": all_operators,
         },

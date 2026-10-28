@@ -406,15 +406,125 @@ class ReportRepository:
             for r in rows
         ]
 
+
+    async def get_monthly_revenue_raw(
+        self,
+        start_utc: datetime | None,
+        end_utc: datetime | None,
+        gate_number: int | None = None,
+        operator_id: int | None = None,
+    ) -> list[dict[str, Any]]:
+        """Groups revenue by Cairo calendar month (YYYY-MM)."""
+        bind = self.db.get_bind()
+        dialect_name = bind.dialect.name if bind else "postgresql"
+
+        if dialect_name == "sqlite":
+            month_expr = "SUBSTR(DATE(exit_time, '+2 hours'), 1, 7)"
+        else:
+            month_expr = "TO_CHAR((exit_time + INTERVAL '2 hours'), 'YYYY-MM')"
+
+        clauses = ["status IN ('COMPLETED', 'LOST_CARD')", "exit_time IS NOT NULL"]
+        params: dict[str, Any] = {}
+        if start_utc is not None:
+            clauses.append("exit_time >= :start_utc")
+            params["start_utc"] = start_utc
+        if end_utc is not None:
+            clauses.append("exit_time < :end_utc")
+            params["end_utc"] = end_utc
+        if gate_number is not None:
+            clauses.append("gate_number = :gate_number")
+            params["gate_number"] = gate_number
+        if operator_id is not None:
+            clauses.append("COALESCE(exit_operator_id, operator_id) = :operator_id")
+            params["operator_id"] = operator_id
+
+        where_sql = " AND ".join(clauses)
+        sql = text(f"""
+            SELECT
+                {month_expr} AS cairo_month,
+                COUNT(*) AS session_count,
+                COALESCE(SUM(amount_charged), 0) AS total_piastres
+            FROM parking_sessions
+            WHERE {where_sql}
+            GROUP BY cairo_month
+            ORDER BY cairo_month ASC
+        """)
+        rows = (await self.db.execute(sql, params)).mappings().all()
+
+        sub_map: dict[str, dict[str, Any]] = {}
+        if gate_number is None:
+            try:
+                sub_clauses = ["status = 'ACTIVE'", "paid_at IS NOT NULL"]
+                sub_params: dict[str, Any] = {}
+                if start_utc is not None:
+                    sub_clauses.append("paid_at >= :start_utc")
+                    sub_params["start_utc"] = start_utc
+                if end_utc is not None:
+                    sub_clauses.append("paid_at < :end_utc")
+                    sub_params["end_utc"] = end_utc
+                if operator_id is not None:
+                    sub_clauses.append("collected_by = :operator_id")
+                    sub_params["operator_id"] = operator_id
+
+                if dialect_name == "sqlite":
+                    sub_month_expr = "SUBSTR(DATE(paid_at, '+2 hours'), 1, 7)"
+                else:
+                    sub_month_expr = "TO_CHAR((paid_at + INTERVAL '2 hours'), 'YYYY-MM')"
+
+                sub_sql = text(f"""
+                    SELECT
+                        {sub_month_expr} AS cairo_month,
+                        COUNT(*) AS sub_count,
+                        COALESCE(SUM(amount_paid_piastres), 0) AS sub_piastres
+                    FROM subscriptions
+                    WHERE {' AND '.join(sub_clauses)}
+                    GROUP BY cairo_month
+                """)
+                sub_rows = (await self.db.execute(sub_sql, sub_params)).mappings().all()
+                sub_map = {str(r["cairo_month"]): dict(r) for r in sub_rows}
+            except Exception:
+                pass
+
+        all_months: set[str] = set()
+        sess_map: dict[str, dict[str, Any]] = {}
+        for r in rows:
+            m = str(r["cairo_month"])
+            if m and m != "None":
+                all_months.add(m)
+                sess_map[m] = dict(r)
+        for m in sub_map.keys():
+            if m and m != "None":
+                all_months.add(m)
+
+        sorted_months = sorted(list(all_months))
+        results: list[dict[str, Any]] = []
+        for m in sorted_months:
+            s_cnt = int(sess_map[m]["session_count"]) if m in sess_map else 0
+            s_piastres = int(sess_map[m]["total_piastres"]) if m in sess_map else 0
+            sub_cnt = int(sub_map[m]["sub_count"]) if m in sub_map else 0
+            sub_piastres = int(sub_map[m]["sub_piastres"]) if m in sub_map else 0
+            results.append({
+                "month_str": m,
+                "session_count": s_cnt,
+                "ticket_piastres": s_piastres,
+                "sub_count": sub_cnt,
+                "sub_piastres": sub_piastres,
+                "total_piastres": s_piastres + sub_piastres,
+            })
+        return results
+
     def _build_session_filter_conditions(self, filters: ReportFilters) -> list[Any]:
         conditions = []
+        session_time = func.coalesce(
+            ParkingSession.exit_time, ParkingSession.entry_time
+        )
         if filters.start_date:
             conditions.append(
-                ParkingSession.exit_time >= cairo_date_to_utc_start(filters.start_date)
+                session_time >= cairo_date_to_utc_start(filters.start_date)
             )
         if filters.end_date:
             conditions.append(
-                ParkingSession.exit_time < cairo_date_to_utc_end(filters.end_date)
+                session_time < cairo_date_to_utc_end(filters.end_date)
             )
         if filters.gate_number is not None:
             conditions.append(ParkingSession.gate_number == filters.gate_number)

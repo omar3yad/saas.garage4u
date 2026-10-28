@@ -45,7 +45,7 @@ async function refreshLiveStats(statsUrl, gatesUrl) {
     const revEl = document.getElementById("stat-revenue-today");
     if (revEl && statData.revenue_today_piastres !== undefined) {
       const egpVal = Math.round(statData.revenue_today_piastres / 100);
-      revEl.textContent = convertToArabicIndic(egpVal) + " ج.م";
+      revEl.textContent = egpVal.toLocaleString("en-US");
     }
 
     const shiftsEl = document.getElementById("stat-open-shifts");

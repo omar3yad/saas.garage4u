@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: Literal["development", "staging", "production"]
     DEBUG: bool = False
     APP_NAME: str = "garage4u"
-    JWT_EXPIRE_HOURS: int = 8
+    JWT_EXPIRE_HOURS: int = 24
     JWT_ALGORITHM: str = "HS256"
     DB_POOL_SIZE: int = 5
     DB_MAX_OVERFLOW: int = 10

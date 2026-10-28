@@ -108,10 +108,25 @@ def cairo_datetime_filter(dt: datetime | None, fmt: str | None = None) -> str:
 
 
 def piastres_to_egp_filter(piastres: int | None) -> str:
-    """Convert integer piastres to EGP currency format string (e.g. 10000 -> 100) without decimals or piastres."""
+    """Convert integer piastres to EGP currency format string with thousands separator (e.g. 1432500 -> 14,325)."""
     if piastres is None:
         return "0"
-    return str(int(round(Decimal(piastres) / Decimal(100))))
+    if piastres % 100 == 0:
+        return f"{piastres // 100:,}"
+    return f"{Decimal(piastres) / Decimal(100):,.2f}"
+
+
+def format_thousands_filter(val: int | float | None) -> str:
+    """Format any number with thousands separator (e.g. 14325 -> 14,325)."""
+    if val is None:
+        return "0"
+    try:
+        val_int = int(val)
+        if isinstance(val, float) and val != val_int:
+            return f"{val:,.2f}"
+        return f"{val_int:,}"
+    except (ValueError, TypeError):
+        return str(val)
 
 
 def duration_ar_filter(duration_minutes: int | float | None) -> str:
@@ -194,6 +209,93 @@ subscription_status_badge_filter = subscription_status_class_filter
 subscription_status_ar_filter = subscription_status_label_filter
 
 
+def format_audit_action_filter(action: Any) -> str:
+    """Translate system audit action names to clear Arabic labels."""
+    if not action:
+        return "—"
+    action_map = {
+        "SESSION_OPENED": "دخول / فتح جلسة",
+        "SESSION_CLOSED": "خروج / إغلاق جلسة",
+        "LOST_CARD_RESOLVED": "تسوية كرت مفقود",
+        "ADMIN_OVERRIDE_CLOSE": "إغلاق وتسوية إدارية",
+        "SESSION_ADMIN_OVERRIDE": "إغلاق وتسوية إدارية",
+        "SESSION_PAYMENT": "سداد الرسوم",
+        "SUBSCRIPTIONS_BULK_EXPIRED": "انتهاء اشتراكات تلقائي",
+        "SHIFT_OPENED": "فتح وردية",
+        "SHIFT_CLOSED": "إغلاق وردية",
+    }
+    return action_map.get(str(action).strip(), str(action))
+
+
+def format_audit_payload_filter(payload_str: Any) -> str:
+    """Format an audit log JSON payload into clean, readable Arabic."""
+    if not payload_str:
+        return "—"
+    try:
+        data = json.loads(payload_str) if isinstance(payload_str, str) else payload_str
+        if not isinstance(data, dict):
+            return str(payload_str)
+
+        labels = {
+            "card_code": "الكرت",
+            "gate_number": "بوابة",
+            "is_subscribed": "النوع",
+            "status": "الحالة",
+            "amount_charged": "المبلغ",
+            "exit_time": "وقت الخروج",
+            "duration_minutes": "المدة",
+            "operator_id": "المشغل",
+            "plate_number": "اللوحة",
+            "notes": "ملاحظات",
+            "override_note": "ملاحظة التعديل",
+            "penalty": "الغرامة",
+            "lost_card_penalty": "غرامة الكرت",
+        }
+        status_map = {
+            "ACTIVE": "نشطة",
+            "COMPLETED": "مكتملة",
+            "CANCELLED": "ملغاة",
+            "LOST_CARD": "كرت مفقود",
+        }
+        parts = []
+        for k, v in data.items():
+            if k == "id":
+                continue
+            lbl = labels.get(k, k)
+            if k == "is_subscribed":
+                val = "اشتراك ساري" if v else "زائر عادي"
+                parts.append(val)
+                continue
+            elif k == "gate_number":
+                parts.append(f"بوابة {v}")
+                continue
+            elif k == "status":
+                val = status_map.get(str(v).upper(), str(v))
+            elif k in ("amount_charged", "penalty", "lost_card_penalty"):
+                try:
+                    num = int(v)
+                    egp = num // 100 if num % 100 == 0 and num >= 100 else num
+                    val = f"{egp} ج.م"
+                except (ValueError, TypeError):
+                    val = f"{v} ج.م"
+            elif k == "duration_minutes":
+                val = duration_ar_filter(v)
+            elif k == "exit_time":
+                try:
+                    dt = datetime.fromisoformat(str(v).replace("Z", "+00:00"))
+                    val = format_cairo_12h(dt)
+                except Exception:
+                    val = str(v)
+            elif v is None:
+                val = "—"
+            else:
+                val = str(v)
+            parts.append(f"{lbl}: {val}")
+        return " • ".join(parts) if parts else str(payload_str)
+    except Exception:
+        return str(payload_str)
+
+
 def register_jinja_filters(templates: Jinja2Templates) -> None:
     """Register custom filters and globals to Starlette Jinja2Templates instance."""
     templates.env.globals["t"] = t
@@ -206,6 +308,7 @@ def register_jinja_filters(templates: Jinja2Templates) -> None:
     templates.env.filters["format_time"] = cairo_time_filter
     templates.env.filters["piastres_to_egp"] = piastres_to_egp_filter
     templates.env.filters["format_egp"] = piastres_to_egp_filter
+    templates.env.filters["format_thousands"] = format_thousands_filter
     templates.env.filters["duration_ar"] = duration_ar_filter
     templates.env.filters["format_duration"] = duration_ar_filter
     templates.env.filters["days_remaining"] = days_remaining_filter
@@ -224,6 +327,8 @@ def register_jinja_filters(templates: Jinja2Templates) -> None:
     templates.env.filters["discrepancy_class"] = discrepancy_class_filter
     templates.env.filters["session_status_label"] = session_status_label_filter
     templates.env.filters["shift_status_label"] = shift_status_label_filter
+    templates.env.filters["format_audit_action"] = format_audit_action_filter
+    templates.env.filters["format_audit_payload"] = format_audit_payload_filter
 
 
 def create_jinja2_environment(settings=None) -> Jinja2Templates:
@@ -233,4 +338,3 @@ def create_jinja2_environment(settings=None) -> Jinja2Templates:
     templates = Jinja2Templates(directory=templates_dir)
     register_jinja_filters(templates)
     return templates
-

@@ -134,6 +134,13 @@ async def db_availability_middleware(request: Request, call_next):
 async def http_exception_handler(request: Request, exc: HTTPException):
     if exc.status_code == 303 and exc.headers and "Location" in exc.headers:
         return RedirectResponse(exc.headers["Location"], status_code=303)
+    # For UI API requests, return JSON with 401 so frontend knows session expired and can redirect cleanly
+    is_api = "/api/" in request.url.path or "application/json" in request.headers.get("accept", "")
+    if is_api and exc.status_code in (401, 403):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={"detail": "انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجدداً", "code": "SESSION_EXPIRED"},
+        )
     if request.url.path.startswith("/ui/admin") and exc.status_code in (401, 403):
         return RedirectResponse(f"/ui/login?next={request.url.path}", status_code=303)
     if request.url.path.startswith("/ui/") and exc.status_code == 401:

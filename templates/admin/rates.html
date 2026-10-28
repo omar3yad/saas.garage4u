@@ -8,27 +8,28 @@
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
       <h1 class="text-2xl font-bold text-white">{{ t("admin.rates.title") }}</h1>
-      <p class="text-sm text-gray-400 mt-1">إدارة وتعديل تسعيرة وقوف السيارات (سعر أول ساعة، الساعات التالية، فترات السماح)</p>
+      <p class="text-sm text-gray-400 mt-1">إدارة وتعديل تسعيرة وقوف السيارات (سعر أول ساعة، الساعات التالية، فترات
+        السماح)</p>
     </div>
     <div class="flex items-center gap-3">
       {% if rules and rules|length > 0 %}
-      <button id="quick-edit-active-btn"
-              data-id="{{ rules[0].id }}"
-              data-label="{{ rules[0].label }}"
-              data-first-hour="{{ (rules[0].first_hour_charge / 100) if rules[0].first_hour_charge > 0 else (rules[0].rate_per_hour / 100) }}"
-              data-subsequent-hour="{{ (rules[0].subsequent_hour_charge / 100) if rules[0].first_hour_charge > 0 else (rules[0].rate_per_hour / 100) }}"
-              data-rate-per-hour="{{ rules[0].rate_per_hour / 100 }}"
-              data-grace="{{ rules[0].grace_period_mins }}"
-              data-min-charge="{{ rules[0].minimum_charge / 100 }}"
-              data-lost-penalty="{{ rules[0].lost_card_penalty / 100 }}"
-              onclick="handleEditBtnClick(this)"
-              class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer">
-        <span>✏️</span>
+      <button id="quick-edit-active-btn" data-id="{{ rules[0].id }}" data-label="{{ rules[0].label }}"
+        data-first-hour="{{ (rules[0].first_hour_charge / 100) if rules[0].first_hour_charge > 0 else (rules[0].rate_per_hour / 100) }}"
+        data-subsequent-hour="{{ (rules[0].subsequent_hour_charge / 100) if rules[0].first_hour_charge > 0 else (rules[0].rate_per_hour / 100) }}"
+        data-rate-per-hour="{{ rules[0].rate_per_hour / 100 }}" data-grace="{{ rules[0].grace_period_mins }}"
+        data-min-charge="{{ rules[0].minimum_charge / 100 }}" data-lost-penalty="{{ rules[0].lost_card_penalty / 100 }}"
+        onclick="handleEditBtnClick(this)"
+        class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/30 cursor-pointer">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10">
+          </path>
+        </svg>
         <span>تعديل التسعيرة الحالية</span>
       </button>
       {% endif %}
       <!-- <button id="toggle-new-rate-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow-lg shadow-indigo-600/30 cursor-pointer">
-        <span>➕</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
         <span>{{ t("admin.rates.create") }}</span>
       </button> -->
     </div>
@@ -38,16 +39,27 @@
   <div id="toast-msg" class="hidden rounded-lg p-4 text-sm font-medium transition-all duration-300 shadow-lg"></div>
 
   <!-- Modal / Collapsible Edit Rate Container -->
-  <div id="edit-rate-container" class="hidden bg-gray-800/95 border border-emerald-500/50 rounded-xl p-6 shadow-2xl backdrop-blur-sm">
+  <div id="edit-rate-container"
+    class="hidden bg-gray-800/95 border border-emerald-500/50 rounded-xl p-6 shadow-2xl backdrop-blur-sm">
     <div class="flex items-center justify-between border-b border-gray-700/80 pb-3 mb-4">
       <h2 class="text-base font-bold text-white flex items-center gap-2">
-        <span class="text-emerald-400">✏️</span>
+        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10">
+          </path>
+        </svg>
         <span id="edit-modal-title">تعديل التسعيرة</span>
       </h2>
-      <button type="button" onclick="closeEditModal()" class="text-gray-400 hover:text-white text-lg cursor-pointer">✕</button>
+      <button type="button" onclick="closeEditModal()" class="text-gray-400 hover:text-white p-1 rounded-lg transition"
+        title="إغلاق">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
     </div>
 
-    <div id="edit-form-error-msg" class="hidden bg-red-950/80 border border-red-500 text-red-200 text-sm p-3 rounded-lg mb-4"></div>
+    <div id="edit-form-error-msg"
+      class="hidden bg-red-950/80 border border-red-500 text-red-200 text-sm p-3 rounded-lg mb-4"></div>
 
     <form id="edit-rate-form" class="space-y-4">
       <input type="hidden" id="edit-rate-id">
@@ -56,53 +68,64 @@
         <!-- Label -->
         <div class="md:col-span-2">
           <label class="block text-xs font-medium text-gray-300 mb-1">اسم التعريفة / الوصف *</label>
-          <input type="text" id="edit-rate-label" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+          <input type="text" id="edit-rate-label" required
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
         </div>
 
         <!-- First Hour Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-emerald-300 mb-1">سعر أول ساعة (ج.م) *</label>
-          <input type="number" id="edit-rate-first-hour" step="1" min="0" required class="w-full bg-gray-900 border border-emerald-600/60 rounded-lg px-3 py-2 text-sm text-emerald-300 font-bold focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="edit-rate-first-hour" step="0.01" min="0" required
+            class="w-full bg-gray-900 border border-emerald-600/60 rounded-lg px-3 py-2 text-sm text-emerald-300 font-bold focus:outline-none focus:border-emerald-500 non-negative">
           <span class="text-[10px] text-gray-400">سعر الساعة الأولى للسيارة</span>
         </div>
 
         <!-- Subsequent Hour Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-cyan-300 mb-1">سعر الساعات التالية (ج.م) *</label>
-          <input type="number" id="edit-rate-subsequent-hour" step="1" min="0" required class="w-full bg-gray-900 border border-cyan-600/60 rounded-lg px-3 py-2 text-sm text-cyan-300 font-bold focus:outline-none focus:border-cyan-500 non-negative">
+          <input type="number" id="edit-rate-subsequent-hour" step="0.01" min="0" required
+            class="w-full bg-gray-900 border border-cyan-600/60 rounded-lg px-3 py-2 text-sm text-cyan-300 font-bold focus:outline-none focus:border-cyan-500 non-negative">
           <span class="text-[10px] text-gray-400">عن كل ساعة إضافية بعد الأولى</span>
         </div>
 
         <!-- Flat Rate Per Hour (EGP) (Fallback) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">سعر الساعة الافتراضي (ج.م)</label>
-          <input type="number" id="edit-rate-per-hour" step="1" min="0" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="edit-rate-per-hour" step="0.01" min="0" required
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
           <span class="text-[10px] text-gray-500">احتياطي</span>
         </div>
 
         <!-- Grace Period (Mins) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">فترة السماح المجانية (دقائق)</label>
-          <input type="number" id="edit-rate-grace" min="0" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="edit-rate-grace" min="0"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
         </div>
 
         <!-- Minimum Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">الحد الأدنى للمحاسبة (ج.م)</label>
-          <input type="number" id="edit-rate-min-charge" step="1" min="0" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="edit-rate-min-charge" step="0.01" min="0"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
         </div>
 
         <!-- Lost Card Penalty (EGP) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">غرامة الكرت المفقود (ج.م)</label>
-          <input type="number" id="edit-rate-lost-penalty" step="1" min="0" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="edit-rate-lost-penalty" step="0.01" min="0"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 non-negative">
         </div>
       </div>
 
       <div class="flex items-center justify-end gap-3 pt-3 border-t border-gray-700/60">
-        <button type="button" onclick="closeEditModal()" class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2 rounded-lg text-sm transition cursor-pointer">إلغاء</button>
-        <button type="submit" id="save-edit-rate-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-2 rounded-lg text-sm transition shadow-lg shadow-emerald-600/30 flex items-center gap-2 cursor-pointer">
-          <span>💾</span>
+        <button type="button" onclick="closeEditModal()"
+          class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2 rounded-lg text-sm transition cursor-pointer">إلغاء</button>
+        <button type="submit" id="save-edit-rate-btn"
+          class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-2 rounded-lg text-sm transition shadow-lg shadow-emerald-600/30 flex items-center gap-2 cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+          </svg>
           <span>حفظ التعديلات</span>
         </button>
       </div>
@@ -110,74 +133,95 @@
   </div>
 
   <!-- Inline New Rate Form (Collapsible) -->
-  <div id="new-rate-container" class="hidden bg-gray-800/95 border border-indigo-500/40 rounded-xl p-6 shadow-2xl backdrop-blur-sm">
+  <div id="new-rate-container"
+    class="hidden bg-gray-800/95 border border-indigo-500/40 rounded-xl p-6 shadow-2xl backdrop-blur-sm">
     <div class="flex items-center justify-between border-b border-gray-700/80 pb-3 mb-4">
       <h2 class="text-base font-bold text-white flex items-center gap-2">
-        <span class="text-indigo-400">➕</span>
+        <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+        </svg>
         <span>{{ t("admin.rates.create") }}</span>
       </h2>
-      <button type="button" onclick="document.getElementById('new-rate-container').classList.add('hidden')" class="text-gray-400 hover:text-white text-lg cursor-pointer">✕</button>
+      <button type="button" onclick="document.getElementById('new-rate-container').classList.add('hidden')"
+        class="text-gray-400 hover:text-white p-1 rounded-lg transition" title="إغلاق">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
     </div>
 
-    <div id="form-error-msg" class="hidden bg-red-950/80 border border-red-500 text-red-200 text-sm p-3 rounded-lg mb-4"></div>
+    <div id="form-error-msg"
+      class="hidden bg-red-950/80 border border-red-500 text-red-200 text-sm p-3 rounded-lg mb-4"></div>
 
     <form id="create-rate-form" class="space-y-4">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <!-- Label -->
         <div class="md:col-span-2">
           <label class="block text-xs font-medium text-gray-300 mb-1">اسم التعريفة / الوصف *</label>
-          <input type="text" id="rate-label" required placeholder="مثال: تسعيرة أول ساعة ٢٠ ثم ١٠" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+          <input type="text" id="rate-label" required placeholder="مثال: تسعيرة أول ساعة ٢٠ ثم ١٠"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
         </div>
 
         <!-- First Hour Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-emerald-300 mb-1">سعر أول ساعة (ج.م) *</label>
-          <input type="number" id="rate-first-hour" step="1" min="0" required placeholder="20" value="20" class="w-full bg-gray-900 border border-emerald-600/50 rounded-lg px-3 py-2 text-sm text-emerald-300 font-semibold focus:outline-none focus:border-emerald-500 non-negative">
+          <input type="number" id="rate-first-hour" step="0.01" min="0" required placeholder="20.00" value="20.00"
+            class="w-full bg-gray-900 border border-emerald-600/50 rounded-lg px-3 py-2 text-sm text-emerald-300 font-semibold focus:outline-none focus:border-emerald-500 non-negative">
           <span class="text-[10px] text-gray-400">الساعة الأولى للسيارة</span>
         </div>
 
         <!-- Subsequent Hour Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-cyan-300 mb-1">سعر الساعات التالية (ج.م) *</label>
-          <input type="number" id="rate-subsequent-hour" step="1" min="0" required placeholder="10" value="10" class="w-full bg-gray-900 border border-cyan-600/50 rounded-lg px-3 py-2 text-sm text-cyan-300 font-semibold focus:outline-none focus:border-cyan-500 non-negative">
+          <input type="number" id="rate-subsequent-hour" step="0.01" min="0" required placeholder="10.00" value="10.00"
+            class="w-full bg-gray-900 border border-cyan-600/50 rounded-lg px-3 py-2 text-sm text-cyan-300 font-semibold focus:outline-none focus:border-cyan-500 non-negative">
           <span class="text-[10px] text-gray-400">عن كل ساعة إضافية</span>
         </div>
 
         <!-- Flat Rate Per Hour (EGP) (Fallback) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">سعر الساعة الافتراضي (ج.م)</label>
-          <input type="number" id="rate-per-hour" step="1" min="0" required placeholder="10" value="10" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
+          <input type="number" id="rate-per-hour" step="0.01" min="0" required placeholder="10.00" value="10.00"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
           <span class="text-[10px] text-gray-500">احتياطي</span>
         </div>
 
         <!-- Grace Period (Mins) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">فترة السماح المجانية (دقائق)</label>
-          <input type="number" id="rate-grace" min="0" value="15" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
+          <input type="number" id="rate-grace" min="0" value="15"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
         </div>
 
         <!-- Minimum Charge (EGP) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">الحد الأدنى للمحاسبة (ج.م)</label>
-          <input type="number" id="rate-min-charge" step="1" min="0" value="0" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
+          <input type="number" id="rate-min-charge" step="0.01" min="0" value="0.00"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
         </div>
 
         <!-- Lost Card Penalty (EGP) -->
         <div>
           <label class="block text-xs font-medium text-gray-300 mb-1">غرامة الكرت المفقود (ج.م)</label>
-          <input type="number" id="rate-lost-penalty" step="1" min="0" value="50" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
+          <input type="number" id="rate-lost-penalty" step="0.01" min="0" value="50.00"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 non-negative">
         </div>
 
         <!-- Effective From -->
         <div class="sm:col-span-2 md:col-span-4">
-          <label class="block text-xs font-medium text-gray-300 mb-1">سارية من تاريخ / وقت (اتركه فارغاً للتطبيق الفوري)</label>
-          <input type="datetime-local" id="rate-effective-from" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+          <label class="block text-xs font-medium text-gray-300 mb-1">سارية من تاريخ / وقت (اتركه فارغاً للتطبيق
+            الفوري)</label>
+          <input type="datetime-local" id="rate-effective-from"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
         </div>
       </div>
 
       <div class="flex items-center justify-end gap-3 pt-3 border-t border-gray-700/60">
-        <button type="button" onclick="document.getElementById('new-rate-container').classList.add('hidden')" class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2 rounded-lg text-sm transition cursor-pointer">إلغاء</button>
-        <button type="submit" id="save-rate-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-2 rounded-lg text-sm transition shadow-lg shadow-indigo-600/30 cursor-pointer">حفظ التعريفة</button>
+        <button type="button" onclick="document.getElementById('new-rate-container').classList.add('hidden')"
+          class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2 rounded-lg text-sm transition cursor-pointer">إلغاء</button>
+        <button type="submit" id="save-rate-btn"
+          class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-2 rounded-lg text-sm transition shadow-lg shadow-indigo-600/30 cursor-pointer">حفظ
+          التعريفة</button>
       </div>
     </form>
   </div>
@@ -211,43 +255,53 @@
             <td class="p-3 font-medium text-white cell-label">{{ r.label }}</td>
             <td class="p-3 font-semibold text-emerald-400 cell-first-hour">
               {% if r.first_hour_charge > 0 %}
-                {{ r.first_hour_charge | format_egp }} ج.م
+              <span>{{ r.first_hour_charge | format_egp }}</span> <span
+                class="text-xs font-normal text-gray-400 mr-1">ج.م</span>
               {% else %}
-                <span class="text-gray-400">{{ r.rate_per_hour | format_egp }} ج.م</span>
+              <span class="text-gray-400"><span>{{ r.rate_per_hour | format_egp }}</span> <span
+                  class="text-xs font-normal text-gray-500 mr-1">ج.م</span></span>
               {% endif %}
             </td>
             <td class="p-3 font-semibold text-cyan-400 cell-subsequent-hour">
               {% if r.first_hour_charge > 0 %}
-                {{ r.subsequent_hour_charge | format_egp }} ج.م
+              <span>{{ r.subsequent_hour_charge | format_egp }}</span> <span
+                class="text-xs font-normal text-gray-400 mr-1">ج.م</span>
               {% else %}
-                <span class="text-gray-400">{{ r.rate_per_hour | format_egp }} ج.م</span>
+              <span class="text-gray-400"><span>{{ r.rate_per_hour | format_egp }}</span> <span
+                  class="text-xs font-normal text-gray-500 mr-1">ج.م</span></span>
               {% endif %}
             </td>
             <td class="p-3 text-gray-300 cell-grace">{{ r.grace_period_mins | to_arabic_indic }} دقيقة</td>
-            <td class="p-3 text-gray-300 cell-min-charge">{{ r.minimum_charge | format_egp }} ج.م</td>
-            <td class="p-3 text-red-400 cell-lost-penalty">{{ r.lost_card_penalty | format_egp }} ج.م</td>
+            <td class="p-3 text-gray-300 cell-min-charge"><span>{{ r.minimum_charge | format_egp }}</span> <span
+                class="text-xs font-normal text-gray-400 mr-1">ج.م</span></td>
+            <td class="p-3 text-red-400 cell-lost-penalty"><span>{{ r.lost_card_penalty | format_egp }}</span> <span
+                class="text-xs font-normal text-gray-400 mr-1">ج.م</span></td>
             <td class="p-3 text-gray-400 text-xs">{{ r.effective_from | format_datetime }}</td>
             <td class="p-3">
-              <span class="rule-status-badge inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ 'bg-emerald-900/60 text-emerald-300 border border-emerald-700/50' if r.is_active else 'bg-gray-700 text-gray-400' }}">
+              <span
+                class="rule-status-badge inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ 'bg-emerald-900/60 text-emerald-300 border border-emerald-700/50' if r.is_active else 'bg-gray-700 text-gray-400' }}">
                 {{ "نشطة" if r.is_active else "معطلة" }}
               </span>
             </td>
             <td class="p-3">
               <div class="flex items-center justify-center gap-2">
-                <button data-id="{{ r.id }}"
-                        data-label="{{ r.label }}"
-                        data-first-hour="{{ (r.first_hour_charge / 100) if r.first_hour_charge > 0 else (r.rate_per_hour / 100) }}"
-                        data-subsequent-hour="{{ (r.subsequent_hour_charge / 100) if r.first_hour_charge > 0 else (r.rate_per_hour / 100) }}"
-                        data-rate-per-hour="{{ r.rate_per_hour / 100 }}"
-                        data-grace="{{ r.grace_period_mins }}"
-                        data-min-charge="{{ r.minimum_charge / 100 }}"
-                        data-lost-penalty="{{ r.lost_card_penalty / 100 }}"
-                        onclick="handleEditBtnClick(this)"
-                        class="edit-action-btn bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs px-2.5 py-1 rounded transition flex items-center gap-1 shadow cursor-pointer">
-                  <span>✏️</span>
+                <button data-id="{{ r.id }}" data-label="{{ r.label }}"
+                  data-first-hour="{{ (r.first_hour_charge / 100) if r.first_hour_charge > 0 else (r.rate_per_hour / 100) }}"
+                  data-subsequent-hour="{{ (r.subsequent_hour_charge / 100) if r.first_hour_charge > 0 else (r.rate_per_hour / 100) }}"
+                  data-rate-per-hour="{{ r.rate_per_hour / 100 }}" data-grace="{{ r.grace_period_mins }}"
+                  data-min-charge="{{ r.minimum_charge / 100 }}" data-lost-penalty="{{ r.lost_card_penalty / 100 }}"
+                  onclick="handleEditBtnClick(this)"
+                  class="edit-action-btn bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs px-2.5 py-1 rounded transition flex items-center gap-1 shadow cursor-pointer">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10">
+                    </path>
+                  </svg>
                   <span>تعديل</span>
                 </button>
-                <button onclick="activateRule({{ r.id }})" class="activate-btn bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-2.5 py-1 rounded transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed" {% if r.is_active %}disabled{% endif %}>
+                <button onclick="activateRule({{ r.id }})"
+                  class="activate-btn bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-2.5 py-1 rounded transition cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                  {% if r.is_active %}disabled{% endif %}>
                   {{ t("admin.rates.activate") }}
                 </button>
               </div>
@@ -278,7 +332,7 @@
 
   // Arabic Indic digits helper
   function toArabic(num) {
-    const map = {'0':'٠','1':'١','2':'٢','3':'٣','4':'٤','5':'٥','6':'٦','7':'٧','8':'٨','9':'٩'};
+    const map = { '0': '٠', '1': '١', '2': '٢', '3': '٣', '4': '٤', '5': '٥', '6': '٦', '7': '٧', '8': '٨', '9': '٩' };
     return String(num).replace(/[0-9]/g, d => map[d] || d);
   }
 
@@ -341,12 +395,12 @@
   function openEditModal(id, label, firstHour, subsequentHour, ratePerHour, grace, minCharge, lostPenalty) {
     document.getElementById('edit-rate-id').value = id;
     document.getElementById('edit-rate-label').value = label;
-    document.getElementById('edit-rate-first-hour').value = Math.round(parseFloat(firstHour));
-    document.getElementById('edit-rate-subsequent-hour').value = Math.round(parseFloat(subsequentHour));
-    document.getElementById('edit-rate-per-hour').value = Math.round(parseFloat(ratePerHour));
+    document.getElementById('edit-rate-first-hour').value = parseFloat(firstHour).toFixed(2);
+    document.getElementById('edit-rate-subsequent-hour').value = parseFloat(subsequentHour).toFixed(2);
+    document.getElementById('edit-rate-per-hour').value = parseFloat(ratePerHour).toFixed(2);
     document.getElementById('edit-rate-grace').value = grace;
-    document.getElementById('edit-rate-min-charge').value = Math.round(parseFloat(minCharge));
-    document.getElementById('edit-rate-lost-penalty').value = Math.round(parseFloat(lostPenalty));
+    document.getElementById('edit-rate-min-charge').value = parseFloat(minCharge).toFixed(2);
+    document.getElementById('edit-rate-lost-penalty').value = parseFloat(lostPenalty).toFixed(2);
 
     document.getElementById('edit-modal-title').textContent = `تعديل التعريفة: ${label}`;
     document.getElementById('edit-form-error-msg').classList.add('hidden');
@@ -405,8 +459,8 @@
       // Update row in table
       const row = document.getElementById(`rule-row-${id}`);
       if (row) {
-        const firstHourFormatted = r.first_hour_charge > 0 ? `${Math.round(r.first_hour_charge/100)} ج.م` : `${Math.round(r.rate_per_hour/100)} ج.م`;
-        const subsequentFormatted = r.first_hour_charge > 0 ? `${Math.round(r.subsequent_hour_charge/100)} ج.م` : `${Math.round(r.rate_per_hour/100)} ج.م`;
+        const firstHourFormatted = r.first_hour_charge > 0 ? `${(r.first_hour_charge / 100).toFixed(2)} ج.م` : `${(r.rate_per_hour / 100).toFixed(2)} ج.م`;
+        const subsequentFormatted = r.first_hour_charge > 0 ? `${(r.subsequent_hour_charge / 100).toFixed(2)} ج.م` : `${(r.rate_per_hour / 100).toFixed(2)} ج.م`;
 
         const cellLabel = row.querySelector('.cell-label');
         if (cellLabel) cellLabel.textContent = r.label;
@@ -421,33 +475,33 @@
         if (cellGrace) cellGrace.textContent = `${toArabic(r.grace_period_mins)} دقيقة`;
 
         const cellMin = row.querySelector('.cell-min-charge');
-        if (cellMin) cellMin.textContent = `${Math.round(r.minimum_charge/100)} ج.م`;
+        if (cellMin) cellMin.textContent = `${(r.minimum_charge / 100).toFixed(2)} ج.م`;
 
         const cellLost = row.querySelector('.cell-lost-penalty');
-        if (cellLost) cellLost.textContent = `${Math.round(r.lost_card_penalty/100)} ج.م`;
+        if (cellLost) cellLost.textContent = `${(r.lost_card_penalty / 100).toFixed(2)} ج.م`;
 
         // Update data-* attributes on the edit button in this row
         const editBtn = row.querySelector('.edit-action-btn');
         if (editBtn) {
           editBtn.setAttribute('data-label', r.label);
-          editBtn.setAttribute('data-first-hour', Math.round(r.first_hour_charge/100));
-          editBtn.setAttribute('data-subsequent-hour', Math.round(r.subsequent_hour_charge/100));
-          editBtn.setAttribute('data-rate-per-hour', Math.round(r.rate_per_hour/100));
+          editBtn.setAttribute('data-first-hour', (r.first_hour_charge / 100).toFixed(2));
+          editBtn.setAttribute('data-subsequent-hour', (r.subsequent_hour_charge / 100).toFixed(2));
+          editBtn.setAttribute('data-rate-per-hour', (r.rate_per_hour / 100).toFixed(2));
           editBtn.setAttribute('data-grace', r.grace_period_mins);
-          editBtn.setAttribute('data-min-charge', Math.round(r.minimum_charge/100));
-          editBtn.setAttribute('data-lost-penalty', Math.round(r.lost_card_penalty/100));
+          editBtn.setAttribute('data-min-charge', (r.minimum_charge / 100).toFixed(2));
+          editBtn.setAttribute('data-lost-penalty', (r.lost_card_penalty / 100).toFixed(2));
         }
 
         // Also update quick edit button if it's the same rule
         const quickBtn = document.getElementById('quick-edit-active-btn');
         if (quickBtn && quickBtn.getAttribute('data-id') === String(id)) {
           quickBtn.setAttribute('data-label', r.label);
-          quickBtn.setAttribute('data-first-hour', Math.round(r.first_hour_charge/100));
-          quickBtn.setAttribute('data-subsequent-hour', Math.round(r.subsequent_hour_charge/100));
-          quickBtn.setAttribute('data-rate-per-hour', Math.round(r.rate_per_hour/100));
+          quickBtn.setAttribute('data-first-hour', (r.first_hour_charge / 100).toFixed(2));
+          quickBtn.setAttribute('data-subsequent-hour', (r.subsequent_hour_charge / 100).toFixed(2));
+          quickBtn.setAttribute('data-rate-per-hour', (r.rate_per_hour / 100).toFixed(2));
           quickBtn.setAttribute('data-grace', r.grace_period_mins);
-          quickBtn.setAttribute('data-min-charge', Math.round(r.minimum_charge/100));
-          quickBtn.setAttribute('data-lost-penalty', Math.round(r.lost_card_penalty/100));
+          quickBtn.setAttribute('data-min-charge', (r.minimum_charge / 100).toFixed(2));
+          quickBtn.setAttribute('data-lost-penalty', (r.lost_card_penalty / 100).toFixed(2));
         }
 
         // Highlight updated row
@@ -543,11 +597,11 @@
       const noRules = document.getElementById('no-rules-row');
       if (noRules) noRules.remove();
 
-      const firstHourVal = Math.round(r.first_hour_charge / 100);
-      const subsequentHourVal = Math.round(r.subsequent_hour_charge / 100);
-      const ratePerHourVal = Math.round(r.rate_per_hour / 100);
-      const minChargeVal = Math.round(r.minimum_charge / 100);
-      const lostPenaltyVal = Math.round(r.lost_card_penalty / 100);
+      const firstHourVal = (r.first_hour_charge / 100).toFixed(2);
+      const subsequentHourVal = (r.subsequent_hour_charge / 100).toFixed(2);
+      const ratePerHourVal = (r.rate_per_hour / 100).toFixed(2);
+      const minChargeVal = (r.minimum_charge / 100).toFixed(2);
+      const lostPenaltyVal = (r.lost_card_penalty / 100).toFixed(2);
 
       const firstHourFormatted = r.first_hour_charge > 0 ? `${firstHourVal} ج.م` : `${ratePerHourVal} ج.م`;
       const subsequentFormatted = r.first_hour_charge > 0 ? `${subsequentHourVal} ج.م` : `${ratePerHourVal} ج.م`;
@@ -581,7 +635,9 @@
                     data-lost-penalty="${lostPenaltyVal}"
                     onclick="handleEditBtnClick(this)"
                     class="edit-action-btn bg-emerald-600/80 hover:bg-emerald-500 text-white text-xs px-2.5 py-1 rounded transition flex items-center gap-1 shadow cursor-pointer">
-              <span>✏️</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"></path>
+              </svg>
               <span>تعديل</span>
             </button>
             <button onclick="activateRule(${r.id})" class="activate-btn bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-2.5 py-1 rounded transition cursor-pointer">
