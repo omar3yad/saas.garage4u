@@ -8,6 +8,7 @@ _ENV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
 
 class Settings(BaseSettings):
     DATABASE_URL: str
+    MIGRATION_DATABASE_URL: str | None = None
     SECRET_KEY: str
     ENVIRONMENT: Literal["development", "staging", "production"]
     DEBUG: bool = False
@@ -48,6 +49,14 @@ class Settings(BaseSettings):
             raise ValueError("EDGE_API_TOKEN must be at least 32 characters")
         if not 0.5 <= self.PLATE_CAPTURE_TIMEOUT_S <= 30:
             raise ValueError("PLATE_CAPTURE_TIMEOUT_S must be between 0.5 and 30")
+        if self.ENVIRONMENT == "production":
+            if not self.MIGRATION_DATABASE_URL:
+                raise ValueError("MIGRATION_DATABASE_URL must be provided in production")
+            if "pgms_migrator" not in self.MIGRATION_DATABASE_URL:
+                raise ValueError("MIGRATION_DATABASE_URL must use the pgms_migrator account in production")
+        else:
+            if not self.MIGRATION_DATABASE_URL:
+                self.MIGRATION_DATABASE_URL = self.DATABASE_URL
         return self
 
 @functools.lru_cache()
