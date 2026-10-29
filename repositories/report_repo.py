@@ -17,44 +17,48 @@ class ReportRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def count_active_sessions(self) -> int:
+    async def count_active_sessions(self, garage_id: int | None = None) -> int:
         """Counts parking sessions where status = 'ACTIVE'."""
-        result = await self.db.execute(
-            select(func.count(ParkingSession.id)).where(
-                ParkingSession.status == SessionStatus.ACTIVE
-            )
+        query = select(func.count(ParkingSession.id)).where(
+            ParkingSession.status == SessionStatus.ACTIVE
         )
+        if garage_id is not None:
+            query = query.where(ParkingSession.garage_id == garage_id)
+        result = await self.db.execute(query)
         return result.scalar_one_or_none() or 0
 
-    async def count_total_card_capacity(self) -> int:
+    async def count_total_card_capacity(self, garage_id: int | None = None) -> int:
         """Counts cards where status != 'DAMAGED'."""
-        result = await self.db.execute(
-            select(func.count(ParkingCard.id)).where(
-                ParkingCard.status != CardStatus.DAMAGED
-            )
+        query = select(func.count(ParkingCard.id)).where(
+            ParkingCard.status != CardStatus.DAMAGED
         )
+        if garage_id is not None:
+            query = query.where(ParkingCard.garage_id == garage_id)
+        result = await self.db.execute(query)
         return result.scalar_one_or_none() or 0
 
-    async def sum_revenue_today(self, start_utc: datetime, end_utc: datetime) -> int:
+    async def sum_revenue_today(self, start_utc: datetime, end_utc: datetime, garage_id: int | None = None) -> int:
         """Sums amount_charged for sessions COMPLETED or LOST_CARD exited within
         [start_utc, end_utc).
         """
-        result = await self.db.execute(
-            select(func.coalesce(func.sum(ParkingSession.amount_charged), 0)).where(
-                ParkingSession.status.in_(
-                    [SessionStatus.COMPLETED, SessionStatus.LOST_CARD]
-                ),
-                ParkingSession.exit_time >= start_utc,
-                ParkingSession.exit_time < end_utc,
-            )
+        query = select(func.coalesce(func.sum(ParkingSession.amount_charged), 0)).where(
+            ParkingSession.status.in_(
+                [SessionStatus.COMPLETED, SessionStatus.LOST_CARD]
+            ),
+            ParkingSession.exit_time >= start_utc,
+            ParkingSession.exit_time < end_utc,
         )
+        if garage_id is not None:
+            query = query.where(ParkingSession.garage_id == garage_id)
+        result = await self.db.execute(query)
         return int(result.scalar_one_or_none() or 0)
 
-    async def count_open_shifts(self) -> int:
+    async def count_open_shifts(self, garage_id: int | None = None) -> int:
         """Counts shifts where ended_at IS NULL."""
-        result = await self.db.execute(
-            select(func.count(Shift.id)).where(Shift.ended_at.is_(None))
-        )
+        query = select(func.count(Shift.id)).where(Shift.ended_at.is_(None))
+        if garage_id is not None:
+            query = query.where(Shift.garage_id == garage_id)
+        result = await self.db.execute(query)
         return result.scalar_one_or_none() or 0
 
     async def get_gate_panel(self) -> list[dict[str, Any]]:
@@ -202,6 +206,7 @@ class ReportRepository:
         start_utc: datetime | None,
         end_utc: datetime | None,
         operator_id: int | None = None,
+        garage_id: int | None = None,
     ) -> list[dict[str, Any]]:
         """Returns revenue and counts broken down by service type:
         1. Regular Tickets (Hourly / Casual)
@@ -215,6 +220,9 @@ class ReportRepository:
             "(is_subscribed = FALSE OR is_subscribed IS NULL)",
         ]
         ticket_params: dict[str, Any] = {}
+        if garage_id is not None:
+            ticket_clauses.append("garage_id = :garage_id")
+            ticket_params["garage_id"] = garage_id
         if start_utc is not None:
             ticket_clauses.append("exit_time >= :start_utc")
             ticket_params["start_utc"] = start_utc
@@ -236,6 +244,9 @@ class ReportRepository:
             "(is_lost_card = TRUE OR status = 'LOST_CARD' OR (lost_card_penalty_applied IS NOT NULL AND lost_card_penalty_applied > 0))"
         ]
         lost_params: dict[str, Any] = {}
+        if garage_id is not None:
+            lost_clauses.append("garage_id = :garage_id")
+            lost_params["garage_id"] = garage_id
         if start_utc is not None:
             lost_clauses.append("exit_time >= :start_utc")
             lost_params["start_utc"] = start_utc
@@ -255,6 +266,9 @@ class ReportRepository:
         # 3. Monthly Subscriptions
         sub_clauses = ["status = 'ACTIVE'"]
         sub_params: dict[str, Any] = {}
+        if garage_id is not None:
+            sub_clauses.append("garage_id = :garage_id")
+            sub_params["garage_id"] = garage_id
         if start_utc is not None:
             sub_clauses.append("paid_at >= :start_utc")
             sub_params["start_utc"] = start_utc

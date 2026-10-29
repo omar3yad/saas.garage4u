@@ -1,9 +1,9 @@
+from datetime import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, SmallInteger, ForeignKey, UniqueConstraint, CheckConstraint
+from sqlalchemy import String, SmallInteger, ForeignKey, UniqueConstraint, CheckConstraint, DateTime, func
 from database import Base
-from models.mixins import TimestampMixin
 
-class GarageGate(Base, TimestampMixin):
+class GarageGate(Base):
     __tablename__ = "garage_gates"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -13,6 +13,7 @@ class GarageGate(Base, TimestampMixin):
     gate_type: Mapped[str] = mapped_column(String(30), nullable=False, server_default="MANUAL_BIDIRECTIONAL")
     default_terminal_profile: Mapped[str] = mapped_column(String(30), nullable=False, server_default="DESKTOP_PC")
     paper_width_mm: Mapped[int] = mapped_column(SmallInteger, nullable=False, server_default="80")
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
 
     # Relationships
     garage: Mapped["Garage"] = relationship("Garage", back_populates="gates", foreign_keys=[garage_id])

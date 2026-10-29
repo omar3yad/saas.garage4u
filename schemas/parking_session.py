@@ -41,8 +41,11 @@ class PriceBreakdownResponse(BaseModel):
 class SessionResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
-    card_id: int
-    card_code: str
+    garage_id: int
+    receipt_no: int
+    ticket_code: str | None = None
+    card_id: int | None = None
+    card_code: str | None = None
     status: SessionStatus
     gate_number: int
     shift_id: int

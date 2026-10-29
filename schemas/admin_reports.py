@@ -75,7 +75,7 @@ class ReportFilters(BaseModel):
 
     start_date: date | None = None
     end_date: date | None = None
-    gate_number: int | None = Field(None, ge=1, le=5)
+    gate_number: int | None = Field(None, ge=1, le=10)
     operator_id: int | None = None
     status: SessionStatus | None = None
     card_code: str | None = Field(None, max_length=50)
@@ -94,7 +94,7 @@ class ShiftFilters(BaseModel):
     model_config = ConfigDict(from_attributes=False)
 
     operator_id: int | None = None
-    gate_number: int | None = Field(None, ge=1, le=5)
+    gate_number: int | None = Field(None, ge=1, le=10)
     status: Literal["open", "closed"] | None = None
     start_date: date | None = None
     end_date: date | None = None

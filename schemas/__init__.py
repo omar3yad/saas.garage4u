@@ -1,5 +1,43 @@
 from schemas.common import PaginatedResponse, ErrorResponse
-from schemas.user import UserBase, UserCreate, UserResponse, UserUpdatePassword
+from schemas.user import (
+    UserBase,
+    UserCreate,
+    UserResponse,
+    UserUpdatePassword,
+    UserUpdate,
+)
+from schemas.owner import (
+    OwnerBase,
+    OwnerCreate,
+    OwnerUpdate,
+    OwnerResponse,
+)
+from schemas.garage import (
+    GarageBase,
+    GarageCreate,
+    GarageUpdate,
+    GarageEntitlementsUpdate,
+    GarageResponse,
+)
+from schemas.garage_config import (
+    ReceiptSettingsSchema,
+    GarageConfigBase,
+    GarageConfigUpdate,
+    GarageConfigResponse,
+)
+from schemas.garage_gate import (
+    GarageGateBase,
+    GarageGateCreate,
+    GarageGateUpdate,
+    GarageGateResponse,
+)
+from schemas.edge_device import (
+    EdgeDeviceCreate,
+    EdgeDeviceResponse,
+    EdgeDeviceTokenResponse,
+    EdgeDeviceGateAssign,
+    EdgeDeviceGateResponse,
+)
 from schemas.auth import LoginRequest, LoginResponse, TokenPayload
 from schemas.audit_log import AuditLogResponse
 from schemas.parking_card import (
@@ -66,6 +104,29 @@ __all__ = [
     "UserCreate",
     "UserResponse",
     "UserUpdatePassword",
+    "UserUpdate",
+    "OwnerBase",
+    "OwnerCreate",
+    "OwnerUpdate",
+    "OwnerResponse",
+    "GarageBase",
+    "GarageCreate",
+    "GarageUpdate",
+    "GarageEntitlementsUpdate",
+    "GarageResponse",
+    "ReceiptSettingsSchema",
+    "GarageConfigBase",
+    "GarageConfigUpdate",
+    "GarageConfigResponse",
+    "GarageGateBase",
+    "GarageGateCreate",
+    "GarageGateUpdate",
+    "GarageGateResponse",
+    "EdgeDeviceCreate",
+    "EdgeDeviceResponse",
+    "EdgeDeviceTokenResponse",
+    "EdgeDeviceGateAssign",
+    "EdgeDeviceGateResponse",
     "LoginRequest",
     "LoginResponse",
     "TokenPayload",

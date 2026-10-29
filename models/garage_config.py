@@ -1,10 +1,10 @@
+from datetime import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, SmallInteger, ForeignKey, UniqueConstraint, CheckConstraint, JSON
+from sqlalchemy import String, Integer, SmallInteger, ForeignKey, UniqueConstraint, CheckConstraint, JSON, DateTime, func
 from sqlalchemy.dialects.postgresql import JSONB
 from database import Base
-from models.mixins import TimestampMixin
 
-class GarageConfig(Base, TimestampMixin):
+class GarageConfig(Base):
     __tablename__ = "garage_configs"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -21,6 +21,7 @@ class GarageConfig(Base, TimestampMixin):
         server_default='{"header_title": "جراج سيارات", "header_subtitle": "أهلاً بكم", "footer_terms": "الجراج غير مسؤول عن محتويات السيارات الداخلية", "show_qr_code": true}',
     )
     version: Mapped[int] = mapped_column(Integer, nullable=False, server_default="1", default=1)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
     # Relationships
     garage: Mapped["Garage"] = relationship("Garage", back_populates="config", foreign_keys=[garage_id])

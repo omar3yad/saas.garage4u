@@ -12,6 +12,7 @@ class ShiftCloseRequest(BaseModel):
 class ShiftResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
+    garage_id: int
     operator_id: int
     gate_number: int
     started_at: datetime
@@ -25,6 +26,7 @@ class ShiftResponse(BaseModel):
 class ShiftSummaryResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     shift_id: int
+    garage_id: int
     operator_id: int
     gate_number: int
     started_at: datetime

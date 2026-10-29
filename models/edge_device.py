@@ -1,10 +1,9 @@
 from datetime import datetime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, SmallInteger, ForeignKey, UniqueConstraint, CheckConstraint, ForeignKeyConstraint, func
+from sqlalchemy import String, SmallInteger, ForeignKey, UniqueConstraint, CheckConstraint, ForeignKeyConstraint, DateTime, func
 from database import Base
-from models.mixins import TimestampMixin
 
-class EdgeDevice(Base, TimestampMixin):
+class EdgeDevice(Base):
     __tablename__ = "edge_devices"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -13,6 +12,7 @@ class EdgeDevice(Base, TimestampMixin):
     token_hash: Mapped[str] = mapped_column(String(128), unique=True, nullable=False)
     revoked_at: Mapped[datetime | None] = mapped_column(nullable=True)
     last_seen_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
 
     # Relationships
     garage: Mapped["Garage"] = relationship("Garage", foreign_keys=[garage_id])
