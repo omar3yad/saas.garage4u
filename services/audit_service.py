@@ -11,12 +11,15 @@ class AuditService:
 
     async def log(
         self,
-        actor_id: int,
+        actor_id: int | None,
         action: str,
         entity_type: str,
         entity_id: int,
         before: dict | None = None,
         after: dict | None = None,
+        actor_type: str = "user",
+        garage_id: int | None = None,
+        owner_id: int | None = None,
     ) -> None:
         try:
             payload_before = None
@@ -40,6 +43,9 @@ class AuditService:
                 entity_id=entity_id,
                 payload_before=payload_before,
                 payload_after=payload_after,
+                actor_type=actor_type,
+                garage_id=garage_id,
+                owner_id=owner_id,
             )
         except Exception as e:
             logger.error("Failed to write audit log: %s", str(e), exc_info=True)

@@ -36,6 +36,7 @@ async def lifespan(app: FastAPI):
         from services.audit_service import AuditService
 
         async with AsyncSessionLocal() as session:
+            session.info["is_system"] = True
             sub_repo = SubscriptionRepository(session)
             plan_repo = SubscriptionPlanRepository(session)
             audit_svc = AuditService(session)
@@ -51,7 +52,7 @@ async def lifespan(app: FastAPI):
 
             if expired_count > 0 or activated_count > 0:
                 await audit_svc.log(
-                    actor_id=1,
+                    actor_id=None,
                     action="SUBSCRIPTIONS_BULK_EXPIRED",
                     entity_type="system",
                     entity_id=0,
@@ -60,6 +61,9 @@ async def lifespan(app: FastAPI):
                         "expired_count": expired_count,
                         "activated_count": activated_count,
                     },
+                    actor_type="system",
+                    garage_id=None,
+                    owner_id=None,
                 )
                 await session.commit()
             logger.info(

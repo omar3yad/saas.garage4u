@@ -39,6 +39,31 @@ else:
         max_overflow=settings.DB_MAX_OVERFLOW,
     )
 
+from sqlalchemy import text
+from sqlalchemy.orm import Session
+
+@event.listens_for(Session, "after_begin")
+def receive_after_begin(session, transaction, connection):
+    """Synchronous session event listener to inject PostgreSQL transaction-local RLS settings."""
+    if connection.dialect.name != "postgresql":
+        return
+    info = session.info
+    garage_id_str = str(info.get("garage_id")) if info.get("garage_id") is not None else ""
+    owner_id_str = str(info.get("owner_id")) if info.get("owner_id") is not None else ""
+    is_super_admin_str = "true" if info.get("is_super_admin") else "false"
+    is_system_str = "true" if (info.get("is_system") or info.get("is_system_context")) else "false"
+
+    connection.execute(
+        text("""
+            SELECT 
+                set_config('app.current_garage_id', :gid, true),
+                set_config('app.current_owner_id', :oid, true),
+                set_config('app.is_super_admin', :isa, true),
+                set_config('app.is_system_context', :sys, true);
+        """),
+        {"gid": garage_id_str, "oid": owner_id_str, "isa": is_super_admin_str, "sys": is_system_str}
+    )
+
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,
     class_=AsyncSession,

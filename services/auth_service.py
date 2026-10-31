@@ -45,9 +45,31 @@ class AuthService:
             raise AuthenticationError("Token is invalid or expired")
 
     async def authenticate_user(
-        self, username: str, password: str, user_repo: UserRepository
+        self, username: str, password: str, user_repo: UserRepository, garage_code: str | None = None
     ) -> User:
-        user = await user_repo.get_by_username(username.strip())
+        user: User | None = None
+        if garage_code:
+            from repositories.garage_repo import GarageRepository
+            garage_repo = GarageRepository(user_repo.db)
+            garage = await garage_repo.get_by_code(garage_code.strip())
+            if not garage:
+                self.verify_password("dummy", DUMMY_HASH)
+                raise AuthenticationError("Invalid credentials")
+            user = await user_repo.get_by_username(username.strip(), garage_id=garage.id)
+        else:
+            # Check if multiple users exist with this username across garages
+            from sqlalchemy import select, func
+            stmt = select(User).where(func.lower(User.username) == username.strip().lower())
+            result = await user_repo.db.execute(stmt)
+            matched_users = result.scalars().all()
+            if len(matched_users) > 1:
+                self.verify_password("dummy", DUMMY_HASH)
+                raise AuthenticationError("Garage code is required when username exists across multiple garages")
+            elif len(matched_users) == 1:
+                user = matched_users[0]
+            else:
+                user = await user_repo.get_by_username(username.strip())
+
         if not user:
             self.verify_password("dummy", DUMMY_HASH)
             raise AuthenticationError("Invalid credentials")

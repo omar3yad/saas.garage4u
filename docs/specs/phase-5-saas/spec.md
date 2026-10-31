@@ -1,5 +1,5 @@
 # مواصفة معمارية الانتقال إلى منصة SaaS السحابية متعددة الملاك والمستأجرين
-# (Phase 5: Multi-Owner, Multi-Garage, Configuration-Driven SaaS Architecture Spec)
+# (Phase 5: Multi-Owner, Multi-Garage, Configuration-Driven SaaS Architecture Spec — v2.3)
 
 ---
 
@@ -323,13 +323,14 @@ CREATE TABLE edge_device_gates (
     created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT uq_device_gate_direction UNIQUE (device_id, garage_id, gate_number, direction),
-    CONSTRAINT uq_gate_direction_active UNIQUE (garage_id, gate_number, direction),
     CONSTRAINT fk_edg_device FOREIGN KEY (device_id, garage_id) 
         REFERENCES edge_devices(id, garage_id) ON DELETE RESTRICT,
     CONSTRAINT fk_edg_gate FOREIGN KEY (garage_id, gate_number) 
         REFERENCES garage_gates(garage_id, gate_number) ON DELETE RESTRICT
 );
 
+-- فهرس فريد جزئي للبوابات النشطة فقط لتمكين تسجيل أجهزة وكاميرات احتياطية (Standby) بنفس البوابة والاتجاه دون تعارض:
+CREATE UNIQUE INDEX uq_gate_direction_active ON edge_device_gates (garage_id, gate_number, direction) WHERE is_active = TRUE;
 CREATE INDEX idx_edg_lookup ON edge_device_gates(garage_id, gate_number);
 ```
 
@@ -622,7 +623,7 @@ ALTER TABLE audit_logs FORCE ROW LEVEL SECURITY;
 - **`garages`:** مستثنى لأن فحص الصلاحية وقراءة `garage.status` مطلوب قبل إنشاء سياق الجراج، وللبحث عن الجراج بكوده `code`.
 - **`users`:** مستثنى لأن عملية تسجيل الدخول تبحث عن المستخدم وتتحقق من هويته بالاسم قبل معرفة الجراج أو إنشاء سياق الجلسة. يتم تأمين جدول `users` عبر الـ Scoped Repositories البرمجية التي تلزم بوجود `WHERE garage_id = :gid`.
 - **`garage_counters`:** يُدار حصراً باستعلام ذري مرمز داخل دالة الـ Service داخل المعاملة.
-- **`edge_devices` (قرار معماري حاسم):** مستثنى لأن وكلاء الكاميرات عند مصافحة الـ WebSocket أو رفع الصور عبر `/api/v1/edge/upload-capture` يرسلون التوكن في `X-Edge-Token` ويجب البحث عن الجهاز بالـ `token_hash` قبل معرفة الجراج التابع له وقبل إمكانية ضبط سياق المعاملة. تفعيل الـ RLS عليه كان سيعيد 0 صفوف دائماً ويعطل الكاميرات بالكامل. يتم تأمين جدول `edge_devices` عبر القيد الفريد `token_hash VARCHAR(64) UNIQUE NOT NULL`، وفور مطابقة التوكن يتم استخراج `device.garage_id` وضبط سياق الجراج فوراً على الجلسة لتخضع كافة العمليات التالية (`edge_device_gates`, `parking_sessions`, `audit_logs`) للـ RLS الكامل. وفي مسارات إدارة الكاميرات للمديرين والملاك يُلزم المستودع بشرط `WHERE garage_id = :gid`.
+- **`edge_devices` (قرار معماري حاسم):** مستثنى لأن وكلاء الكاميرات عند مصافحة الـ WebSocket أو رفع الصور عبر `/api/v1/edge/upload-capture` يرسلون التوكن في `X-Edge-Token` ويجب البحث عن الجهاز بالـ `token_hash` قبل معرفة الجراج التابع له وقبل إمكانية ضبط سياق المعاملة. تفعيل الـ RLS عليه كان سيعيد 0 صفوف دائماً ويعطل الكاميرات بالكامل. يتم تأمين جدول `edge_devices` عبر القيد الفريد `token_hash VARCHAR(128) UNIQUE NOT NULL`، وفور مطابقة التوكن يتم استخراج `device.garage_id` وضبط سياق الجراج فوراً على الجلسة لتخضع كافة العمليات التالية (`edge_device_gates`, `parking_sessions`, `audit_logs`) للـ RLS الكامل. وفي مسارات إدارة الكاميرات للمديرين والملاك يُلزم المستودع بشرط `WHERE garage_id = :gid`.
 
 #### 3. السياسات الصريحة المحددة بالاسم لكل جدول (Inline Safe Casting):
 
@@ -733,7 +734,8 @@ CREATE POLICY rls_policy_audit ON audit_logs FOR ALL
 - **طبيعة العمليات:** قراءة وإدارة وتحليلات فقط. **لا تحتوي على مسارات تسجيل دخول مركبات (`entry`) أو فتح ورديات كاشير (`shift open`)** لأن هذه العمليات ميدانية تخص المشغلين.
 - **حل شاشات المالك في المتصفح (Jinja2 SSR UI):**  
   - عند اختيار المالك لجراج من الـ Switcher، يُسجل في كوكيز آمنة `pgms_active_garage=<garage_id>; HttpOnly; SameSite=Lax`.
-  - لحماية الـ POST/PATCH من هجمات الـ CSRF عند استخدام الكوكيز، يُلزم النظام بوجود رمز حماية CSRF Token (`_csrf_token` في حقول النماذج أو `X-CSRF-Token` في الترويسات) يتم التحقق منه في كل طلب تغيير.
+  - لحماية الـ POST/PATCH/DELETE من هجمات الـ CSRF عند استخدام الكوكيز، يُلزم النظام بوجود رمز حماية CSRF Token (`_csrf_token` في حقول النماذج أو `X-CSRF-Token` في الترويسات) في مسارات المتصفح (`/ui/*`).
+  - **نطاق واستثناءات وسيط الـ CSRF:** يُطبق وسيط الـ CSRF حصراً على طلبات واجهة المستخدم المتصفحية المستندة إلى الكوكيز (`/ui/*`)؛ ويتم استثناء مسارات الـ REST API عديمة الحالة (`/api/v1/*`)، ومسارات وكلاء الكاميرات المحلية والأجهزة المعتمدة على التوكن (`/api/v1/edge/*`)، ومصافحة اتصالات الـ WebSocket (`/ws/*`).
   - عند تصفح صفحات الإدارة الحالية `/ui/admin/shifts`, `/ui/admin/reports`, `/ui/admin/sessions`، تتحقق تبعية `get_tenant_context` في **كل طلب** من ملكية المالك للجراج المحدد بالكوكيز، مما يمنع التلاعب برقم الجراج ويسمح للقوالب الحالية بالعمل بكفاءة دون تعديل روابطها الداخلية.
   - مسارات الـ REST APIs تستمر بفرض المسار الصريح: `/api/v1/garages/{garage_id}/*` وتتجاهل الكوكيز تماماً لمنع أي تضارب.
 - **مكون مبدل الجراجات (`Garage Switcher`) في `base_admin.html`:**  
@@ -748,10 +750,10 @@ CREATE POLICY rls_policy_audit ON audit_logs FOR ALL
    كافة العمليات مصرح بها بالكامل.
 2. **في حال تعليق الجراج (`garage.status == 'SUSPENDED'`) أو تأخر الفاتورة (`billing_status == 'PAST_DUE'`):**  
    - يدخل الجراج تلقائياً في **وضع الخروج فقط (`TENANT_SUSPENDED_EXIT_ONLY`)**:
-     - يُمنع دخول أي سيارات جديدة (`POST /sessions/entry` يعيد `403 TENANT_SUSPENDED`).
-     - يُمنع فتح أي وردية جديدة (`POST /shifts/open` يعيد `403 TENANT_SUSPENDED`).
+     - يُمنع دخول أي سيارات جديدة (`POST /sessions/entry` يعيد `403 TENANT_SUSPENDED` في حال تعليق الجراج إدارياً، أو `403 BILLING_PAST_DUE` في حال تعليق بسبب فاتورة المالك المتأخرة).
+     - يُمنع فتح أي وردية جديدة (`POST /shifts/open` يعيد `403 TENANT_SUSPENDED` أو `403 BILLING_PAST_DUE`).
      - **يُسمح حصراً بتسجيل خروج السيارات المتواجدة بالفعل داخل الجراج واحتساب رسومها وطباعة المخالصة** لحماية سيارات المواطنين ومنع احتجازها.
-     - واجهة الإدارة `/ui/admin/*` تتحول لوضع القراءة فقط (`Read-Only`) وتمنع أي تعديل على التسعيرات أو المشتركين بكود `403 TENANT_SUSPENDED`.
+     - واجهة الإدارة `/ui/admin/*` تتحول لوضع القراءة فقط (`Read-Only`) وتمنع أي تعديل على التسعيرات أو المشتركين بكود `403 TENANT_SUSPENDED` أو `403 BILLING_PAST_DUE`.
 3. **في حال إنهاء التعاقد (`garage.status == 'TERMINATED'`):**  
    يُحجب النظام بالكامل وتُمنع كافة العمليات التشغيلية والإدارية.
 
@@ -821,7 +823,7 @@ CREATE POLICY rls_policy_audit ON audit_logs FOR ALL
 - **مع الكروت البلاستيكية (`REUSABLE_CARDS`):**
   - **منع تكرار المسح المزدوج (Debounce & Concurrency Locks):**
     - الضمان الفيزيائي الذري: الفهرس الجزئي في قاعدة البيانات `idx_garage_active_card_id` على `(garage_id, card_id) WHERE status = 'ACTIVE'` لمنع فتح جلستين متزامنتين لنفس الكارت عبر أكثر من Worker.
-    - قفل المعاملة البرمجي السريع: استخدام `SELECT pg_try_advisory_xact_lock(hashtext('card:' || card_id::text))` لرفض أي طلب موازي لنفس الكارت في أجزاء من الثانية دون استنزاف مجمع الاتصالات.
+    - قفل المعاملة البرمجي السريع: استخدام القفل الاستشاري المزدوج الأصلي `SELECT pg_try_advisory_xact_lock(:garage_id, :card_id)` (حيث تقبل دالة `pg_try_advisory_xact_lock(int4, int4)` رقم الجراج ورقم الكارت كأعداد صحيحة 32-bit مباشرة لمنع التصادم التام دون الحاجة لتجزئة نصية hashtext) لرفض أي طلب موازي لنفس الكارت في أجزاء من الثانية دون استنزاف مجمع الاتصالات.
     - قفل تكرار في الواجهة (Client Debounce) لمدة 3 ثوانٍ يمنع إرسال طلبات مكررة لنفس المسحة.
   - **الحد الأدنى لمدة الجلسة (`min_session_duration_seconds`):**
     - إذا كان الوقت المنقضي أقل من `min_session_duration_seconds` المحددة للجراج (المجال 30 إلى 600 ثانية، الافتراضي 60 ثانية):
@@ -1172,7 +1174,8 @@ flowchart TD
 | :--- | :---: | :--- | :--- |
 | **`TENANT_NOT_FOUND`** | `404` | الجراج غير موجود، أو موجود ولا يملكه المستخدم الحالي (يُستخدم أيضاً لمنع IDOR). | التأكد من مسار الرابط أو مراجعة قائمة جراجات المالك. |
 | **`CARD_NOT_FOUND`** | `404` | الكارت غير مسجل في نطاق الجراج الحالي. | رفض الحركة وتنبيه المشغل صوتياً ومرئياً. |
-| **`TENANT_SUSPENDED`** | `403` | الجراج معلق؛ يُمنع تسجيل دخول مركبات جديدة أو فتح ورديات جديدة (وضع الخروج فقط سارٍ). | يُسمح بخروج السيارات الموجودة وسداد رسومها، ومراجعة إدارة المنصة لتسوية الحساب. |
+| **`TENANT_SUSPENDED`** | `403` | الجراج معلق إدارياً؛ يُمنع تسجيل دخول مركبات جديدة أو فتح ورديات جديدة (وضع الخروج فقط سارٍ). | يُسمح بخروج السيارات الموجودة وسداد رسومها، ومراجعة إدارة المنصة لتسوية الحساب. |
+| **`BILLING_PAST_DUE`** | `403` | اشتراك المالك متأخر السداد (`PAST_DUE`)؛ يُمنع تسجيل دخول مركبات جديدة أو فتح ورديات جديدة (وضع الخروج فقط سارٍ لحماية سيارات المواطنين). | سداد الفاتورة المستحقة عبر لوحة المالك أو التواصل مع إدارة المنصة. |
 | **`TENANT_TERMINATED`** | `403` | إنهاء التعاقد وإغلاق الجراج نهائياً؛ حجب كافة العمليات. | مراجعة إدارة المنصة. |
 | **`PASSWORD_CHANGE_REQUIRED`** | `403` | الحساب ملزم بتغيير كلمة المرور المؤقتة (`must_change_password=True`)؛ تُحجب كافة المسارات عدا مسار التغيير. | التوجه لمسار `/auth/change-password` لتعيين كلمة مرور جديدة. |
 | **`PRIVILEGE_ESCALATION_DENIED`** | `403` | محاولة مستخدم إنشاء أو ترقية مستخدم برتبة تماثله أو تعلوه أو إسناده لجراج خارج نطاق صلاحياته. | رفض العملية وتوثيقها في سجل التدقيق الأمني. |
@@ -1181,11 +1184,11 @@ flowchart TD
 | **`CONFIG_VERSION_CONFLICT`** | `409` | تعارض في حفظ التكوين نتيجة تعديل متزامن (Optimistic Lock). | إعادة تحميل أحدث نسخة من التكوين وتكرار التعديل. |
 | **`SHORT_SESSION_CONFIRMATION_REQUIRED`** | `409` | محاولة إغلاق جلسة على بوابة مدمجة بدأت منذ أقل من الحد الأدنى `min_session_duration_seconds` دون تمرير `confirm_short_session=True`. | طلب تأكيد يدوي صريح من المشغل قبل الإغلاق. |
 | **`EDGE_AUTH_FAILED`** | `401` / `1008` | التوكن المرسل في `X-Edge-Token` غير صالح أو تم إبطاله. | إعادة إصدار التوكن وربطه بالجهاز المحلي. |
-| **`RAPID_DOUBLE_SCAN`** | `429` | فشل الحصول على القفل الاستشاري `pg_try_advisory_xact_lock` للبطاقة بسبب مسح مزدوج سريع خلال أجزاء من الثانية. | الانتظار لثوانٍ معدودة قبل إعادة المسح. |
+| **`RAPID_DOUBLE_SCAN`** | `429` | فشل الحصول على القفل الاستشاري المزدوج `pg_try_advisory_xact_lock(garage_id, card_id)` للبطاقة بسبب مسح مزدوج سريع خلال أجزاء من الثانية. | الانتظار لثوانٍ معدودة قبل إعادة المسح. |
 | **`EXIT_PHOTO_REQUIRES_ANPR`** | `422` | محاولة تفعيل التقاط صور الخروج `exit_photo_enabled` مع تعطيل نظام التعرف على اللوحات `anpr_enabled`. | تفعيل نظام الـ ANPR أولاً أو تعطيل صور الخروج. |
 | **`MAX_GATES_EXCEEDED`** | `422` | محاولة إضافة بوابات تتجاوز الحد المرخص للجراج `max_gates`. | مراجعة رخصة الجراج عبر السوبر أدمن. |
 | **`MAX_GARAGES_EXCEEDED`** | `422` | محاولة المالك إنشاء جراجات تتجاوز حصة باقته `max_garages_allowed`. | ترقية باقة اشتراك المالك. |
-| **`CSRF_TOKEN_INVALID`** | `403` | رمز التحقق ضد التزوير مفقود أو غير مطابق في طلبات المتصفح. | تجديد الصفحة وإعادة إرسال النموذج. |
+| **`CSRF_TOKEN_INVALID`** | `403` | رمز التحقق ضد التزوير مفقود أو غير مطابق في طلبات المتصفح (`/ui/*`). | تجديد الصفحة وإعادة إرسال النموذج. |
 
 ---
 
