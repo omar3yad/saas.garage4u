@@ -6,13 +6,14 @@ from pydantic import BeforeValidator
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import FileResponse, RedirectResponse
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config import get_settings
 from database import get_db
 from models import (
     AuditLog,
+    ParkingSession,
     PricingRule,
     SessionStatus,
     Shift,
@@ -21,6 +22,8 @@ from models import (
 )
 from repositories import (
     AdminShiftRepository,
+    GarageGateRepository,
+    GarageRepository,
     ParkingSessionRepository,
     PricingRuleRepository,
     ReportRepository,
@@ -39,6 +42,7 @@ from services import (
 from utils.time import cairo_now
 
 router = APIRouter(prefix="/ui/admin", tags=["ui-admin"])
+owner_ui_router = APIRouter(prefix="/ui/owner", tags=["ui-owner"])
 
 
 # ---------------------------------------------------------------------------
@@ -73,12 +77,158 @@ async def require_admin_ui(
         )
     user_repo = UserRepository(db)
     user = await user_repo.get_by_id(user_id)
-    if not user or not user.is_active or user.role != UserRole.ADMIN:
+    allowed_roles = (
+        UserRole.SUPER_ADMIN,
+        UserRole.OWNER,
+        UserRole.MANAGER,
+        UserRole.ADMIN,
+    )
+    if not user or not user.is_active or user.role not in allowed_roles:
         raise HTTPException(
             status_code=303,
             headers={"Location": f"/ui/login?next={request.url.path}"},
         )
     return user
+
+
+async def get_ui_context(
+    request: Request,
+    current_user: User,
+    db: AsyncSession,
+) -> dict:
+    """Helper to populate multi-tenant context into UI templates."""
+    garage_repo = GarageRepository(db)
+    gate_repo = GarageGateRepository(db)
+    owned_garages = []
+    active_garage = None
+    garage_id = None
+
+    if current_user.role == UserRole.OWNER and current_user.owner_id:
+        owned_garages = await garage_repo.get_by_owner(current_user.owner_id)
+        cookie_gid = request.cookies.get("pgms_active_garage")
+        if cookie_gid:
+            try:
+                gid = int(cookie_gid)
+                for g in owned_garages:
+                    if g.id == gid:
+                        active_garage = g
+                        garage_id = g.id
+                        break
+            except Exception:
+                pass
+        if not active_garage and owned_garages:
+            active_garage = owned_garages[0]
+            garage_id = active_garage.id
+    elif current_user.garage_id:
+        garage_id = current_user.garage_id
+        active_garage = await garage_repo.get_by_id(garage_id)
+    elif current_user.role == UserRole.SUPER_ADMIN:
+        cookie_gid = request.cookies.get("pgms_active_garage")
+        if cookie_gid:
+            try:
+                garage_id = int(cookie_gid)
+                active_garage = await garage_repo.get_by_id(garage_id)
+            except Exception:
+                pass
+
+    garage_gates = []
+    if garage_id:
+        garage_gates = await gate_repo.get_by_garage(garage_id)
+
+    csrf_token = (
+        getattr(request.state, "csrf_token", "")
+        or request.cookies.get("pgms_csrf_token", "")
+    )
+
+    return {
+        "request": request,
+        "user": current_user,
+        "owned_garages": owned_garages,
+        "active_garage": active_garage,
+        "garage_gates": garage_gates,
+        "csrf_token": csrf_token,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Task 10.2: Switch Garage Endpoint (Protected with CSRF)
+# ---------------------------------------------------------------------------
+
+
+@router.post("/switch-garage")
+async def switch_garage(
+    request: Request,
+    current_user: User = Depends(require_admin_ui),
+    db: AsyncSession = Depends(get_db),
+):
+    garage_id = None
+    content_type = request.headers.get("content-type", "")
+    if "application/json" in content_type:
+        try:
+            body = await request.json()
+            garage_id = body.get("garage_id")
+        except Exception:
+            pass
+    if garage_id is None:
+        try:
+            form = await request.form()
+            garage_id = form.get("garage_id")
+        except Exception:
+            pass
+    if garage_id is None:
+        garage_id = request.query_params.get("garage_id")
+
+    if garage_id is None:
+        raise HTTPException(
+            status_code=400,
+            detail="garage_id is required",
+            headers={"X-Error-Code": "BAD_REQUEST"},
+        )
+
+    try:
+        garage_id = int(garage_id)
+    except (ValueError, TypeError):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid garage_id",
+            headers={"X-Error-Code": "BAD_REQUEST"},
+        )
+
+    garage_repo = GarageRepository(db)
+    if current_user.role == UserRole.OWNER:
+        garage = await garage_repo.get_by_id(garage_id, owner_id=current_user.owner_id)
+        if not garage:
+            raise HTTPException(
+                status_code=404,
+                detail="Garage not found",
+                headers={"X-Error-Code": "TENANT_NOT_FOUND"},
+            )
+    elif current_user.role == UserRole.SUPER_ADMIN:
+        garage = await garage_repo.get_by_id(garage_id)
+        if not garage:
+            raise HTTPException(
+                status_code=404,
+                detail="Garage not found",
+                headers={"X-Error-Code": "TENANT_NOT_FOUND"},
+            )
+    elif current_user.role in (UserRole.MANAGER, UserRole.ADMIN):
+        if garage_id != current_user.garage_id:
+            raise HTTPException(
+                status_code=404,
+                detail="Garage not found",
+                headers={"X-Error-Code": "TENANT_NOT_FOUND"},
+            )
+
+    referer = request.headers.get("referer") or "/ui/admin/dashboard"
+    response = RedirectResponse(url=referer, status_code=303)
+    response.set_cookie(
+        key="pgms_active_garage",
+        value=str(garage_id),
+        httponly=True,
+        samesite="lax",
+        path="/",
+    )
+    return response
 
 
 # ---------------------------------------------------------------------------
@@ -135,12 +285,12 @@ async def admin_dashboard(
     except Exception:
         pass
 
+    ui_ctx = await get_ui_context(request, current_user, db)
     templates = request.app.state.templates
     return templates.TemplateResponse(
         "admin/dashboard.html",
         {
-            "request": request,
-            "user": current_user,
+            **ui_ctx,
             "stats": stats,
             "gates": gates,
             "today_shifts": today_shifts,
@@ -216,12 +366,12 @@ async def admin_shifts_page(
     )
     all_operators = all_operators_res.scalars().all()
 
+    ui_ctx = await get_ui_context(request, current_user, db)
     templates = request.app.state.templates
     return templates.TemplateResponse(
         "admin/shifts.html",
         {
-            "request": request,
-            "user": current_user,
+            **ui_ctx,
             "shifts": shifts,
             "total": total,
             "page": page,
@@ -360,12 +510,12 @@ async def admin_sessions_page(
     )
     all_operators = all_operators_res.scalars().all()
 
+    ui_ctx = await get_ui_context(request, current_user, db)
     templates = request.app.state.templates
     return templates.TemplateResponse(
         "admin/sessions.html",
         {
-            "request": request,
-            "user": current_user,
+            **ui_ctx,
             "sessions": sessions,
             "total": total,
             "page": page,
@@ -514,12 +664,12 @@ async def admin_revenue_report_page(
     )
     all_operators = all_operators_res.scalars().all()
 
+    ui_ctx = await get_ui_context(request, current_user, db)
     templates = request.app.state.templates
     return templates.TemplateResponse(
         "admin/reports/revenue.html",
         {
-            "request": request,
-            "user": current_user,
+            **ui_ctx,
             "filters": filters,
             "summary": summary,
             "by_gate": by_gate,
@@ -776,4 +926,89 @@ async def admin_cards_page(
             "search": search or "",
         },
     )
+
+
+# ---------------------------------------------------------------------------
+# Task 10.4: Owner Fleet Dashboard Endpoint
+# ---------------------------------------------------------------------------
+
+
+@owner_ui_router.get("/dashboard")
+async def owner_dashboard_page(
+    request: Request,
+    current_user: User = Depends(require_admin_ui),
+    db: AsyncSession = Depends(get_db),
+):
+    if current_user.role not in (UserRole.OWNER, UserRole.SUPER_ADMIN):
+        if current_user.role == UserRole.MANAGER:
+            return RedirectResponse("/ui/admin/dashboard", status_code=303)
+        return RedirectResponse("/ui/operator/dashboard", status_code=303)
+
+    garage_repo = GarageRepository(db)
+    session_repo = ParkingSessionRepository(db)
+
+    if current_user.role == UserRole.SUPER_ADMIN:
+        garages, _ = await garage_repo.get_all(page=1, size=100)
+    else:
+        garages = await garage_repo.get_by_owner(current_user.owner_id)
+
+    from datetime import datetime, time
+    today = cairo_now().date()
+    today_start = datetime.combine(today, time.min)
+
+    garages_stats = []
+    total_active_sessions = 0
+    total_revenue = 0.0
+
+    for g in garages:
+        active_count = await session_repo.count_active(g.id)
+        # Revenue today
+        res = await db.execute(
+            select(func.coalesce(func.sum(ParkingSession.amount_charged), 0.0)).where(
+                ParkingSession.garage_id == g.id,
+                ParkingSession.status == SessionStatus.COMPLETED,
+                ParkingSession.exit_time >= today_start,
+            )
+        )
+        rev = float(res.scalar() or 0.0)
+
+        cap = g.capacity or 100
+        occ_rate = round((active_count / cap) * 100, 1) if cap > 0 else 0.0
+
+        garages_stats.append({
+            "garage": g,
+            "active_sessions": active_count,
+            "capacity": cap,
+            "occupancy_rate": occ_rate,
+            "today_revenue": rev,
+        })
+        total_active_sessions += active_count
+        total_revenue += rev
+
+    csrf_token = (
+        getattr(request.state, "csrf_token", "")
+        or request.cookies.get("pgms_csrf_token", "")
+    )
+
+    templates = request.app.state.templates
+    return templates.TemplateResponse(
+        request,
+        "owner/dashboard.html",
+        {
+            "request": request,
+            "user": current_user,
+            "garages_stats": garages_stats,
+            "total_garages": len(garages),
+            "total_active_sessions": total_active_sessions,
+            "total_revenue": total_revenue,
+            "today": today,
+            "csrf_token": csrf_token,
+        },
+    )
+
+
+@router.get("/owner/dashboard")
+async def admin_owner_dashboard_redirect():
+    """Redirect /ui/admin/owner/dashboard to /ui/owner/dashboard."""
+    return RedirectResponse("/ui/owner/dashboard", status_code=303)
 

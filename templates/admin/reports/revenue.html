@@ -122,10 +122,20 @@
         <select name="gate_number"
           class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500">
           <option value="">{{ t("admin.filter.all_gates") }}</option>
-          {% for g in range(1, 6) %}
-          <option value="{{ g }}" {% if filters.gate_number==g %}selected{% endif %}>بوابة {{ g | to_arabic_indic }}
-          </option>
-          {% endfor %}
+          {% if garage_gates %}
+            {% for gate in garage_gates %}
+              {% set gn = gate.gate_number if gate.gate_number is defined else gate %}
+              <option value="{{ gn }}" {% if filters.gate_number == gn or (filters.gate_number is string and filters.gate_number == (gn | string)) %}selected{% endif %}>
+                بوابة {{ gn | to_arabic_indic }}{% if gate.name is defined and gate.name %} - {{ gate.name }}{% endif %}
+              </option>
+            {% endfor %}
+          {% else %}
+            {% for g in range(1, 11) %}
+              <option value="{{ g }}" {% if filters.gate_number == g or (filters.gate_number is string and filters.gate_number == (g | string)) %}selected{% endif %}>
+                بوابة {{ g | to_arabic_indic }}
+              </option>
+            {% endfor %}
+          {% endif %}
         </select>
       </div>
 

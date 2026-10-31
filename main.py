@@ -102,6 +102,8 @@ app.state.templates = templates
 if settings.ENVIRONMENT == "production" and "*" in settings.CORS_ORIGINS:
     raise RuntimeError("Wildcard CORS origin forbidden in production")
 
+from middlewares.csrf import CSRFMiddleware
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -109,6 +111,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(CSRFMiddleware)
 
 # Mount static files
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -182,11 +185,13 @@ from routes.rates import router as rates_router
 from routes.ui_operator import router as ui_operator_router
 from routes.subscriptions_api import router as subscriptions_api_router
 from routes.admin_api import router as admin_api_router
-from routes.ui_admin import router as ui_admin_router
+from routes.ui_admin import router as ui_admin_router, owner_ui_router
 from routes.ui_subscriptions import router as ui_subscriptions_router
 from routes.edge_ws import router as edge_ws_router
 from routes.edge_api import router as edge_api_router
 from routes.garage_management_api import router as garage_management_api_router
+from routes.platform_admin import router as platform_admin_router
+from routes.owner_api import router as owner_api_router
 
 # Include routers
 app.include_router(auth_router)
@@ -200,10 +205,17 @@ app.include_router(ui_operator_router)
 app.include_router(subscriptions_api_router)
 app.include_router(admin_api_router)
 app.include_router(ui_admin_router)
+app.include_router(owner_ui_router)
 app.include_router(ui_subscriptions_router)
 app.include_router(edge_ws_router)
 app.include_router(edge_api_router)
 app.include_router(garage_management_api_router)
+app.include_router(platform_admin_router)
+app.include_router(owner_api_router)
+
+@app.get("/owner/dashboard")
+async def legacy_owner_dashboard_redirect():
+    return RedirectResponse("/ui/owner/dashboard", status_code=303)
 
 @app.get("/")
 async def root_redirect():

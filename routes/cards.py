@@ -43,7 +43,15 @@ async def create_card(
             headers={"X-Error-Code": "INVALID_BARCODE_FORMAT"},
         )
 
-    existing = await card_repo.get_by_code(normalized)
+    garage_id = current_user.garage_id
+    if garage_id is None:
+        raise HTTPException(
+            status_code=400,
+            detail="User has no assigned garage",
+            headers={"X-Error-Code": "GARAGE_REQUIRED"},
+        )
+
+    existing = await card_repo.get_by_code(normalized, garage_id=garage_id)
     if existing:
         raise HTTPException(
             status_code=409,
@@ -51,7 +59,7 @@ async def create_card(
             headers={"X-Error-Code": "CARD_CODE_ALREADY_EXISTS"},
         )
 
-    card = await card_repo.create(normalized)
+    card = await card_repo.create(normalized, garage_id=garage_id)
     await db.commit()
     await db.refresh(card)
 
@@ -80,6 +88,14 @@ async def create_cards_bulk(
                 headers={"X-Error-Code": "INVALID_BARCODE_FORMAT"},
             )
 
+    garage_id = current_user.garage_id
+    if garage_id is None:
+        raise HTTPException(
+            status_code=400,
+            detail="User has no assigned garage",
+            headers={"X-Error-Code": "GARAGE_REQUIRED"},
+        )
+
     conflicting = await card_repo.get_existing_codes(normalized_codes)
     new_codes = [c for c in normalized_codes if c not in conflicting]
     
@@ -90,7 +106,7 @@ async def create_cards_bulk(
             headers={"X-Error-Code": "ALL_CARDS_EXIST"},
         )
 
-    cards = await card_repo.bulk_create(new_codes)
+    cards = await card_repo.bulk_create(new_codes, garage_id=garage_id)
     await db.commit()
 
     return {
@@ -108,6 +124,14 @@ async def create_cards_range(
     card_service: CardService = Depends(get_card_service),
     card_repo: ParkingCardRepository = Depends(get_card_repo),
 ):
+    garage_id = current_user.garage_id
+    if garage_id is None:
+        raise HTTPException(
+            status_code=400,
+            detail="User has no assigned garage",
+            headers={"X-Error-Code": "GARAGE_REQUIRED"},
+        )
+
     if data.start_number > data.end_number:
         raise HTTPException(
             status_code=422,
@@ -147,7 +171,7 @@ async def create_cards_range(
             headers={"X-Error-Code": "ALL_CARDS_EXIST"},
         )
 
-    cards = await card_repo.bulk_create(new_codes)
+    cards = await card_repo.bulk_create(new_codes, garage_id=garage_id)
     await db.commit()
 
     return {
@@ -167,7 +191,8 @@ async def get_cards(
     current_user: User = Depends(require_admin),
     card_repo: ParkingCardRepository = Depends(get_card_repo),
 ):
-    cards, total = await card_repo.get_all(status=status, search=search, page=page, size=size)
+    gid = current_user.garage_id if current_user.role != UserRole.SUPER_ADMIN else None
+    cards, total = await card_repo.get_all(garage_id=gid, status=status, search=search, page=page, size=size)
     responses = [ParkingCardResponse.model_validate(c) for c in cards]
     return PaginatedResponse[ParkingCardResponse](
         data=responses,
@@ -193,7 +218,8 @@ async def get_card_by_code(
             headers={"X-Error-Code": "INVALID_BARCODE_FORMAT"},
         )
 
-    card = await card_repo.get_by_code(normalized)
+    gid = current_user.garage_id if current_user.role != UserRole.SUPER_ADMIN else None
+    card = await card_repo.get_by_code(normalized, garage_id=gid)
     if not card:
         raise HTTPException(
             status_code=404,
@@ -220,7 +246,8 @@ async def update_card_status(
             headers={"X-Error-Code": "INVALID_BARCODE_FORMAT"},
         )
 
-    card = await card_repo.get_by_code(normalized)
+    gid = current_user.garage_id if current_user.role != UserRole.SUPER_ADMIN else None
+    card = await card_repo.get_by_code(normalized, garage_id=gid)
     if not card:
         raise HTTPException(
             status_code=404,

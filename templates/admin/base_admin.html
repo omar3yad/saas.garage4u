@@ -51,6 +51,15 @@
           class="text-xs bg-cyan-900/40 text-cyan-300 border border-cyan-700/40 px-2 py-0.5 rounded-full">مسؤول</span>
       </div>
       <nav class="p-3 space-y-1 text-sm font-medium flex-1 overflow-y-auto">
+        {% if user and user.role == 'OWNER' %}
+        <a href="/ui/owner/dashboard"
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition mb-2 bg-gradient-to-r from-cyan-900/40 to-indigo-900/40 text-cyan-300 font-bold border border-cyan-500/40 hover:from-cyan-900/60 hover:to-indigo-900/60">
+          <svg class="w-5 h-5 shrink-0 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+          <span>لوحة أسطول الجراجات</span>
+        </a>
+        {% endif %}
         <a href="/ui/admin/dashboard"
           class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition {% if request and request.url.path == '/ui/admin/dashboard' %}bg-cyan-600/20 text-cyan-400 font-semibold border-2 border-cyan-500{% else %}text-gray-300 hover:bg-gray-800 hover:text-white{% endif %}">
           <svg class="w-5 h-5 shrink-0 text-current" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -159,6 +168,7 @@
 
         <div class="pt-4 mt-4 border-t border-gray-800">
           <form method="POST" action="/ui/logout">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token if csrf_token is defined else '' }}">
             <button type="submit"
               class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-red-400 hover:bg-red-950/40 hover:text-red-300 transition text-right">
               <svg class="w-5 h-5 shrink-0 text-red-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -192,11 +202,37 @@
           <span class="text-sm font-semibold text-gray-300">مواقف السيارات الذكية</span>
         </div>
 
-        <!-- النص في المنتصف تماماً بخط عريض -->
-        <div class="absolute left-1/2 -translate-x-1/2 pointer-events-none">
-          <span class="text-lg md:text-xl font-bold tracking-wide text-white drop-shadow-sm">
-            جراج باب اللوق
-          </span>
+        <!-- مبدل الجراجات للمالك أو الشارة الثابتة للمدير والمشغل -->
+        <div class="flex items-center justify-center">
+          {% if user and user.role == 'OWNER' %}
+          <form method="POST" action="/ui/admin/switch-garage" class="flex items-center gap-2 m-0">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token if csrf_token is defined else '' }}">
+            <label for="garage-switcher-select" class="text-xs text-gray-400 hidden sm:inline-block">الجراج النشط:</label>
+            <div class="relative">
+              <select id="garage-switcher-select" name="garage_id" onchange="this.form.submit()"
+                class="bg-gray-900 text-cyan-300 border border-cyan-500/50 rounded-lg px-3 py-1 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-cyan-500 cursor-pointer shadow-sm">
+                {% if owned_garages %}
+                  {% for g in owned_garages %}
+                    <option value="{{ g.id }}" {% if active_garage and active_garage.id == g.id %}selected{% endif %}>
+                      {{ g.name }} ({{ g.code }})
+                    </option>
+                  {% endfor %}
+                {% else %}
+                  <option value="{{ active_garage.id if active_garage else 1 }}">
+                    {{ active_garage.name if active_garage else 'جراج باب اللوق' }}
+                  </option>
+                {% endif %}
+              </select>
+            </div>
+          </form>
+          {% else %}
+          <div class="flex items-center gap-2 px-3 py-1 bg-gray-900 border border-gray-800 rounded-lg">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>
+            <span class="text-sm font-bold text-gray-200">
+              {{ active_garage.name if active_garage else (user.garage.name if user and user.garage else "جراج باب اللوق") }}
+            </span>
+          </div>
+          {% endif %}
         </div>
 
         <!-- الجانب الأيسر -->

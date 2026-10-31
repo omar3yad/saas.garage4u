@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from config import get_settings
 from database import get_db
-from dependencies import require_admin
+from dependencies import require_admin, validate_role_assignment
 from models.user import User, UserRole
 from repositories.user_repo import UserRepository
 from schemas.common import PaginatedResponse
@@ -29,6 +29,12 @@ async def create_user(
     current_user: User = Depends(require_admin),
     user_service: UserService = Depends(get_user_service),
 ):
+    validate_role_assignment(
+        creator=current_user,
+        target_role=data.role,
+        target_garage_id=data.garage_id,
+        target_owner_id=data.owner_id,
+    )
     new_user = await user_service.create_user(data)
     return {"data": UserResponse.model_validate(new_user).model_dump(mode="json")}
 

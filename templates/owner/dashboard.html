@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}لوحة أسطول الجراجات — garage4u{% endblock %}
+
+{% block nav %}
+<nav class="bg-[#0b0f19]/90 backdrop-blur-md border-b border-slate-800/80 px-4 lg:px-8 py-3 flex justify-between items-center shadow-lg sticky top-0 z-50">
+    <div class="flex items-center gap-3">
+        <img src="/static/icons/icon-32x32.png" alt="garage4u" width="28" height="28" class="w-7 h-7 rounded-lg shadow-md border border-cyan-500/30">
+        <span class="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 font-sans">
+            garage4u
+        </span>
+        <div class="h-5 w-px bg-slate-700 mx-2 hidden sm:block"></div>
+        <span class="text-white text-base sm:text-lg font-black tracking-wide">
+            لوحة أسطول الجراجات (Owner Fleet Dashboard)
+        </span>
+    </div>
+
+    <div class="flex items-center gap-4">
+        <div class="hidden md:flex items-center gap-2 bg-slate-800/60 border border-slate-700/60 rounded-lg px-3 py-1.5 text-xs text-slate-300">
+            <span>المالك:</span>
+            <span class="font-bold text-white">{{ user.full_name }}</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block mr-1"></span>
+        </div>
+
+        <a href="/ui/admin/dashboard" class="text-xs bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-600/30 px-3 py-1.5 rounded-lg transition font-semibold">
+            لوحة الإدارة
+        </a>
+
+        <form method="POST" action="/ui/logout" class="inline">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token if csrf_token is defined else '' }}">
+            <button type="submit" class="text-xs text-red-400 hover:text-red-300 hover:bg-red-950/40 px-2.5 py-1.5 rounded-lg transition">
+                تسجيل الخروج
+            </button>
+        </form>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8 space-y-8">
+    <!-- Header & Welcome -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-800/80">
+        <div>
+            <h1 class="text-2xl md:text-3xl font-black text-white tracking-tight flex items-center gap-3">
+                <span>أسطول الجراجات المملوكة</span>
+                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-900/40 text-cyan-300 border border-cyan-700/40">
+                    {{ total_garages }} جراج
+                </span>
+            </h1>
+            <p class="text-sm text-slate-400 mt-1">
+                نظرة شاملة ومباشرة على الإشغال والعمليات والإيرادات اليومية لكافة مواقعك
+            </p>
+        </div>
+        <div class="text-xs text-slate-400 bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-lg self-start md:self-auto font-mono">
+            التاريخ: {{ today }}
+        </div>
+    </div>
+
+    <!-- Summary KPI Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+        <!-- Total Garages -->
+        <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 shadow-xl backdrop-blur relative overflow-hidden group">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition duration-500"></div>
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">عدد الجراجات</span>
+                <span class="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                </span>
+            </div>
+            <div class="mt-4 flex items-baseline gap-2">
+                <span class="text-3xl font-black text-white font-mono">{{ total_garages }}</span>
+                <span class="text-xs text-slate-400">موقع نشط</span>
+            </div>
+        </div>
+
+        <!-- Total Active Vehicles -->
+        <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 shadow-xl backdrop-blur relative overflow-hidden group">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition duration-500"></div>
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">السيارات بالداخل الآن</span>
+                <span class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+                </span>
+            </div>
+            <div class="mt-4 flex items-baseline gap-2">
+                <span class="text-3xl font-black text-emerald-400 font-mono">{{ total_active_sessions }}</span>
+                <span class="text-xs text-slate-400">سيارة في الأسطول</span>
+            </div>
+        </div>
+
+        <!-- Total Revenue Today -->
+        <div class="bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 shadow-xl backdrop-blur relative overflow-hidden group">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition duration-500"></div>
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">إيرادات اليوم الكلية</span>
+                <span class="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </span>
+            </div>
+            <div class="mt-4 flex items-baseline gap-2">
+                <span class="text-3xl font-black text-amber-400 font-mono">{{ "%.2f"|format(total_revenue) }}</span>
+                <span class="text-xs text-slate-400 font-semibold">ج.م</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Garages Grid -->
+    <div class="space-y-4">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>مواقع الجراجات</span>
+        </h2>
+
+        {% if garages_stats %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for item in garages_stats %}
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between hover:border-slate-700 transition duration-200">
+                <div class="space-y-4">
+                    <!-- Title & Status -->
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <h3 class="text-lg font-bold text-white tracking-wide">{{ item.garage.name }}</h3>
+                            <span class="text-xs font-mono text-cyan-400 bg-cyan-950/40 border border-cyan-800/40 px-2 py-0.5 rounded-md mt-1 inline-block">
+                                {{ item.garage.code }}
+                            </span>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full border {% if item.garage.status == 'ACTIVE' %}bg-emerald-500/10 text-emerald-400 border-emerald-500/30{% elif item.garage.status == 'SUSPENDED' %}bg-amber-500/10 text-amber-400 border-amber-500/30{% else %}bg-rose-500/10 text-rose-400 border-rose-500/30{% endif %}">
+                            {{ item.garage.status }}
+                        </span>
+                    </div>
+
+                    <!-- Occupancy Bar -->
+                    <div class="space-y-2 pt-2">
+                        <div class="flex justify-between text-xs font-medium">
+                            <span class="text-slate-400">نسبة الإشغال</span>
+                            <span class="text-white font-mono font-bold">{{ item.occupancy_rate }}%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                            <div class="h-2.5 rounded-full transition-all duration-500 occupancy-progress {% if item.occupancy_rate >= 90 %}bg-rose-500{% elif item.occupancy_rate >= 70 %}bg-amber-500{% else %}bg-cyan-500{% endif %}"
+                                 data-rate="{{ item.occupancy_rate }}"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-slate-400 font-mono">
+                            <span>بالداخل: <b class="text-white">{{ item.active_sessions }}</b></span>
+                            <span>السعة: {{ item.capacity }} سيارة</span>
+                        </div>
+                    </div>
+
+                    <!-- Today's Revenue -->
+                    <div class="bg-slate-950/50 border border-slate-800/60 rounded-xl p-3 flex justify-between items-center text-xs">
+                        <span class="text-slate-400">إيرادات اليوم:</span>
+                        <span class="font-bold text-amber-400 font-mono text-sm">
+                            {{ "%.2f"|format(item.today_revenue) }} ج.م
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Action Button: Switch & Manage -->
+                <div class="pt-6 mt-4 border-t border-slate-800/80">
+                    <form method="POST" action="/ui/admin/switch-garage" class="w-full">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token if csrf_token is defined else '' }}">
+                        <input type="hidden" name="garage_id" value="{{ item.garage.id }}">
+                        <button type="submit" class="w-full py-2.5 px-4 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-bold text-sm transition shadow-lg shadow-cyan-600/20 flex items-center justify-center gap-2">
+                            <span>إدارة الجراج</span>
+                            <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-12 text-center text-slate-400">
+            <svg class="w-12 h-12 mx-auto text-slate-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            <p class="text-base font-medium">لا توجد جراجات مسندة لهذا الحساب حالياً.</p>
+        </div>
+        {% endif %}
+    </div>
+</main>
+<script>
+    document.querySelectorAll('.occupancy-progress').forEach(el => {
+        const rate = parseFloat(el.getAttribute('data-rate')) || 0;
+        el.style.width = Math.min(100, Math.max(0, rate)) + '%';
+    });
+</script>
+{% endblock %}

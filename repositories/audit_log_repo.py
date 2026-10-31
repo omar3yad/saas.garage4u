@@ -31,3 +31,33 @@ class AuditLogRepository:
         self.db.add(log_entry)
         await self.db.flush()
         return log_entry
+
+    async def get_all(
+        self,
+        garage_id: int | None = None,
+        owner_id: int | None = None,
+        action: str | None = None,
+        page: int = 1,
+        size: int = 50,
+    ) -> tuple[list[AuditLog], int]:
+        from sqlalchemy import select, func, desc
+        query = select(AuditLog)
+        count_query = select(func.count()).select_from(AuditLog)
+
+        if garage_id is not None:
+            query = query.where(AuditLog.garage_id == garage_id)
+            count_query = count_query.where(AuditLog.garage_id == garage_id)
+        if owner_id is not None:
+            query = query.where(AuditLog.owner_id == owner_id)
+            count_query = count_query.where(AuditLog.owner_id == owner_id)
+        if action is not None:
+            query = query.where(AuditLog.action == action)
+            count_query = count_query.where(AuditLog.action == action)
+
+        count_res = await self.db.execute(count_query)
+        total = count_res.scalar_one()
+
+        offset = (page - 1) * size
+        query = query.order_by(desc(AuditLog.id)).offset(offset).limit(size)
+        res = await self.db.execute(query)
+        return list(res.scalars().all()), total

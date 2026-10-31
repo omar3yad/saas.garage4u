@@ -27,7 +27,7 @@
   <div class="center bold" style="font-size: 11pt;">
     {{ t("receipt.lost_card_title") if receipt.is_lost_card else t("receipt.title") }}
   </div>
-  <div class="center font-mono">رقم العملية: {{ receipt.session_id | string | zfill(8) }}</div>
+  <div class="center font-mono">رقم الإيصال: {{ (receipt.receipt_no if receipt.receipt_no is defined and receipt.receipt_no else receipt.session_id) | string | zfill(8) }}</div>
   <p class="sep">--------------------------------</p>
 
   <div class="row">

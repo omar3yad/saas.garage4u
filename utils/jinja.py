@@ -330,6 +330,14 @@ def register_jinja_filters(templates: Jinja2Templates) -> None:
     templates.env.filters["format_audit_action"] = format_audit_action_filter
     templates.env.filters["format_audit_payload"] = format_audit_payload_filter
 
+    def _get_csrf_token(request=None):
+        if request and hasattr(request, "state") and hasattr(request.state, "csrf_token"):
+            return request.state.csrf_token
+        return ""
+
+    templates.env.globals["get_csrf_token"] = _get_csrf_token
+    templates.env.globals["csrf_token"] = _get_csrf_token
+
 
 def create_jinja2_environment(settings=None) -> Jinja2Templates:
     """Factory to create Jinja2Templates with all registered filters and globals."""

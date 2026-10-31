@@ -26,8 +26,9 @@ async def get_active_rate(
     current_user: User = Depends(require_any_role),
     pricing_service: PricingService = Depends(get_pricing_service),
 ):
+    gid = current_user.garage_id if current_user.role != UserRole.SUPER_ADMIN else None
     try:
-        rule = await pricing_service.get_active_rule()
+        rule = await pricing_service.get_active_rule(garage_id=gid)
     except NoPricingRuleError as e:
         raise HTTPException(
             status_code=503,
@@ -42,8 +43,9 @@ async def preview_rate(
     current_user: User = Depends(require_any_role),
     pricing_service: PricingService = Depends(get_pricing_service),
 ):
+    gid = current_user.garage_id if current_user.role != UserRole.SUPER_ADMIN else None
     try:
-        calc = await pricing_service.preview(entry_time)
+        calc = await pricing_service.preview(entry_time, garage_id=gid)
     except NoPricingRuleError as e:
         raise HTTPException(
             status_code=503,
@@ -59,7 +61,8 @@ async def get_rates(
     current_user: User = Depends(require_admin),
     pricing_repo: PricingRuleRepository = Depends(get_pricing_repo),
 ):
-    rules, total = await pricing_repo.get_all(page=page, size=size)
+    gid = current_user.garage_id if current_user.role != UserRole.SUPER_ADMIN else None
+    rules, total = await pricing_repo.get_all(garage_id=gid, page=page, size=size)
     responses = [PricingRuleResponse.model_validate(r) for r in rules]
     return PaginatedResponse[PricingRuleResponse](
         data=responses,
