@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
 from dependencies import require_admin, require_any_role
-from models.user import User
+from models.user import User, UserRole
 from models.parking_card import CardStatus
 from repositories.card_repo import ParkingCardRepository
 from schemas.common import PaginatedResponse

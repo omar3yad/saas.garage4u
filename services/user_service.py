@@ -155,6 +155,8 @@ class UserService:
                 entity_id=user_id,
                 before=before_dict,
                 after=update_data,
+                garage_id=user.garage_id,
+                owner_id=user.owner_id,
             )
 
             await self.db.commit()
@@ -164,13 +166,17 @@ class UserService:
 
     async def get_all_users(
         self,
-        role: UserRole | None,
-        is_active: bool | None,
-        gate_number: int | None,
-        page: int,
-        size: int,
+        garage_id: int | None = None,
+        owner_id: int | None = None,
+        role: UserRole | None = None,
+        is_active: bool | None = None,
+        gate_number: int | None = None,
+        page: int = 1,
+        size: int = 20,
     ) -> tuple[list[User], int]:
         return await self.user_repo.get_all(
+            garage_id=garage_id,
+            owner_id=owner_id,
             role=role,
             is_active=is_active,
             gate_number=gate_number,

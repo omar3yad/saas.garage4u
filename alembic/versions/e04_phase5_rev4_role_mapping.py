@@ -115,11 +115,11 @@ def downgrade() -> None:
         with op.batch_alter_table("users", schema=None) as batch_op:
             batch_op.drop_constraint("ck_users_saas_hierarchy", type_="check")
 
-    # 2. Revert MANAGER to ADMIN for admin user
+    # 2. Revert MANAGER to ADMIN
     conn.execute(sa.text("""
         UPDATE users 
         SET role = 'ADMIN', owner_id = NULL, garage_id = NULL 
-        WHERE username = 'admin';
+        WHERE role = 'MANAGER' OR username = 'admin';
     """))
 
     # 3. Unassign owner_id and garage_id from operators

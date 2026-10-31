@@ -102,3 +102,69 @@ async def async_client(engine, settings_override: Settings):
     app.dependency_overrides.clear()
     main.engine = orig_main_engine
     database.engine = orig_db_engine
+
+
+# ---------------------------------------------------------------------------
+# Task 11.1: Real PostgreSQL Fixtures for RLS & Multi-Tenant Integration Tests
+# ---------------------------------------------------------------------------
+
+PG_APP_URL = os.environ.get(
+    "TEST_DATABASE_URL",
+    "postgresql+asyncpg://pgms_app:PgAppSecurePass2026x@127.0.0.1:5432/pgms_saas_db",
+)
+
+PG_MIGRATOR_URL = os.environ.get(
+    "TEST_MIGRATION_DATABASE_URL",
+    "postgresql+asyncpg://pgms_migrator:PgMigratorSecurePass2026x@127.0.0.1:5432/pgms_saas_db",
+)
+
+
+@pytest.fixture(scope="session")
+def pg_settings() -> Settings:
+    return Settings(
+        DATABASE_URL=PG_APP_URL,
+        MIGRATION_DATABASE_URL=PG_MIGRATOR_URL,
+        SECRET_KEY="e" * 32,
+        ENVIRONMENT="development",
+        DEBUG=True,
+        JWT_EXPIRE_HOURS=1,
+    )
+
+
+@pytest.fixture(scope="function")
+async def pg_engine():
+    """Async engine connected as unprivileged pgms_app user subject to RLS."""
+    test_pg_engine = create_async_engine(
+        PG_APP_URL,
+        pool_size=5,
+        max_overflow=10,
+    )
+    yield test_pg_engine
+    await test_pg_engine.dispose()
+
+
+@pytest.fixture(scope="function")
+async def pg_migrator_engine():
+    """Async engine connected as privileged pgms_migrator user (BYPASSRLS)."""
+    migrator_engine = create_async_engine(
+        PG_MIGRATOR_URL,
+        pool_size=5,
+        max_overflow=10,
+    )
+    yield migrator_engine
+    await migrator_engine.dispose()
+
+
+@pytest.fixture(scope="function")
+async def pg_session(pg_engine) -> AsyncSession:
+    """AsyncSession for pgms_app subject to RLS."""
+    async with AsyncSession(pg_engine, expire_on_commit=False) as session:
+        yield session
+
+
+@pytest.fixture(scope="function")
+async def pg_migrator_session(pg_migrator_engine) -> AsyncSession:
+    """AsyncSession for pgms_migrator for administrative setups and seedings."""
+    async with AsyncSession(pg_migrator_engine, expire_on_commit=False) as session:
+        yield session
+

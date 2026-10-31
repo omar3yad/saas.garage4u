@@ -192,9 +192,10 @@ class PricingService:
         admin_id: int,
         rate_repo: PricingRuleRepository,
         audit_service: AuditService,
+        garage_id: int | None = None,
     ) -> PricingRule:
         """Updates an existing pricing rule with uniqueness check and audit logging."""
-        rule = await rate_repo.get_by_id(rule_id)
+        rule = await rate_repo.get_by_id(rule_id, garage_id=garage_id)
         if not rule:
             raise ValueError(f"PricingRule with id {rule_id} not found")
 

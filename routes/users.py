@@ -48,7 +48,11 @@ async def get_users(
     current_user: User = Depends(require_admin),
     user_service: UserService = Depends(get_user_service),
 ):
+    gid = current_user.garage_id if current_user.role == UserRole.MANAGER else None
+    oid = current_user.owner_id if current_user.role == UserRole.OWNER else None
     users, total = await user_service.get_all_users(
+        garage_id=gid,
+        owner_id=oid,
         role=role,
         is_active=is_active,
         gate_number=gate_number,
@@ -77,26 +81,60 @@ async def get_user_by_id(
             detail="User not found",
             headers={"X-Error-Code": "USER_NOT_FOUND"},
         )
+
+    # Scoping check: Manager can only access users within own garage
+    if current_user.role == UserRole.MANAGER and user.garage_id != current_user.garage_id:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found",
+            headers={"X-Error-Code": "USER_NOT_FOUND"},
+        )
+    # Owner can only access users within own fleet
+    if current_user.role == UserRole.OWNER and user.owner_id != current_user.owner_id:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found",
+            headers={"X-Error-Code": "USER_NOT_FOUND"},
+        )
+
     return {"data": UserResponse.model_validate(user).model_dump(mode="json")}
 
 @router.patch("/{user_id}/deactivate")
 async def deactivate_user(
     user_id: int,
     current_user: User = Depends(require_admin),
+    db: AsyncSession = Depends(get_db),
     user_service: UserService = Depends(get_user_service),
 ):
-    user = await user_service.deactivate_user(user_id, actor_id=current_user.id)
-    return {"data": UserResponse.model_validate(user).model_dump(mode="json")}
+    user_repo = UserRepository(db)
+    user = await user_repo.get_by_id(user_id)
+    if not user or (current_user.role == UserRole.MANAGER and user.garage_id != current_user.garage_id) or (current_user.role == UserRole.OWNER and user.owner_id != current_user.owner_id):
+        raise HTTPException(
+            status_code=404,
+            detail="User not found",
+            headers={"X-Error-Code": "USER_NOT_FOUND"},
+        )
+    deactivated = await user_service.deactivate_user(user_id, actor_id=current_user.id)
+    return {"data": UserResponse.model_validate(deactivated).model_dump(mode="json")}
 
 @router.patch("/{user_id}/reset-password")
 async def reset_password(
     user_id: int,
     data: UserUpdatePassword,
     current_user: User = Depends(require_admin),
+    db: AsyncSession = Depends(get_db),
     user_service: UserService = Depends(get_user_service),
 ):
-    user = await user_service.reset_password(user_id, data.new_password, actor_id=current_user.id)
-    return {"data": UserResponse.model_validate(user).model_dump(mode="json")}
+    user_repo = UserRepository(db)
+    user = await user_repo.get_by_id(user_id)
+    if not user or (current_user.role == UserRole.MANAGER and user.garage_id != current_user.garage_id) or (current_user.role == UserRole.OWNER and user.owner_id != current_user.owner_id):
+        raise HTTPException(
+            status_code=404,
+            detail="User not found",
+            headers={"X-Error-Code": "USER_NOT_FOUND"},
+        )
+    reset_user = await user_service.reset_password(user_id, data.new_password, actor_id=current_user.id)
+    return {"data": UserResponse.model_validate(reset_user).model_dump(mode="json")}
 
 
 @router.patch("/{user_id}")
@@ -104,8 +142,17 @@ async def update_user(
     user_id: int,
     data: UserUpdate,
     current_user: User = Depends(require_admin),
+    db: AsyncSession = Depends(get_db),
     user_service: UserService = Depends(get_user_service),
 ):
-    user = await user_service.update_user(user_id, data, actor_id=current_user.id)
-    return {"data": UserResponse.model_validate(user).model_dump(mode="json")}
+    user_repo = UserRepository(db)
+    user = await user_repo.get_by_id(user_id)
+    if not user or (current_user.role == UserRole.MANAGER and user.garage_id != current_user.garage_id) or (current_user.role == UserRole.OWNER and user.owner_id != current_user.owner_id):
+        raise HTTPException(
+            status_code=404,
+            detail="User not found",
+            headers={"X-Error-Code": "USER_NOT_FOUND"},
+        )
+    updated = await user_service.update_user(user_id, data, actor_id=current_user.id)
+    return {"data": UserResponse.model_validate(updated).model_dump(mode="json")}
 

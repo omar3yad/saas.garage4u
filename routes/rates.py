@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
 from dependencies import require_admin, require_any_role
-from models.user import User
+from models.user import User, UserRole
 from repositories.rate_repo import PricingRuleRepository
 from schemas.common import PaginatedResponse
 from schemas.pricing_rule import PricingRuleCreate, PricingRuleUpdate, PricingRuleResponse
@@ -98,6 +98,7 @@ async def create_rate(
 
 @router.put("/{rule_id}")
 @router.patch("/{rule_id}")
+@router.put("/{rule_id}")
 async def update_rate(
     rule_id: int,
     data: PricingRuleUpdate,
@@ -107,6 +108,7 @@ async def update_rate(
     pricing_service: PricingService = Depends(get_pricing_service),
 ):
     audit_service = AuditService(db)
+    gid = current_user.garage_id if current_user.role != UserRole.SUPER_ADMIN else None
     try:
         rule = await pricing_service.update_rule(
             rule_id=rule_id,
@@ -114,6 +116,7 @@ async def update_rate(
             admin_id=current_user.id,
             rate_repo=pricing_repo,
             audit_service=audit_service,
+            garage_id=gid,
         )
     except ValueError as e:
         raise HTTPException(

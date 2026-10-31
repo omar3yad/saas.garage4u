@@ -227,6 +227,8 @@ def downgrade() -> None:
     with op.batch_alter_table('subscribers', schema=None) as batch_op:
         batch_op.drop_column('garage_id')
 
+    op.execute("DELETE FROM parking_sessions WHERE card_id IS NULL OR card_code IS NULL;")
+
     with op.batch_alter_table('parking_sessions', schema=None) as batch_op:
         batch_op.alter_column('card_code', existing_type=sa.String(length=50), nullable=False)
         batch_op.alter_column('card_id', existing_type=sa.Integer(), nullable=False)

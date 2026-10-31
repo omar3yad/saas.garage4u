@@ -115,7 +115,8 @@ async def get_shift_summary(
     shift_repo: ShiftRepository = Depends(get_shift_repo),
     shift_service: ShiftService = Depends(get_shift_service),
 ):
-    shift = await shift_repo.get_by_id(shift_id)
+    gid = current_user.garage_id if current_user.role != UserRole.SUPER_ADMIN else None
+    shift = await shift_repo.get_by_id(shift_id, garage_id=gid)
     if not shift:
         raise HTTPException(
             status_code=404,

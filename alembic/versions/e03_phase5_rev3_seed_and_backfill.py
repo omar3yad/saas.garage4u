@@ -143,5 +143,6 @@ def downgrade() -> None:
     conn.execute(sa.text("UPDATE pricing_rules SET garage_id = NULL WHERE garage_id = 1;"))
     conn.execute(sa.text("UPDATE shifts SET garage_id = NULL WHERE garage_id = 1;"))
     conn.execute(sa.text("UPDATE parking_cards SET garage_id = NULL WHERE garage_id = 1;"))
+    conn.execute(sa.text("UPDATE users SET garage_id = NULL, owner_id = NULL WHERE garage_id = 1 OR owner_id = 1;"))
     conn.execute(sa.text("DELETE FROM garages WHERE id = 1;"))
     conn.execute(sa.text("DELETE FROM owners WHERE id = 1;"))
