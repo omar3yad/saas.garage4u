@@ -211,4 +211,13 @@ class ParkingSessionRepository:
         result = await self.db.execute(query)
         return result.scalar_one()
 
+    async def count_active(self, garage_id: int) -> int:
+        """Returns the number of active sessions currently open in a garage."""
+        query = select(func.count()).select_from(ParkingSession).where(
+            ParkingSession.garage_id == garage_id,
+            ParkingSession.status == SessionStatus.ACTIVE,
+        )
+        result = await self.db.execute(query)
+        return result.scalar_one_or_none() or 0
+
 __all__ = ["ParkingSessionRepository"]

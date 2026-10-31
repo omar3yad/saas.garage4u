@@ -185,6 +185,8 @@ from routes.admin_api import router as admin_api_router
 from routes.ui_admin import router as ui_admin_router
 from routes.ui_subscriptions import router as ui_subscriptions_router
 from routes.edge_ws import router as edge_ws_router
+from routes.edge_api import router as edge_api_router
+from routes.garage_management_api import router as garage_management_api_router
 
 # Include routers
 app.include_router(auth_router)
@@ -200,6 +202,8 @@ app.include_router(admin_api_router)
 app.include_router(ui_admin_router)
 app.include_router(ui_subscriptions_router)
 app.include_router(edge_ws_router)
+app.include_router(edge_api_router)
+app.include_router(garage_management_api_router)
 
 @app.get("/")
 async def root_redirect():

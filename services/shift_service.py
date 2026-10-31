@@ -6,6 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.shift import Shift
 from models.parking_session import ParkingSession, SessionStatus
+from models.user import User
+from models.garage import Garage
+from models.owner import Owner
 from services.audit_service import AuditService
 from services.exceptions import (
     ShiftAlreadyOpenError,
@@ -13,6 +16,9 @@ from services.exceptions import (
     ShiftNotFoundError,
     ShiftNotOwnedError,
     ShiftAlreadyClosedError,
+    TenantSuspendedError,
+    BillingPastDueError,
+    TenantTerminatedError,
 )
 from services.shift_summary import ShiftSummary
 
@@ -41,14 +47,42 @@ class ShiftService:
         return shift
 
     async def open_shift(
-        self, operator_id: int, gate_number: int, opening_cash_egp: int
+        self,
+        operator_id: int,
+        gate_number: int,
+        opening_cash_egp: int,
+        garage_id: int | None = None,
     ) -> Shift:
-        """Opens a new shift for the operator if none is currently active."""
+        """Opens a new shift for the operator if none is currently active, enforcing tenant status."""
         active = await self.get_active_shift(operator_id)
         if active:
             raise ShiftAlreadyOpenError("Operator already has an active shift")
 
+        gid = garage_id
+        if gid is None:
+            user_res = await self.db.execute(select(User).where(User.id == operator_id).limit(1))
+            user = user_res.scalars().first()
+            if user:
+                gid = user.garage_id
+
+        if gid:
+            garage_res = await self.db.execute(select(Garage).where(Garage.id == gid).limit(1))
+            garage = garage_res.scalars().first()
+            if garage:
+                if garage.status == "TERMINATED":
+                    raise TenantTerminatedError("Garage operations have been terminated")
+                if garage.status == "SUSPENDED":
+                    raise TenantSuspendedError("Garage is suspended (Exit-Only grace mode active)")
+                owner_res = await self.db.execute(select(Owner).where(Owner.id == garage.owner_id).limit(1))
+                owner = owner_res.scalars().first()
+                if owner:
+                    if owner.billing_status == "PAST_DUE":
+                        raise BillingPastDueError("Owner subscription is past due (Exit-Only grace mode active)")
+                    if owner.billing_status in ("SUSPENDED", "TERMINATED"):
+                        raise TenantSuspendedError("Owner subscription is suspended")
+
         shift = Shift(
+            garage_id=gid,
             operator_id=operator_id,
             gate_number=gate_number,
             opening_cash_egp=opening_cash_egp,
@@ -64,6 +98,7 @@ class ShiftService:
             action="SHIFT_OPENED",
             entity_type="shift",
             entity_id=shift.id,
+            garage_id=gid,
             after={
                 "operator_id": operator_id,
                 "gate_number": gate_number,

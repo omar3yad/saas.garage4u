@@ -1,7 +1,7 @@
 """WebSocket endpoint the garage edge PC keeps open (it sits behind NAT and
 cannot be reached directly, so it dials out to us)."""
 import asyncio
-import hmac
+import hashlib
 import json
 import logging
 
@@ -13,6 +13,10 @@ from database import AsyncSessionLocal
 from schemas.edge import CaptureResult, EdgeHello
 from services.edge_hub import EdgeConnection, EdgeHub
 from services.plate_capture_service import CaptureRejected, PlateCaptureService
+from repositories.edge_device_repo import EdgeDeviceRepository
+from repositories.garage_repo import GarageRepository
+from repositories.garage_config_repo import GarageConfigRepository
+from models.edge_device import EdgeDevice
 
 logger = logging.getLogger(__name__)
 
@@ -21,14 +25,71 @@ router = APIRouter(tags=["edge"])
 _HELLO_TIMEOUT_S = 5.0
 
 
-def _authorized(websocket: WebSocket, expected: str | None) -> bool:
-    if not expected:
-        return False
-    header = websocket.headers.get("authorization", "")
-    scheme, _, token = header.partition(" ")
-    if scheme.lower() != "bearer" or not token:
-        return False
-    return hmac.compare_digest(token.strip().encode(), expected.encode())
+from sqlalchemy.ext.asyncio import AsyncSession
+
+async def _authenticate_edge_device(
+    websocket: WebSocket,
+    db: AsyncSession | None = None,
+) -> tuple[EdgeDevice | None, bool]:
+    """Authenticates the edge device using X-Edge-Token (or Authorization/query fallback).
+    Checks that the device exists, is not revoked, and that the garage is entitled to ANPR.
+    Uses a short-lived AsyncSession and closes it immediately to prevent connection pool starvation.
+    Returns (device, is_entitled).
+    """
+    token = websocket.headers.get("x-edge-token")
+    if not token:
+        # Fallback to query parameter or Authorization Bearer header
+        token = websocket.query_params.get("token")
+        if not token:
+            header = websocket.headers.get("authorization", "")
+            scheme, _, bearer_token = header.partition(" ")
+            if scheme.lower() == "bearer":
+                token = bearer_token.strip()
+
+    if not token:
+        return None, False
+
+    token_hash = hashlib.sha256(token.strip().encode()).hexdigest()
+
+    async def _check(session: AsyncSession) -> tuple[EdgeDevice | None, bool]:
+        device_repo = EdgeDeviceRepository(session)
+        device = await device_repo.get_by_token_hash(token_hash)
+        if not device or device.revoked_at is not None:
+            return None, False
+
+        # Check ANPR entitlement (can_use_anpr and anpr_enabled)
+        garage_repo = GarageRepository(session)
+        config_repo = GarageConfigRepository(session)
+        garage = await garage_repo.get_by_id(device.garage_id)
+        config = await config_repo.get_by_garage_id(device.garage_id)
+
+        if not garage or not config:
+            return None, False
+
+        is_entitled = bool(garage.can_use_anpr and config.anpr_enabled)
+        if not is_entitled:
+            return device, False
+
+        await device_repo.update_last_seen(device.id)
+        await session.flush()
+
+        return device, True
+
+    if db is not None:
+        return await _check(db)
+
+    app_db = None
+    if hasattr(websocket, "app") and hasattr(websocket.app, "state"):
+        app_db = getattr(websocket.app.state, "db", None)
+
+    if app_db is not None:
+        return await _check(app_db)
+
+    # Open brief session and close immediately before accepting websocket
+    async with AsyncSessionLocal() as session:
+        res = await _check(session)
+        await session.commit()
+        return res
 
 
 @router.websocket("/ws/edge")
@@ -36,10 +97,18 @@ async def edge_socket(websocket: WebSocket) -> None:
     settings = get_settings()
     hub: EdgeHub | None = getattr(websocket.app.state, "edge_hub", None)
 
-    # Closing before accept() makes Starlette reject the handshake with HTTP 403.
-    if hub is None or not _authorized(websocket, settings.EDGE_API_TOKEN):
-        logger.warning("Rejected edge connection from %s", websocket.client)
-        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+    device, is_entitled = await _authenticate_edge_device(websocket)
+
+    # Reject connection before accept() if unauthenticated or not entitled for ANPR
+    if hub is None or device is None or not is_entitled:
+        logger.warning(
+            "Rejected edge connection from %s: device=%s, entitled=%s",
+            websocket.client, device, is_entitled
+        )
+        await websocket.close(
+            code=status.WS_1008_POLICY_VIOLATION,
+            reason="Policy Violation: Authentication or ANPR license required",
+        )
         return
 
     await websocket.accept()

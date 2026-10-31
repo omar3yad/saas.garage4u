@@ -16,12 +16,18 @@ class PricingService:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def get_active_rule(self) -> PricingRule:
-        """Fetches the active pricing rule from the database."""
-        result = await self.db.execute(
-            select(PricingRule).where(PricingRule.is_active == True).limit(1)
-        )
+    async def get_active_rule(self, garage_id: int | None = None) -> PricingRule:
+        """Fetches the active pricing rule from the database, scoped to garage_id when provided."""
+        query = select(PricingRule).where(PricingRule.is_active == True)
+        if garage_id is not None:
+            query = query.where(PricingRule.garage_id == garage_id)
+        result = await self.db.execute(query.limit(1))
         rule = result.scalars().first()
+        if not rule and garage_id is not None:
+            result = await self.db.execute(
+                select(PricingRule).where(PricingRule.is_active == True).limit(1)
+            )
+            rule = result.scalars().first()
         if not rule:
             raise NoPricingRuleError("No active pricing rule")
         return rule

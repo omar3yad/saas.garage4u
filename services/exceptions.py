@@ -140,6 +140,71 @@ class ShiftIdRequiredForPrintError(Exception):
         self.message = message
         super().__init__(message)
 
+# Phase 5 — Multi-Tenant SaaS Exceptions
+class TenantNotFoundError(Exception):
+    def __init__(self, message: str = "Tenant or garage not found"):
+        self.message = message
+        super().__init__(message)
+
+class TenantSuspendedError(Exception):
+    def __init__(self, message: str = "Tenant is suspended (Exit-Only mode)"):
+        self.message = message
+        super().__init__(message)
+
+class BillingPastDueError(Exception):
+    def __init__(self, message: str = "Billing subscription is past due (Exit-Only mode)"):
+        self.message = message
+        super().__init__(message)
+
+class TenantTerminatedError(Exception):
+    def __init__(self, message: str = "Tenant operations have been terminated"):
+        self.message = message
+        super().__init__(message)
+
+class FeatureNotEntitledError(Exception):
+    def __init__(self, message: str = "Feature not entitled for this garage"):
+        self.message = message
+        super().__init__(message)
+
+class ConfigLockedActiveSessionsError(Exception):
+    def __init__(self, message: str = "Cannot change configuration while active sessions exist"):
+        self.message = message
+        super().__init__(message)
+
+class ConfigVersionConflictError(Exception):
+    def __init__(self, message: str = "Configuration version conflict"):
+        self.message = message
+        super().__init__(message)
+
+class ShortSessionConfirmationRequiredError(Exception):
+    def __init__(self, elapsed_seconds: int, min_seconds: int, message: str | None = None):
+        self.elapsed_seconds = elapsed_seconds
+        self.min_seconds = min_seconds
+        msg = message or f"Session started only {elapsed_seconds}s ago (min: {min_seconds}s). Confirmation required."
+        self.message = msg
+        super().__init__(msg)
+
+class RapidDoubleScanError(Exception):
+    def __init__(self, message: str = "Rapid double scan detected. Please wait before retrying."):
+        self.message = message
+        super().__init__(message)
+
+class ExitPhotoRequiresANPRError(Exception):
+    def __init__(self, message: str = "Exit photo requires ANPR to be enabled"):
+        self.message = message
+        super().__init__(message)
+
+class FileTooLargeError(Exception):
+    def __init__(self, size: int, max_bytes: int = 1_500_000):
+        self.size = size
+        self.max_bytes = max_bytes
+        super().__init__(f"File size {size} exceeds maximum permitted limit {max_bytes} bytes")
+
+class EdgeAuthFailedError(Exception):
+    def __init__(self, message: str = "Edge device authentication failed"):
+        self.message = message
+        super().__init__(message)
+
 __all__ = [
     "CardNotFoundError",
     "CardNotAvailableError",
@@ -169,4 +234,16 @@ __all__ = [
     "InvalidDateRangeError",
     "InvalidReportTypeError",
     "ShiftIdRequiredForPrintError",
+    "TenantNotFoundError",
+    "TenantSuspendedError",
+    "BillingPastDueError",
+    "TenantTerminatedError",
+    "FeatureNotEntitledError",
+    "ConfigLockedActiveSessionsError",
+    "ConfigVersionConflictError",
+    "ShortSessionConfirmationRequiredError",
+    "RapidDoubleScanError",
+    "ExitPhotoRequiresANPRError",
+    "FileTooLargeError",
+    "EdgeAuthFailedError",
 ]

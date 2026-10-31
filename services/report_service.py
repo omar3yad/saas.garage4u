@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models.parking_session import ParkingSession
 from repositories.report_repo import ReportRepository
 from repositories.subscription_repo import SubscriptionRepository
+from repositories.garage_gate_repo import GarageGateRepository
 from schemas.admin_reports import (
     LiveStatsResponse,
     GateStatusResponse,
@@ -30,10 +31,18 @@ logger = logging.getLogger(__name__)
 
 
 class ReportService:
-    def __init__(self, db: AsyncSession, report_repo: ReportRepository | None = None):
+    def __init__(
+        self,
+        db: AsyncSession,
+        report_repo: ReportRepository | None = None,
+        gate_repo: GarageGateRepository | None = None,
+    ):
         self.db = db
         self.report_repo = (
             report_repo if report_repo is not None else ReportRepository(db)
+        )
+        self.gate_repo = (
+            gate_repo if gate_repo is not None else GarageGateRepository(db)
         )
 
     async def get_live_stats(self) -> LiveStatsResponse:
@@ -69,13 +78,19 @@ class ReportService:
             open_shifts=open_shifts,
         )
 
-    async def get_gate_panel(self) -> list[GateStatusResponse]:
-        """Returns gate status for gates 1 through 5, padding empty gates."""
+    async def get_gate_panel(self, garage_id: int | None = None) -> list[GateStatusResponse]:
+        """Returns gate status for all configured gates dynamically querying garage_gates."""
         rows = await self.report_repo.get_gate_panel()
         gate_map = {r["gate_number"]: r for r in rows}
 
+        if garage_id is not None:
+            gates = await self.gate_repo.get_all_by_garage(garage_id)
+            gate_numbers = [g.gate_number for g in gates]
+        else:
+            gate_numbers = sorted(list(gate_map.keys())) or list(range(1, 6))
+
         panel: list[GateStatusResponse] = []
-        for g in range(1, 6):
+        for g in gate_numbers:
             if g in gate_map:
                 info = gate_map[g]
                 panel.append(
